@@ -1,5 +1,5 @@
 /**
- * Contrat de données du site Le Crousty — ÉTAPE 1 (proposition, à valider).
+ * Contrat de données du site Le Crousty.
  *
  * menu.json est la SEULE source de vérité : catégories, produits, options,
  * ingrédients visibles en 3D. Le code 3D ne connaît qu'un vocabulaire fixe
@@ -12,14 +12,16 @@
  *   peut être remplacé par `/models/ingredients/tenders.glb` sans rien changer.
  * - Toute information manquante vaut exactement "[À COMPLÉTER]".
  * - Toute information lue sur la photo et non confirmée porte `toVerify`.
- * - Aucun prix n'est stocké tant que `meta.showPrices` est false.
+ * - Le site est une vitrine : aucun prix, aucune commande.
+ * - Une option n'est proposée que si le support courant peut accueillir ce
+ *   qu'elle ajoute (ex. pas de gratiné sur la tortilla) : aucune règle à écrire.
  */
 
 export type Id = string;
 export type ToComplete = "[À COMPLÉTER]";
 
-/** D'où vient l'information (rien n'est encore validé par le restaurant). */
-export type Source = "brief" | "photo" | "brief+photo";
+/** D'où vient l'information. `restaurant` = confirmé par le restaurant. */
+export type Source = "brief" | "photo" | "restaurant";
 
 // ---------------------------------------------------------------------------
 // Vocabulaire fixe côté code (ajouter une valeur ici = nouveau code 3D)
@@ -27,8 +29,8 @@ export type Source = "brief" | "photo" | "brief+photo";
 
 /** Places dans l'empilement. Chaque support déclare lesquelles il accepte et dans quel ordre. */
 export type LayerId =
-  | "sauce-base" // sauce ou crème étalée sur la base (sauce emmental, fromage frais…)
-  | "fries" //      frites (dans la barquette, dans le tacos)
+  | "sauce-base" // sauce ou crème étalée sur la base (sauce emmental, crème fraîche…)
+  | "fries" //      frites (barquette, tacos, pot d'accompagnement)
   | "veg" //        crudités du bas (salade, tomate, avocat)
   | "meat" //       viandes principales
   | "cheese" //     fromages en tranche ou à tartiner
@@ -37,43 +39,71 @@ export type LayerId =
   | "coating" //    nappage qui coule (cheddar sur les frites)
   | "sauce" //      filet de sauce
   | "gratin" //     fromage gratiné posé SUR le support refermé
-  | "drink"; //     boisson (emplacement boisson de la formule)
+  | "drink"; //     boisson
+
+export const LAYERS: readonly LayerId[] = [
+  "sauce-base", "fries", "veg", "meat", "cheese", "extra", "veg-top", "coating", "sauce", "gratin", "drink",
+];
 
 /** Formes génériques des supports (ce qui porte les ingrédients). */
 export type SupportArchetype =
-  | "bread" //       pain de sandwich (s'ouvre en charnière)
-  | "tortilla" //    galette de tacos (ouverte pendant la composition, se replie ensuite)
+  | "bread" //       pain long (sandwichs, gratinés) : s'ouvre en charnière
+  | "tortilla" //    variant "wrap" (roulée) ou "tacos" (pliée, grillée)
   | "bun" //         pain burger (base + chapeau)
   | "hotdog-bun" //  pain hot-dog
-  | "fry-box" //     barquette de frites
+  | "toast" //       pain de mie (croques)
+  | "fry-box" //     barquette (frites, starters)
+  | "pot" //         pot d'accompagnement (brasserie)
+  | "bowl" //        bol (salades)
+  | "plate" //       assiette (brasserie)
   | "drink-spot"; // emplacement de boisson (invisible)
+
+export const SUPPORT_ARCHETYPES: readonly SupportArchetype[] = [
+  "bread", "tortilla", "bun", "hotdog-bun", "toast", "fry-box", "pot", "bowl", "plate", "drink-spot",
+];
 
 /** Formes génériques des ingrédients, paramétrées par couleur / nombre / taille. */
 export type IngredientArchetype =
-  | "patty" //        steak haché, smash (variant "smash" : bords croustillants)
-  | "cutlet" //       escalope, suprême, poulet (plaque irrégulière, grillée ou panée)
-  | "strips" //       tenders (bâtonnets panés)
-  | "chunks" //       tandoori, curry, émincé (morceaux irréguliers)
+  | "patty" //        steak haché (variant "smash" : bords croustillants)
+  | "cutlet" //       escalope, suprême, cordon bleu (plaque irrégulière, grillée ou panée)
+  | "strips" //       tenders, nuggets (morceaux panés)
+  | "chunks" //       tandoori, curry, kebab, émincés (morceaux irréguliers)
   | "crumble" //      viande hachée, bacon émietté, bolognaise
   | "sausage" //      merguez, saucisse
   | "sliced" //       tranches souples : pastrami, jambon, bacon, poulet fumé
+  | "skewer" //       brochettes
+  | "wings" //        ailes de poulet
+  | "rings" //        onion rings panés
   | "cheese-slice" // tranche de fromage qui s'affaisse
   | "spread" //       boursin, crème, fromage frais, confiture, sauce fromagère
+  | "ball" //         burrata, tomates cerises
   | "melt" //         gratin (variant "gratin") ou nappage qui coule (variant "pour")
   | "leaf" //         salade
   | "slices" //       rondelles : tomate, oignon rouge, cornichon, jalapeño, avocat, chorizo…
-  | "bits" //         petits éléments : oignons, olives, poivrons, oignons frits…
+  | "bits" //         petits éléments : oignons, olives, poivrons, maïs, feta…
+  | "pasta" //        mac & cheese
   | "egg" //          œuf au plat
   | "drizzle" //      filet de sauce, miel
-  | "fries" //        frites (instanciées ; variant "wedges" pour potatoes/paysannes)
+  | "fries" //        frites (instanciées ; variant "wedges" pour les paysannes)
   | "can" //          canette
   | "bottle"; //      bouteille
+
+export const INGREDIENT_ARCHETYPES: readonly IngredientArchetype[] = [
+  "patty", "cutlet", "strips", "chunks", "crumble", "sausage", "sliced", "skewer", "wings", "rings",
+  "cheese-slice", "spread", "ball", "melt", "leaf", "slices", "bits", "pasta", "egg", "drizzle",
+  "fries", "can", "bottle",
+];
 
 export type EnterAnim = "drop-bounce" | "flutter" | "slide-in" | "pour" | "melt" | "rain" | "pop" | "none";
 export type ExitAnim = "lift-fade" | "dissolve" | "slide-out" | "none";
 
-export type Picto = "burger" | "sandwich" | "tacos" | "hotdog" | "fries" | "bottle" | "icecream";
+export type Picto = "burger" | "sandwich" | "tacos" | "hotdog" | "fries" | "bottle" | "icecream" | "plate" | "salad";
 export type Badge = "epice" | "best-seller" | "nouveau";
+
+/** Emplacements autour du produit principal. */
+export type PlaceId = "side" | "side2" | "drink";
+/** Assemblage modifié par une option. */
+export type Target = "main" | PlaceId;
 
 // ---------------------------------------------------------------------------
 // Données
@@ -94,15 +124,12 @@ export interface Menu {
 export interface MenuMeta {
   restaurant: string;
   city: string;
-  currency: "EUR";
-  /** false : aucun prix affiché nulle part (ni fiche, ni configurateur, ni récap). */
-  showPrices: boolean;
   /** Passe à true quand le restaurant a relu toute la carte. */
   validatedByRestaurant: boolean;
   todoMarker: ToComplete;
 }
 
-/** Produits mis en scène (accueil). */
+/** Produits mis en scène (accueil, ouverture du configurateur). */
 export interface Showcase {
   hero: { product: Id; selections: Selections };
 }
@@ -110,7 +137,7 @@ export interface Showcase {
 /** Réglage visuel commun aux supports et ingrédients. */
 export interface Visual<A extends string = string> {
   archetype: A;
-  /** Sous-style de l'archétype (ex. "smash", "sesame", "gratin", "pour", "wedges"). */
+  /** Sous-style de l'archétype (ex. "smash", "wrap", "gratin", "pour", "wedges"). */
   variant?: string;
   /** Couleur dominante (hex). */
   color?: string;
@@ -124,8 +151,6 @@ export interface Visual<A extends string = string> {
   label?: string;
   /** Modèle designer. S'il existe, il remplace le procédural (même id, même place). */
   glb?: string;
-  /** Visuel du mode 2D ; sinon dessiné automatiquement depuis archétype + couleurs. */
-  sprite2d?: string;
   /** Surcharge des animations par défaut de l'archétype. */
   anim?: { enter?: EnterAnim; exit?: ExitAnim };
 }
@@ -148,7 +173,6 @@ export interface Ingredient {
   label: string;
   layer: LayerId;
   visual: Visual<IngredientArchetype>;
-  allergens?: string[] | ToComplete;
   source?: Source;
   toVerify?: string;
 }
@@ -156,16 +180,13 @@ export interface Ingredient {
 /** Ingrédient seul, ou avec une quantité (ex. double cheddar). */
 export type IngredientRef = Id | { id: Id; qty: number };
 
-/** Assemblage visé par une option : le produit, les frites de la formule, ou la boisson. */
-export type Target = "main" | "side" | "drink";
-
 export interface OptionGroup {
   /** Titre court et gourmand ("Ta viande", "Tes sauces"). */
   label: string;
   kind: "single" | "multi" | "toggle";
   /** Minimum de choix (défaut : 1 pour "single", 0 sinon). */
   min?: number;
-  /** Maximum de choix ; null = limite inconnue [À COMPLÉTER]. */
+  /** Maximum de choix ; null = pas de limite connue. */
   max?: number | null;
   /** Le même choix peut être pris plusieurs fois (ex. 2 × tenders dans un tacos). */
   allowRepeat?: boolean;
@@ -181,24 +202,30 @@ export interface OptionGroup {
 export interface Choice {
   id: Id;
   label: string;
+  /** Mention courte affichée sous le choix (ex. "Supplément"). */
+  note?: string;
   /** Ingrédients ajoutés à l'assemblage visé. */
   adds?: IngredientRef[];
-  /** Ingrédients de base retirés (ex. « sans oignons »). */
+  /** Ingrédients de base retirés (ex. frites maison remplacées par les paysannes). */
   removes?: Id[];
-  /** Duplique les ingrédients d'une couche (« Doublez votre viande », double / triple). */
+  /** Change le support de l'assemblage visé (ex. pain → tortilla). */
+  support?: Id;
+  /** Duplique les ingrédients d'une couche (double, triple, « doublez votre viande »). */
   duplicate?: { layer: LayerId; times: number };
   /** Choix coché à l'ouverture. */
   default?: boolean;
-  /** Réservé : ignoré tant que meta.showPrices est false. */
-  priceDelta?: number;
   toVerify?: string;
 }
 
+export interface Place {
+  support: Id;
+  defaults: IngredientRef[];
+}
+
 export interface Formula {
-  /** Ex. "Frites + boisson incluses". */
+  /** Ex. "Frites maison incluses · boisson en option". */
   label: string;
-  side?: { support: Id; defaults: IngredientRef[] };
-  drink?: { support: Id };
+  places: Partial<Record<PlaceId, Place>>;
   optionGroups: Id[];
   /** Affiche l'ensemble sur le plateau papier journal. */
   tray: boolean;
@@ -225,7 +252,7 @@ export interface Product {
   category: Id;
   name: string;
   /** Phrase gourmande validée par le restaurant, sinon "[À COMPLÉTER]". */
-  description: string | ToComplete;
+  description: string;
   /** Garniture de base (la fiche produit liste ces ingrédients). */
   defaults: IngredientRef[];
   /** Surcharges de la catégorie. */
@@ -233,8 +260,6 @@ export interface Product {
   optionGroups?: Id[];
   formula?: Id | null;
   badges: Badge[];
-  /** Réservé : jamais publié tant que meta.showPrices est false. */
-  price?: number;
   source?: Source;
   toVerify?: string;
 }

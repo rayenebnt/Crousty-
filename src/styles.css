@@ -1,0 +1,49 @@
+@import "tailwindcss";
+@import "@fontsource/anton/latin-400.css";
+@import "@fontsource-variable/inter/wght.css";
+
+@theme {
+  --color-nuit: #0b1020;
+  --color-noir: #06070b;
+  --color-rouge: #e3262b;
+  --color-flamme: #ff6a13;
+  --color-cheddar: #ffc21a;
+  --color-papier: #efe6d2;
+  --color-bois: #8a5a33;
+  --font-display: "Anton", "Arial Narrow", Impact, sans-serif;
+  --font-sans: "Inter Variable", system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  background: var(--color-nuit);
+  color: #fff;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Fond de la scène : halo chaud au centre, nuit sur les bords. */
+.stage-bg {
+  background:
+    radial-gradient(ellipse 70% 60% at 50% 55%, rgb(120 52 18 / 0.55), transparent 70%),
+    radial-gradient(ellipse 120% 90% at 50% 100%, #1b1220, var(--color-nuit));
+}
+
+/* Pictogrammes au trait, comme au mur du restaurant. */
+.picto-bg {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160' fill='none' stroke='%23ffffff' stroke-opacity='0.05' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M20 40c0-12 9-19 20-19s20 7 20 19zM18 46h44M20 52h40c0 5-3 8-8 8H28c-5 0-8-3-8-8z'/%3E%3Cpath d='M106 30l4 34h20l4-34zM112 30l-2-16M120 30v-18M128 30l2-15'/%3E%3Cpath d='M22 118c0 8 36 8 36 0M18 112c0-6 44-6 44 0M26 114c3-3 6 3 9 0s6 3 9 0 6 3 9 0'/%3E%3Cpath d='M114 96h8v10c6 3 8 7 8 12v26h-24v-26c0-5 2-9 8-12z'/%3E%3C/svg%3E");
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

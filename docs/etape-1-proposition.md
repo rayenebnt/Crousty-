@@ -1,14 +1,14 @@
 # Le Crousty — Étape 1 : proposition d'architecture
 
-> **Statut : à valider.** Aucune ligne de 3D n'est écrite. Cette étape fixe le plan, le modèle de données et la liste des pièces à construire.
+> **Statut : validée avec corrections.** Tes réponses sont consignées en section 10. La suite est dans [`etape-2-configurateur.md`](etape-2-configurateur.md).
 
-Livré avec ce document :
+Fichiers de données :
 
 | Fichier | Contenu |
 |---|---|
 | `src/data/menu.types.ts` | Le contrat de `menu.json` (types commentés) |
-| `src/data/menu.json` | Brouillon **complet** de la carte : 7 catégories, 39 produits, 83 ingrédients, 13 groupes d'options, 2 formules. Aucun prix. 59 `[À COMPLÉTER]`, 48 points `toVerify` |
-| `src/data/restaurant.json` | Infos pratiques (adresse, horaires, liens) : vides, à remplir |
+| `src/data/menu.json` | La carte **complète** d'après la 2ᵉ photo : 12 catégories, 55 produits, 110 ingrédients, 20 groupes d'options, 3 formules. Aucun prix. 70 `[À COMPLÉTER]` (dont 55 descriptions produit) et 41 points `toVerify` |
+| `src/data/restaurant.json` | Infos pratiques (adresse, horaires, liens) : vides, à remplir plus tard |
 
 ---
 
@@ -30,19 +30,19 @@ resolveBuild()  ← fonction pure, testée, ne connaît ni React ni Three.js
 
 Le code 3D ne connaît **aucun produit**. Il sait seulement dessiner des « archétypes » (un steak, des morceaux, une tranche, un filet de sauce…) à une « couche » donnée d'un « support » (pain, galette, bun, barquette…). Tout le reste vient de `menu.json`.
 
-Exemple de BuildSpec pour *Sandwich Tenders gratiné + frites cheddar bacon + Coca* :
+Exemple de BuildSpec pour *Crousty aux tenders gratiné + frites paysannes + Coca* :
 
 ```ts
 {
   main:  { support: "pain-sandwich", items: [
-           { key: "tenders#0",        ingredient: "tenders",        layer: "meat"   },
-           { key: "gratin-fromage#0", ingredient: "gratin-fromage", layer: "gratin" } ] },
-  side:  { support: "barquette", items: [
-           { key: "frites#0",          ingredient: "frites",          layer: "fries"   },
-           { key: "nappage-cheddar#0", ingredient: "nappage-cheddar", layer: "coating" },
-           { key: "bacon-miettes#0",   ingredient: "bacon-miettes",   layer: "extra"   } ] },
-  drink: { support: "emplacement-boisson", items: [
-           { key: "coca-cola#0", ingredient: "coca-cola", layer: "drink" } ] },
+           { key: "viandes/tenders:tenders#0",          ingredient: "tenders",        layer: "meat"   },
+           { key: "base:cheddar#0",                     ingredient: "cheddar",        layer: "cheese" },
+           { key: "gratine/gratine:gratin-fromage#0",   ingredient: "gratin-fromage", layer: "gratin" } ] },
+  places: {
+    side:  { support: "barquette", items: [
+             { key: "frites-formule/paysannes:frites-paysannes#0", ingredient: "frites-paysannes", layer: "fries" } ] },
+    drink: { support: "emplacement-boisson", items: [
+             { key: "boisson-option/coca-cola:coca-cola#0", ingredient: "coca-cola", layer: "drink" } ] } },
   tray: true
 }
 ```
@@ -58,20 +58,20 @@ Chaque route est **pré-rendue en HTML statique**, ce qui permet l'indexation et
 ```
 /                        Accueil : sandwich gratiné 3D + aperçu carte, formules, galerie, infos
 /carte                   La carte : onglets par catégorie (/carte#tacos…)
-/composer/:produit       Configurateur 3D (ex. /composer/sandwich-tenders), lien partageable
+/composer/:produit       Configurateur 3D (ex. /composer/sandwich-crousty), lien partageable
 /formules                Ce qui est inclus, suppléments, « doublez votre viande »
 /galerie                 Vraies photos du restaurant et des plats
 /infos                   Adresse, horaires, téléphone, plan, livraison
 /mentions-legales
 ```
 
-**Parcours principal :** Accueil → « Composer mon menu » → catégorie → produit → configurateur → récap → « Commander ». Le mode de commande reste à définir (question 9).
+**Parcours principal :** Accueil → « Composer mon menu » → catégorie → produit → configurateur → récap « Ta compo ». Le site est **une vitrine** : pas de commande en ligne, pas de prix. Le récap mène vers les infos pratiques (« Viens le goûter »), une fois l'adresse fournie.
 
 **Mobile (d'abord) :**
 
 ```
 ┌───────────────────────────────┐
-│ ←  Sandwichs · Tenders        │
+│ ←  Sandwichs · Crousty        │
 │                               │
 │         [ SCÈNE 3D ]          │  ~50 % de l'écran, rotation au doigt
 │                               │
@@ -79,12 +79,12 @@ Chaque route est **pré-rendue en HTML statique**, ce qui permet l'indexation et
 │ Viande · Gratiné · Sauces ·…  │  étapes (onglets défilants)
 │ [Tenders] [Tandoori] [Curry]  │  choix en grosses pastilles (≥ 44 px)
 ├───────────────────────────────┤
-│ Récap · 3 articles  ▲ [Commander] │  panneau bas repliable
+│ Ta compo · Crousty · Tenders… ▲ │  récap repliable (sans prix)
 └───────────────────────────────┘
 ```
 
 Sur ordinateur, la 3D occupe 60 % à gauche, les options sont à droite et le récap reste visible.
-Une barre basse fixe hors configurateur propose : **Carte · Composer · Appeler**.
+Une barre basse fixe hors configurateur propose : **Carte · Composer · Nous trouver**.
 
 ---
 
@@ -138,12 +138,12 @@ Sept blocs (types complets dans `menu.types.ts`) :
 
 | Bloc | Rôle | Exemple |
 |---|---|---|
-| `meta` | Réglages globaux. **`showPrices: false`** : aucun prix nulle part | |
-| `showcase` | Ce que l'accueil met en scène | `sandwich-tenders` gratiné |
-| `supports` | Ce qui porte les ingrédients, et l'ordre des couches | `pain-sandwich`, `galette-tacos`, `bun`, `pain-hot-dog`, `barquette`, `emplacement-boisson` |
+| `meta` | Réglages globaux. Aucun prix n'existe dans le fichier | |
+| `showcase` | Ce que l'accueil met en scène | Crousty aux tenders, gratiné, algérienne, crudités, Coca |
+| `supports` | Ce qui porte les ingrédients, et l'ordre des couches | `pain-sandwich`, `tortilla-wrap`, `galette-tacos`, `bun`, `pain-hot-dog`, `pain-de-mie`, `barquette`, `pot`, `bol-salade`, `assiette`… |
 | `ingredients` | Un élément visible : nom, couche, archétype, couleurs, `.glb` optionnel | `tenders`, `gratin-fromage`, `ketchup`, `coca-cola` |
 | `optionGroups` | Un choix du client : unique, multiple, interrupteur | `viandes`, `gratine`, `sauces`, `boisson` |
-| `formulas` | Ce qu'ajoute « frites + boisson incluses » : barquette, boisson, plateau | `frites-boisson` |
+| `formulas` | Ce qui accompagne le produit : barquette, boisson, petite salade, plateau | `frites-maison`, `frites-boisson`, `brasserie` |
 | `categories` / `products` | La carte. Un produit hérite du support, des options et de la formule de sa catégorie | `sandwich-crousty` |
 
 ### Couches (places dans l'empilement)
@@ -153,10 +153,13 @@ Chaque support liste les couches qu'il accepte, **du bas vers le haut** :
 | Support | Couches intérieures | Posé dessus |
 |---|---|---|
 | `pain-sandwich` | sauce-base → meat → cheese → extra → veg → veg-top → sauce | gratin |
+| `tortilla-wrap` | sauce-base → meat → cheese → extra → veg → veg-top → sauce | — (donc pas de gratiné) |
 | `galette-tacos` | sauce-base → fries → meat → cheese → extra → veg → veg-top → sauce | gratin |
 | `bun` | sauce-base → veg → meat → cheese → extra → veg-top → sauce | — |
-| `pain-hot-dog` | sauce-base → meat → cheese → extra → veg → veg-top → sauce | gratin |
+| `pain-hot-dog` | sauce-base → meat → cheese → extra → veg → veg-top → sauce | — |
+| `pain-de-mie` (croques) | sauce-base → meat → cheese → extra → veg → sauce | gratin |
 | `barquette` | fries → coating → meat → extra → sauce | — |
+| `pot`, `bol-salade`, `petit-bol`, `assiette` | selon le cas (brasserie, salade) | gratin sur l'assiette |
 | `emplacement-boisson` | drink | — |
 
 Plusieurs éléments sur la même couche (ex. 3 viandes dans un tacos) : les formes plates s'empilent, les morceaux se répartissent sur la surface.
@@ -164,9 +167,11 @@ Plusieurs éléments sur la même couche (ex. 3 viandes dans un tacos) : les for
 ### Options
 
 - `kind` : `single` (une viande), `multi` (sauces, jusqu'à `max`), `toggle` (gratiné, doublez votre viande).
-- `target` : ce que l'option modifie. `main` = le produit (par défaut), `side` = les frites de la formule, `drink` = la boisson.
-- Un choix peut `adds` (ajouter des ingrédients, avec quantité), `removes` (retirer, ex. « sans oignons ») ou `duplicate` (dupliquer une couche : double, triple, doublez votre viande).
+- `target` : ce que l'option modifie. `main` = le produit (par défaut), `side` / `side2` = accompagnements de la formule, `drink` = la boisson.
+- Un choix peut `adds` (ajouter des ingrédients, avec quantité), `removes` (retirer, ex. frites maison → paysannes), `support` (changer de support : pain → tortilla) ou `duplicate` (dupliquer une couche : double, triple, doublez votre viande).
+- `note` affiche une mention courte sous le choix, par exemple « Supplément », sans montant.
 - `choicesFrom` réutilise une liste : les viandes du tacos reprennent celles du Crousty.
+- **Disponibilité automatique** : une option n'est proposée que si le support courant peut l'accueillir. Le gratiné disparaît avec la tortilla sans aucune règle écrite, parce que la tortilla n'a pas de couche « gratin ».
 
 ### Ajouter un produit = modifier seulement `menu.json`
 
@@ -177,8 +182,8 @@ Plusieurs éléments sur la même couche (ex. 3 viandes dans un tacos) : les for
 
 Le produit apparaît automatiquement dans la carte, le configurateur, la vue 2D, le récap et les données schema.org.
 
-- **Nouvel ingrédient** : on choisit un archétype existant et des couleurs, sans toucher au code. Pour une forme vraiment nouvelle, on dépose `public/models/ingredients/<id>.glb` et on ajoute `"glb"`. La place et les animations restent identiques.
-- **Garde-fou** : au build, zod vérifie le fichier, puis des contrôles croisés vérifient que chaque ingrédient référencé existe et que sa couche est acceptée par le support. S'il y a une erreur, le build s'arrête avec un message clair. Ces contrôles tournent déjà sur le brouillon et passent.
+- **Nouvel ingrédient** : on choisit un archétype existant et des couleurs, sans toucher au code. Pour une forme vraiment nouvelle, on déposera `public/models/ingredients/<id>.glb` et on ajoutera `"glb"`. Le champ existe dans le contrat ; le chargement des `.glb` sera branché à l'étape 3.
+- **Garde-fou** : `npm run build` lance d'abord les tests. zod vérifie la forme du fichier, puis des contrôles croisés vérifient que chaque ingrédient référencé existe, que sa couche est acceptée par le support, et que **chaque produit se construit avec chacune de ses options**. S'il y a une erreur, le build s'arrête.
 - **Manques** : `npm run menu:report` liste tous les `[À COMPLÉTER]` et `toVerify`. En prévisualisation, ils sont visibles (pastille « À compléter »). En production, un champ manquant n'est **jamais affiché** : la ligne est masquée.
 
 ---
@@ -302,70 +307,38 @@ Avec « réduire les animations », il n'y a pas d'épinglage : on affiche une i
 
 ---
 
-## 10. Incohérences relevées (brief ↔ photo)
+## 10. Décisions validées (tes réponses)
 
-1. **Prix** : le brief demande un compteur de prix animé, mais aussi « ne pas afficher les prix ». Dans le brouillon, aucun prix n'est stocké (`showPrices: false`). Le compteur est remplacé par un récap animé (nombre d'articles).
-2. **Simple / double / triple** : sur l'affiche, cette option n'apparaît que pour **Whoop** et **Cheese**. Je l'ai limitée à ces deux burgers.
-3. **Sur l'affiche, absents du brief** : burger **540G** ; hot-dog **« Viande h… »** (tronqué). Ajoutés au brouillon, marqués à vérifier.
-4. **Dans le brief, absent de l'affiche** : **Sandwich Tenders**.
-5. **Bacon** : cité comme supplément dans la description du configurateur, mais absent de la liste des suppléments. Non ajouté.
-6. **Frites des burgers gourmets** : l'affiche semble indiquer « frites **paysannes** & boisson incluses ». J'ai créé une formule à part, à vérifier.
-7. **Sauces imposées** : les sauces propres aux burgers (poivre, cajun, zinger, fumée, andalouse, curry-mango, smokey, piquante, giant, moutarde) ne sont pas dans la liste des sauces au choix. Elles sont modélisées comme ingrédients fixes des produits, pas comme options.
-8. **Méthode** : il n'y a pas d'étape 4 dans la liste (1, 2, 3, 5). Je propose que l'étape 4 couvre les autres pages (carte, formules, galerie, infos, pied de page), entre la généralisation et les finitions.
+| Sujet | Décision |
+|---|---|
+| Prix | Aucun prix, nulle part. Le fichier n'en contient pas ; un test le vérifie |
+| Commande | Aucune : le site est une vitrine. Pas de bouton « Commander » |
+| Source de vérité | La carte affichée en boutique (2ᵉ photo), pas le brief |
+| Sandwich Tenders | N'existe pas sur la carte : c'est le **Crousty** avec tenders (viande au choix) |
+| Simple / double / triple | Seulement pour Whoop et Cheese. Ailleurs, on ajoute de la viande via les suppléments |
+| Pain des sandwichs | Pain (celui de la photo du plat) **ou tortilla**. Pas de gratinage sur la tortilla |
+| Gratiné | À l'emmental, sur tous les sandwichs et sur les tacos |
+| Sauces | 2 au maximum |
+| Crudités | Salade, tomates, oignons |
+| Suppléments | Œuf, cheddar, **bacon**, oignons caramélisés (vus sur l'affiche), boursin, tandoori, curry, tenders, merguez, pastrami, escalope |
+| Frites du menu | Frites maison ; les **frites paysannes** en supplément à la place. Les frites garnies se vendent à part |
+| Boissons | En canette, génériques colorées, nom écrit en clair, sans logo |
+| Boisson du menu | Incluse pour les classics et les smash (1ʳᵉ photo). En option (« boisson + ») pour les sandwichs, gratinés, burgers gourmets, hot-dogs (2ᵉ photo) |
+| Nouvelles catégories (2ᵉ photo) | Gratinés, Croques, Brasserie, Salade signature, Starters : ajoutées à `menu.json` |
+| Étape 4 | Les autres pages (carte, formules, galerie, infos, pied de page) |
+| Adresse, horaires… | Plus tard |
 
----
+## 11. Questions restantes (non bloquantes pour l'étape 3)
 
-## 11. Questions
+Toutes sont aussi listées par `npm run menu:report`.
 
-### A. Bloquantes pour l'étape 2 (Sandwich Tenders + gratiné + frites + boisson)
-
-1. **Sandwich Tenders** : produit à part (quelle garniture ?) ou *Crousty* avec des tenders ?
-2. **Pain des sandwichs** : lequel ? La photo du plat montre un pain long gratiné, l'affiche un pain type pita. Est-ce le même pour tous ?
-3. **Gratiné** : quel fromage ? Sur quelles catégories (sandwichs, tacos, hot-dogs) ?
-4. **Sauces** : combien au maximum par produit ? Sont-elles aussi au choix sur les burgers et les frites ?
-5. **Crudités** des sandwichs : liste exacte (salade, tomate, oignons… ) ?
-6. **Frites de la formule** : peut-on les remplacer par des frites garnies (cheddar bacon / tandoori), ou celles-ci ne sont-elles vendues qu'à part ? Frites classiques ou potatoes (la photo montre des potatoes) ?
-7. **Boissons** : canette 33 cl ou bouteille ? Variantes exactes de « tous les cocas » et « tous les Oasis » ? Je propose des **canettes génériques colorées avec le nom écrit, sans logo** (droit des marques). Ça te va ?
-8. **Prix** : confirmes-tu « aucun prix nulle part », avec le compteur de prix remplacé par le récap ?
-9. **Commande** : que se passe-t-il après « Commander » ?
-   - (a) récap plein écran à montrer au comptoir ;
-   - (b) bouton d'appel ;
-   - (c) message WhatsApp ou SMS pré-rempli avec la composition ;
-   - (d) liens Uber Eats, Deliveroo… lesquels ?
-
-   Plusieurs réponses possibles. Le site ne peut pas transmettre la composition aux plateformes de livraison.
-
-### B. Pour généraliser à toute la carte (étape 3)
-
-10. **180G / 360G / 540G** : trois burgers, ou trois tailles du même burger ? Y a-t-il du fromage ?
-11. **Hot-dogs** : composition de chacun ? Le 4ᵉ « Viande h… » existe-t-il ? Sont-ils servis en formule ?
-12. **Tacos** : tailles (1/2/3 viandes) ? Peut-on prendre deux fois la même viande ? Base : « sauce emmental, jambon de dinde (?), frites » ? Formule incluse ?
-13. **Textes illisibles** sur la photo : Country, So Giant, Soho, Chèvre-Miel, Braisé, Wood, Pastrami, Chicanos, Chicken Burger. Peux-tu m'envoyer une photo nette de chaque écran, ou le texte ?
-14. **Suppléments** : sur quelles catégories ? Bacon en supplément ? « Doublez votre viande » : smash uniquement ?
-15. **Badges** : quels produits sont *Best-seller*, *Épicé*, *Nouveau* ? Je n'en ai attribué aucun.
-
-### C. Avant la mise en ligne
-
-16. Adresse exacte, téléphone, horaires, liens de livraison, réseaux sociaux.
-17. Mentions légales : raison sociale, SIRET, directeur de publication, hébergeur.
-18. **Photos** : as-tu les droits sur les deux photos ? La première ressemble à une photo d'avis Google. As-tu d'autres photos (façade, salle, plats) et le logo en vectoriel ?
-19. Nom de domaine et hébergement prévus ?
-20. Veux-tu une rubrique allergènes ?
-
----
-
-## 12. Étape 2 : périmètre proposé (après ta validation)
-
-- Installation du projet (Vite, React, TS, Tailwind, R3F, drei, GSAP, Zustand, zod, Vitest).
-- `menu.schema.ts`, `resolveBuild` et leurs tests (chaque produit et chaque option se construisent).
-- Configurateur complet sur **un parcours** :
-  - Sandwich Tenders : le pain s'ouvre, les tenders tombent avec un rebond ;
-  - gratiné : fonte, coulures, dorure, vapeur ;
-  - les 8 sauces ;
-  - frites nature / cheddar bacon / cheddar tandoori ;
-  - les 9 boissons ;
-  - le plateau papier journal ;
-  - le récap ;
-  - rotation, zoom et rotation automatique.
-- Formulaire d'options accessible (qui sert aussi d'interface sans 3D).
-- Je t'envoie des captures et une courte vidéo du rendu sur mobile pour validation.
+1. **Gratinés** : même fromage (emmental) ? Sauces, crudités et suppléments possibles ?
+2. **Tacos** : tailles ? La même viande deux fois ? Servis avec frites / boisson ?
+3. **Hot-dogs et croques** : composition de chacun ? Boisson en option ?
+4. **180G / 360G / 540G** : trois tailles du même burger ? Y a-t-il du fromage ?
+5. **Textes peu lisibles** : Country, So Giant, « sauce Anoli » (aïoli ?) du Wood, salade signature (« grenades », « pommes » ?), « Saltiboca » (Saltimbocca ?), quantités des onion rings et des brochettes bœuf-fromage.
+6. **Bacon** : de bœuf ou de dinde, dans les burgers et sur les frites ?
+7. **Boissons** : variantes exactes (cocas, Oasis) ? L'eau aussi en canette ?
+8. **Badges** Best-seller / Épicé / Nouveau : lesquels ?
+9. **Photos** : droits sur les photos, autres photos, logo vectoriel ?
+10. **Mise en ligne** : adresse, téléphone, horaires, réseaux, mentions légales, nom de domaine.
