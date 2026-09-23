@@ -1,0 +1,26 @@
+{
+  "name": "Le Crousty",
+  "tagline": "[À COMPLÉTER]",
+  "address": {
+    "street": "[À COMPLÉTER]",
+    "postalCode": "94380",
+    "city": "Bonneuil-sur-Marne",
+    "country": "FR",
+    "geo": { "lat": "[À COMPLÉTER]", "lng": "[À COMPLÉTER]" }
+  },
+  "phone": "[À COMPLÉTER]",
+  "openingHours": "[À COMPLÉTER]",
+  "services": {
+    "surPlace": "[À COMPLÉTER]",
+    "aEmporter": "[À COMPLÉTER]",
+    "livraison": "[À COMPLÉTER]"
+  },
+  "deliveryLinks": [],
+  "socialLinks": [],
+  "legal": {
+    "companyName": "[À COMPLÉTER]",
+    "siret": "[À COMPLÉTER]",
+    "publicationDirector": "[À COMPLÉTER]",
+    "host": "[À COMPLÉTER]"
+  }
+}

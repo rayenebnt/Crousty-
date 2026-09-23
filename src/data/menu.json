@@ -1,0 +1,348 @@
+{
+  "version": 1,
+  "meta": {
+    "restaurant": "Le Crousty",
+    "city": "Bonneuil-sur-Marne (94)",
+    "currency": "EUR",
+    "showPrices": false,
+    "validatedByRestaurant": false,
+    "todoMarker": "[À COMPLÉTER]"
+  },
+
+  "showcase": {
+    "hero": { "product": "sandwich-tenders", "selections": { "gratine": ["gratine"] } }
+  },
+
+  "supports": {
+    "pain-sandwich": {
+      "label": "Pain [À COMPLÉTER]",
+      "visual": { "archetype": "bread", "color": "#D9A05B", "color2": "#8A4E1E" },
+      "opens": true,
+      "layers": ["sauce-base", "meat", "cheese", "extra", "veg", "veg-top", "sauce"],
+      "onTop": ["gratin"],
+      "toVerify": "Type de pain ? La photo du plat montre un pain long gratiné, l'affiche un pain type pita. Le même pour tous les sandwichs ?"
+    },
+    "galette-tacos": {
+      "label": "Galette de blé",
+      "visual": { "archetype": "tortilla", "color": "#EBC98C", "color2": "#A86A2E" },
+      "opens": true,
+      "layers": ["sauce-base", "fries", "meat", "cheese", "extra", "veg", "veg-top", "sauce"],
+      "onTop": ["gratin"]
+    },
+    "bun": {
+      "label": "Pain burger",
+      "visual": { "archetype": "bun", "variant": "sesame", "color": "#C8742E", "color2": "#F5E3B8" },
+      "opens": true,
+      "layers": ["sauce-base", "veg", "meat", "cheese", "extra", "veg-top", "sauce"],
+      "toVerify": "Même pain pour classics, gourmets et smash ? (photo du plat : bun brioché au sésame)"
+    },
+    "pain-hot-dog": {
+      "label": "Pain hot-dog",
+      "visual": { "archetype": "hotdog-bun", "color": "#D89A5A", "color2": "#9A5A26" },
+      "opens": true,
+      "layers": ["sauce-base", "meat", "cheese", "extra", "veg", "veg-top", "sauce"],
+      "onTop": ["gratin"]
+    },
+    "barquette": {
+      "label": "Barquette",
+      "visual": { "archetype": "fry-box", "color": "#E8651E", "color2": "#FFFFFF" },
+      "layers": ["fries", "coating", "meat", "extra", "sauce"]
+    },
+    "emplacement-boisson": {
+      "label": "Boisson",
+      "visual": { "archetype": "drink-spot" },
+      "layers": ["drink"]
+    }
+  },
+
+  "ingredients": {
+    "steak-hache":        { "label": "Steak haché",          "layer": "meat",  "visual": { "archetype": "patty", "color": "#5A2E1B", "color2": "#2E150C" }, "source": "photo", "toVerify": "Poids du steak des classics / sandwichs ?" },
+    "steak-150g":         { "label": "Steak 150 g",          "layer": "meat",  "visual": { "archetype": "patty", "color": "#5A2E1B", "color2": "#2E150C", "size": 1.15 }, "source": "photo" },
+    "smash-steak":        { "label": "Steak smashé",         "layer": "meat",  "visual": { "archetype": "patty", "variant": "smash", "color": "#6B3520", "color2": "#2A120A" }, "source": "photo" },
+    "poulet":             { "label": "Poulet",               "layer": "meat",  "visual": { "archetype": "cutlet", "color": "#D6A15C", "color2": "#9A5E24" }, "source": "photo", "toVerify": "Poulet pané, grillé ? (Chicken Burger, Country)" },
+    "supreme-poulet":     { "label": "Suprême de poulet",    "layer": "meat",  "visual": { "archetype": "cutlet", "color": "#E0B57A", "color2": "#A8672F" }, "source": "photo" },
+    "poulet-braise":      { "label": "Poulet braisé",        "layer": "meat",  "visual": { "archetype": "cutlet", "color": "#B8692E", "color2": "#6E3314" }, "source": "photo" },
+    "tenders":            { "label": "Tenders",              "layer": "meat",  "visual": { "archetype": "strips", "variant": "breaded", "color": "#D9962F", "color2": "#F2C46A", "count": 3 }, "source": "brief+photo" },
+    "escalope":           { "label": "Escalope",             "layer": "meat",  "visual": { "archetype": "cutlet", "color": "#D8A866", "color2": "#9C5C28" }, "source": "brief+photo", "toVerify": "Escalope de poulet ? panée ou grillée ?" },
+    "tandoori":           { "label": "Poulet tandoori",      "layer": "meat",  "visual": { "archetype": "chunks", "color": "#D2461E", "color2": "#8E2A10", "count": 9 }, "source": "brief" },
+    "curry":              { "label": "Poulet curry",         "layer": "meat",  "visual": { "archetype": "chunks", "color": "#E0A526", "color2": "#A86A12", "count": 9 }, "source": "brief", "toVerify": "Poulet au curry ?" },
+    "merguez":            { "label": "Merguez",              "layer": "meat",  "visual": { "archetype": "sausage", "color": "#8E2E1C", "color2": "#4E150B", "count": 2 }, "source": "brief+photo" },
+    "saucisse":           { "label": "Saucisse",             "layer": "meat",  "visual": { "archetype": "sausage", "color": "#C0704A", "color2": "#7A3A1E", "count": 1 }, "source": "photo", "toVerify": "Saucisse du hot-dog Classic : type ? [À COMPLÉTER]" },
+    "pastrami":           { "label": "Pastrami",             "layer": "meat",  "visual": { "archetype": "sliced", "color": "#A8404A", "color2": "#5C1E24", "count": 4 }, "source": "brief+photo" },
+    "viande-hachee":      { "label": "Viande hachée",        "layer": "meat",  "visual": { "archetype": "crumble", "color": "#5E3420", "color2": "#3A1D10" }, "source": "brief+photo" },
+    "emince-poulet":      { "label": "Émincé de poulet mariné", "layer": "meat", "visual": { "archetype": "chunks", "variant": "strips", "color": "#C9853D", "color2": "#7E4A1A", "count": 10 }, "source": "photo", "toVerify": "Suite du texte illisible sur la photo (Chicanos)" },
+    "bolognaise":         { "label": "Bolognaise",           "layer": "meat",  "visual": { "archetype": "crumble", "variant": "sauce", "color": "#8A2E1A", "color2": "#4A1A0E" }, "source": "brief+photo", "toVerify": "Composition du hot-dog Bolognaise [À COMPLÉTER]" },
+
+    "bacon":              { "label": "Bacon",                "layer": "extra", "visual": { "archetype": "sliced", "variant": "bacon", "color": "#B5473A", "color2": "#F0C9B0", "count": 2 }, "source": "photo", "toVerify": "Bacon de bœuf ou de dinde ? (Big Bacon, Braisé, Louisiane, Smash Bacon)" },
+    "bacon-boeuf":        { "label": "Bacon de bœuf",        "layer": "extra", "visual": { "archetype": "sliced", "variant": "bacon", "color": "#9E3A2E", "color2": "#E8BFA8", "count": 2 }, "source": "photo" },
+    "bacon-dinde":        { "label": "Bacon de dinde",       "layer": "extra", "visual": { "archetype": "sliced", "variant": "bacon", "color": "#C8604E", "color2": "#F2D2C0", "count": 2 }, "source": "photo" },
+    "bacon-miettes":      { "label": "Bacon",                "layer": "extra", "visual": { "archetype": "crumble", "variant": "bits", "color": "#A8402F", "color2": "#E8B8A0" }, "source": "brief", "toVerify": "Bacon de bœuf ou de dinde sur les frites ?" },
+    "jambon":             { "label": "Jambon",               "layer": "extra", "visual": { "archetype": "sliced", "color": "#F0A8A8", "color2": "#E88C8C", "count": 2 }, "source": "photo", "toVerify": "Jambon de dinde ? (Soho)" },
+    "poulet-fume":        { "label": "Poulet fumé",          "layer": "extra", "visual": { "archetype": "sliced", "color": "#E8B9A4", "color2": "#C88A70", "count": 3 }, "source": "photo" },
+    "chorizo":            { "label": "Chorizo",              "layer": "extra", "visual": { "archetype": "slices", "color": "#B8321E", "color2": "#E8A07A", "count": 5 }, "source": "photo" },
+    "saucisson-sec-boeuf":{ "label": "Saucisson sec de bœuf", "layer": "extra", "visual": { "archetype": "slices", "color": "#7A2A26", "color2": "#E8D2C0", "count": 5 }, "source": "photo" },
+    "oeuf":               { "label": "Œuf",                  "layer": "extra", "visual": { "archetype": "egg", "color": "#FFFFFF", "color2": "#FFB300" }, "source": "brief+photo" },
+    "champignons":        { "label": "Champignons",          "layer": "extra", "visual": { "archetype": "slices", "variant": "mushroom", "color": "#C9A27C", "color2": "#7A5A3A", "count": 6 }, "source": "photo" },
+    "confiture-figue":    { "label": "Confiture de figue",   "layer": "extra", "visual": { "archetype": "spread", "color": "#5E2342", "color2": "#8A3A5E" }, "source": "photo" },
+
+    "cheddar":            { "label": "Cheddar",              "layer": "cheese", "visual": { "archetype": "cheese-slice", "color": "#F5A623" }, "source": "brief+photo" },
+    "red-cheddar":        { "label": "Red cheddar",          "layer": "cheese", "visual": { "archetype": "cheese-slice", "color": "#E8781E" }, "source": "photo" },
+    "raclette":           { "label": "Raclette",             "layer": "cheese", "visual": { "archetype": "cheese-slice", "color": "#F3D98B" }, "source": "photo" },
+    "comte":              { "label": "Comté",                "layer": "cheese", "visual": { "archetype": "cheese-slice", "color": "#F1D27A" }, "source": "photo" },
+    "emmental":           { "label": "Emmental",             "layer": "cheese", "visual": { "archetype": "cheese-slice", "color": "#F6E3A1" }, "source": "photo" },
+    "mozzarella":         { "label": "Mozzarella",           "layer": "cheese", "visual": { "archetype": "cheese-slice", "variant": "soft", "color": "#FBF6EA" }, "source": "photo" },
+    "chevre":             { "label": "Chèvre",               "layer": "cheese", "visual": { "archetype": "slices", "variant": "goat", "color": "#F7F4EC", "color2": "#E8DFC8", "count": 3 }, "source": "photo" },
+    "bleu-auvergne":      { "label": "Bleu d'Auvergne AOP",  "layer": "cheese", "visual": { "archetype": "bits", "variant": "blue-cheese", "color": "#E9E6DA", "color2": "#5B6E8C" }, "source": "photo" },
+    "boursin":            { "label": "Boursin",              "layer": "cheese", "visual": { "archetype": "spread", "variant": "herbs", "color": "#F6F3EA", "color2": "#6F8F4E" }, "source": "brief+photo" },
+    "fromage-frais":      { "label": "Fromage frais",        "layer": "cheese", "visual": { "archetype": "spread", "color": "#FAF7F0" }, "source": "photo" },
+    "creme-fraiche":      { "label": "Crème fraîche",        "layer": "sauce-base", "visual": { "archetype": "spread", "color": "#FBF8F1" }, "source": "photo" },
+    "sauce-emmental":     { "label": "Sauce emmental",       "layer": "sauce-base", "visual": { "archetype": "spread", "variant": "sauce", "color": "#F2D27B" }, "source": "photo", "toVerify": "« Sauce emmental » lu sur l'affiche (Pastrami, Tacos) : c'est la sauce fromagère ?" },
+    "gratin-fromage":     { "label": "Gratiné",              "layer": "gratin", "visual": { "archetype": "melt", "variant": "gratin", "color": "#F4CF6A", "color2": "#B86B22" }, "source": "brief", "toVerify": "Quel fromage pour le gratiné ? [À COMPLÉTER]" },
+    "nappage-cheddar":    { "label": "Nappage cheddar",      "layer": "coating", "visual": { "archetype": "melt", "variant": "pour", "color": "#FFB81C", "color2": "#E8901A" }, "source": "brief" },
+
+    "salade":             { "label": "Salade",               "layer": "veg",     "visual": { "archetype": "leaf", "color": "#7DBB3C", "color2": "#C9E58A" }, "source": "photo" },
+    "tomate":             { "label": "Tomate",               "layer": "veg",     "visual": { "archetype": "slices", "color": "#D8301E", "color2": "#F26B4E", "count": 3 }, "source": "photo" },
+    "avocat":             { "label": "Avocat",               "layer": "veg",     "visual": { "archetype": "slices", "variant": "avocado", "color": "#9CC24A", "color2": "#3E5A1E", "count": 4 }, "source": "photo" },
+    "oignons":            { "label": "Oignons",              "layer": "veg-top", "visual": { "archetype": "bits", "color": "#F2EEDF", "color2": "#E0D8C0" }, "source": "photo" },
+    "oignons-rouges":     { "label": "Oignons rouges",       "layer": "veg-top", "visual": { "archetype": "slices", "variant": "rings", "color": "#8C3A7A", "color2": "#EBD7E6", "count": 4 }, "source": "photo" },
+    "oignons-frits":      { "label": "Oignons frits",        "layer": "veg-top", "visual": { "archetype": "bits", "variant": "crispy", "color": "#C98A3A", "color2": "#8A5220" }, "source": "photo" },
+    "cornichons":         { "label": "Cornichons",           "layer": "veg-top", "visual": { "archetype": "slices", "color": "#5E7A2A", "color2": "#A8B860", "count": 4 }, "source": "photo" },
+    "jalapenos":          { "label": "Jalapeños",            "layer": "veg-top", "visual": { "archetype": "slices", "color": "#4F8A2B", "color2": "#C8D890", "count": 5 }, "source": "photo" },
+    "poivrons":           { "label": "Poivrons",             "layer": "veg-top", "visual": { "archetype": "bits", "variant": "strips", "color": "#D93A1E", "color2": "#3E8C2E" }, "source": "photo" },
+    "olives":             { "label": "Olives",               "layer": "veg-top", "visual": { "archetype": "bits", "variant": "rings", "color": "#2E2A24", "color2": "#4A443A" }, "source": "photo" },
+    "tomates-sechees":    { "label": "Tomates séchées",      "layer": "veg-top", "visual": { "archetype": "bits", "color": "#8E2418", "color2": "#5A140C" }, "source": "photo" },
+    "croustillant-miel-sesame": { "label": "Croustillant miel-sésame", "layer": "veg-top", "visual": { "archetype": "bits", "variant": "crispy", "color": "#D9A24A", "color2": "#F2E0B0" }, "source": "photo", "toVerify": "Lecture incertaine sur l'affiche (Chèvre-Miel)" },
+
+    "biggy":              { "label": "Sauce Biggy",          "layer": "sauce", "visual": { "archetype": "drizzle", "color": "#F08A4B" }, "source": "brief+photo" },
+    "barbecue":           { "label": "Sauce barbecue",       "layer": "sauce", "visual": { "archetype": "drizzle", "color": "#5A2410" }, "source": "brief+photo" },
+    "ketchup":            { "label": "Ketchup",              "layer": "sauce", "visual": { "archetype": "drizzle", "color": "#C8161D" }, "source": "brief+photo" },
+    "mayonnaise":         { "label": "Mayonnaise",           "layer": "sauce", "visual": { "archetype": "drizzle", "color": "#F6E7B0" }, "source": "brief+photo" },
+    "sauce-blanche":      { "label": "Sauce blanche",        "layer": "sauce", "visual": { "archetype": "drizzle", "color": "#F4F1E8" }, "source": "brief+photo" },
+    "algerienne":         { "label": "Sauce algérienne",     "layer": "sauce", "visual": { "archetype": "drizzle", "color": "#E8964A" }, "source": "brief+photo" },
+    "harissa":            { "label": "Harissa",              "layer": "sauce", "visual": { "archetype": "drizzle", "color": "#A8190F" }, "source": "brief" },
+    "samourai":           { "label": "Sauce samouraï",       "layer": "sauce", "visual": { "archetype": "drizzle", "color": "#E86A2C" }, "source": "brief" },
+    "moutarde":           { "label": "Moutarde",             "layer": "sauce", "visual": { "archetype": "drizzle", "color": "#D9A400" }, "source": "photo" },
+    "sauce-poivre":       { "label": "Sauce poivre",         "layer": "sauce", "visual": { "archetype": "drizzle", "color": "#8A6A4A" }, "source": "photo" },
+    "sauce-giant":        { "label": "Sauce Giant",          "layer": "sauce", "visual": { "archetype": "drizzle", "color": "#E0A070" }, "source": "photo", "toVerify": "Couleur / recette de la sauce Giant ?" },
+    "sauce-cajun":        { "label": "Sauce cajun",          "layer": "sauce", "visual": { "archetype": "drizzle", "color": "#C0501E" }, "source": "photo" },
+    "sauce-zinger":       { "label": "Sauce Zinger",         "layer": "sauce", "visual": { "archetype": "drizzle", "color": "#D8431E" }, "source": "photo" },
+    "sauce-fumee":        { "label": "Sauce fumée",          "layer": "sauce", "visual": { "archetype": "drizzle", "color": "#6A3418" }, "source": "photo" },
+    "sauce-andalouse":    { "label": "Sauce andalouse",      "layer": "sauce", "visual": { "archetype": "drizzle", "color": "#E0703A" }, "source": "photo", "toVerify": "Lu « sauce Anda… » sur l'affiche (Wood)" },
+    "sauce-curry-mango":  { "label": "Sauce curry-mango",    "layer": "sauce", "visual": { "archetype": "drizzle", "color": "#E8A21E" }, "source": "photo" },
+    "sauce-smokey":       { "label": "Sauce smokey",         "layer": "sauce", "visual": { "archetype": "drizzle", "color": "#7A3A1A" }, "source": "photo" },
+    "sauce-piquante":     { "label": "Sauce piquante",       "layer": "sauce", "visual": { "archetype": "drizzle", "color": "#C2261A" }, "source": "photo" },
+    "miel":               { "label": "Miel",                 "layer": "sauce", "visual": { "archetype": "drizzle", "variant": "honey", "color": "#E3A21A" }, "source": "photo" },
+
+    "frites":             { "label": "Frites",               "layer": "fries", "visual": { "archetype": "fries", "color": "#F2C14E", "color2": "#C98A2A", "count": 40 }, "source": "brief+photo", "toVerify": "Frites classiques ou potatoes ? (la photo du plat montre des potatoes)" },
+    "frites-paysannes":   { "label": "Frites paysannes",     "layer": "fries", "visual": { "archetype": "fries", "variant": "wedges", "color": "#E8B04A", "color2": "#8A5A2A", "count": 24 }, "source": "photo", "toVerify": "Lu « frites paysannes & boisson incluses » près des burgers gourmets" },
+
+    "coca-cola":          { "label": "Coca-Cola",            "layer": "drink", "visual": { "archetype": "can", "color": "#D0141E", "color2": "#FFFFFF", "label": "Coca-Cola" }, "source": "brief", "toVerify": "« Tous les cocas » : variantes exactes (Zero, Cherry…) [À COMPLÉTER]" },
+    "fanta":              { "label": "Fanta",                "layer": "drink", "visual": { "archetype": "can", "color": "#F28C1E", "color2": "#1E4AA8", "label": "Fanta" }, "source": "brief" },
+    "hawai":              { "label": "Hawaï",                "layer": "drink", "visual": { "archetype": "can", "color": "#F5A623", "color2": "#2E9E4A", "label": "Hawaï" }, "source": "brief" },
+    "oasis":              { "label": "Oasis",                "layer": "drink", "visual": { "archetype": "can", "color": "#F29A1E", "color2": "#2E9E4A", "label": "Oasis" }, "source": "brief", "toVerify": "« Tous les Oasis » : parfums exacts [À COMPLÉTER]" },
+    "orangina":           { "label": "Orangina",             "layer": "drink", "visual": { "archetype": "can", "color": "#F28C1E", "color2": "#1E3A8A", "label": "Orangina" }, "source": "brief" },
+    "schweppes-agrumes":  { "label": "Schweppes Agrumes",    "layer": "drink", "visual": { "archetype": "can", "color": "#F2D21E", "color2": "#1E1E1E", "label": "Schweppes Agrumes" }, "source": "brief" },
+    "ice-tea":            { "label": "Ice Tea",              "layer": "drink", "visual": { "archetype": "can", "color": "#B5651D", "color2": "#F2E0B0", "label": "Ice Tea" }, "source": "brief" },
+    "sprite":             { "label": "Sprite",               "layer": "drink", "visual": { "archetype": "can", "color": "#2E9E4A", "color2": "#F2D21E", "label": "Sprite" }, "source": "brief" },
+    "eau":                { "label": "Eau",                  "layer": "drink", "visual": { "archetype": "bottle", "color": "#9FD3F2", "color2": "#FFFFFF", "label": "Eau" }, "source": "brief" }
+  },
+
+  "optionGroups": {
+    "viandes": {
+      "label": "Ta viande", "kind": "single", "min": 1, "max": 1, "source": "brief",
+      "choices": [
+        { "id": "tandoori", "label": "Tandoori", "adds": ["tandoori"] },
+        { "id": "curry", "label": "Curry", "adds": ["curry"] },
+        { "id": "tenders", "label": "Tenders", "adds": ["tenders"] },
+        { "id": "merguez", "label": "Merguez", "adds": ["merguez"] },
+        { "id": "pastrami", "label": "Pastrami", "adds": ["pastrami"] },
+        { "id": "escalope", "label": "Escalope", "adds": ["escalope"] }
+      ]
+    },
+    "viandes-tacos": {
+      "label": "Tes viandes (jusqu'à 3)", "kind": "multi", "min": 1, "max": 3, "allowRepeat": false,
+      "choicesFrom": "viandes", "source": "brief",
+      "toVerify": "Tailles de tacos (1, 2, 3 viandes) ? La même viande peut-elle être prise deux fois ?"
+    },
+    "viande-soho": {
+      "label": "Ta viande", "kind": "single", "min": 1, "max": 1, "source": "photo",
+      "choices": [
+        { "id": "steak", "label": "Steak", "adds": ["steak-hache"], "default": true },
+        { "id": "escalope", "label": "Escalope", "adds": ["escalope"] }
+      ]
+    },
+    "viande-country": {
+      "label": "Ta viande", "kind": "single", "min": 1, "max": 1, "source": "photo",
+      "toVerify": "Lu « Steak ou Poulet » sur l'affiche (Country)",
+      "choices": [
+        { "id": "steak", "label": "Steak", "adds": ["steak-hache"], "default": true },
+        { "id": "poulet", "label": "Poulet", "adds": ["poulet"] }
+      ]
+    },
+    "champignons-ou-olives": {
+      "label": "Champignons ou olives", "kind": "single", "min": 1, "max": 1, "source": "photo",
+      "choices": [
+        { "id": "champignons", "label": "Champignons", "adds": ["champignons"], "default": true },
+        { "id": "olives", "label": "Olives", "adds": ["olives"] }
+      ]
+    },
+    "gratine": {
+      "label": "Gratiné", "kind": "toggle", "source": "brief",
+      "choices": [ { "id": "gratine", "label": "Gratiné au four", "adds": ["gratin-fromage"] } ]
+    },
+    "sauces": {
+      "label": "Tes sauces", "kind": "multi", "min": 0, "max": null, "source": "brief",
+      "toVerify": "Nombre maximum de sauces par produit ? [À COMPLÉTER]",
+      "choices": [
+        { "id": "biggy", "label": "Biggy", "adds": ["biggy"] },
+        { "id": "barbecue", "label": "Barbecue", "adds": ["barbecue"] },
+        { "id": "ketchup", "label": "Ketchup", "adds": ["ketchup"] },
+        { "id": "mayonnaise", "label": "Mayonnaise", "adds": ["mayonnaise"] },
+        { "id": "sauce-blanche", "label": "Blanche", "adds": ["sauce-blanche"] },
+        { "id": "algerienne", "label": "Algérienne", "adds": ["algerienne"] },
+        { "id": "harissa", "label": "Harissa", "adds": ["harissa"] },
+        { "id": "samourai", "label": "Samouraï", "adds": ["samourai"] }
+      ]
+    },
+    "crudites": {
+      "label": "Crudités", "kind": "multi", "min": 0, "max": null, "source": "photo",
+      "toVerify": "Liste exacte des crudités des sandwichs / tacos ? [À COMPLÉTER]",
+      "choices": [
+        { "id": "salade", "label": "Salade", "adds": ["salade"] },
+        { "id": "tomate", "label": "Tomate", "adds": ["tomate"] },
+        { "id": "oignons", "label": "Oignons", "adds": ["oignons"] }
+      ]
+    },
+    "supplements": {
+      "label": "Suppléments", "kind": "multi", "min": 0, "max": null, "source": "brief",
+      "toVerify": "Sur quelles catégories ? Bacon en supplément (cité dans le brief mais absent de la liste) ?",
+      "choices": [
+        { "id": "oeuf", "label": "Œuf", "adds": ["oeuf"] },
+        { "id": "cheddar", "label": "Cheddar", "adds": ["cheddar"] },
+        { "id": "boursin", "label": "Boursin", "adds": ["boursin"] },
+        { "id": "tandoori", "label": "Tandoori", "adds": ["tandoori"] },
+        { "id": "curry", "label": "Curry", "adds": ["curry"] },
+        { "id": "tenders", "label": "Tenders", "adds": ["tenders"] },
+        { "id": "merguez", "label": "Merguez", "adds": ["merguez"] },
+        { "id": "pastrami", "label": "Pastrami", "adds": ["pastrami"] },
+        { "id": "escalope", "label": "Escalope", "adds": ["escalope"] }
+      ]
+    },
+    "taille-classic": {
+      "label": "Ta taille", "kind": "single", "min": 1, "max": 1, "source": "brief+photo",
+      "toVerify": "Sur l'affiche, simple / double / triple n'apparaît que pour Whoop et Cheese",
+      "choices": [
+        { "id": "simple", "label": "Simple", "default": true },
+        { "id": "double", "label": "Double", "duplicate": { "layer": "meat", "times": 1 } },
+        { "id": "triple", "label": "Triple", "duplicate": { "layer": "meat", "times": 2 } }
+      ]
+    },
+    "doubler-viande": {
+      "label": "Doublez votre viande", "kind": "toggle", "source": "brief+photo",
+      "choices": [ { "id": "double", "label": "Viande doublée", "duplicate": { "layer": "meat", "times": 1 } } ]
+    },
+    "frites-formule": {
+      "label": "Tes frites", "kind": "single", "min": 1, "max": 1, "target": "side", "source": "brief",
+      "toVerify": "Peut-on prendre des frites garnies à la place des frites de la formule ?",
+      "choices": [
+        { "id": "nature", "label": "Nature", "default": true },
+        { "id": "cheddar-bacon", "label": "Cheddar bacon", "adds": ["nappage-cheddar", "bacon-miettes"] },
+        { "id": "cheddar-tandoori", "label": "Cheddar tandoori", "adds": ["nappage-cheddar", "tandoori"] },
+        { "id": "cheddar-viande-hachee", "label": "Cheddar viande hachée", "adds": ["nappage-cheddar", "viande-hachee"] }
+      ]
+    },
+    "boisson": {
+      "label": "Ta boisson", "kind": "single", "min": 1, "max": 1, "target": "drink", "source": "brief",
+      "toVerify": "Canette 33 cl ou bouteille ? Variantes exactes ? [À COMPLÉTER]",
+      "choices": [
+        { "id": "coca-cola", "label": "Coca-Cola", "adds": ["coca-cola"], "default": true },
+        { "id": "fanta", "label": "Fanta", "adds": ["fanta"] },
+        { "id": "hawai", "label": "Hawaï", "adds": ["hawai"] },
+        { "id": "oasis", "label": "Oasis", "adds": ["oasis"] },
+        { "id": "orangina", "label": "Orangina", "adds": ["orangina"] },
+        { "id": "schweppes-agrumes", "label": "Schweppes Agrumes", "adds": ["schweppes-agrumes"] },
+        { "id": "ice-tea", "label": "Ice Tea", "adds": ["ice-tea"] },
+        { "id": "sprite", "label": "Sprite", "adds": ["sprite"] },
+        { "id": "eau", "label": "Eau", "adds": ["eau"] }
+      ]
+    }
+  },
+
+  "formulas": {
+    "frites-boisson": {
+      "label": "Frites + boisson incluses",
+      "side": { "support": "barquette", "defaults": ["frites"] },
+      "drink": { "support": "emplacement-boisson" },
+      "optionGroups": ["frites-formule", "boisson"],
+      "tray": true,
+      "source": "brief+photo"
+    },
+    "frites-paysannes-boisson": {
+      "label": "Frites paysannes + boisson incluses",
+      "side": { "support": "barquette", "defaults": ["frites-paysannes"] },
+      "drink": { "support": "emplacement-boisson" },
+      "optionGroups": ["frites-formule", "boisson"],
+      "tray": true,
+      "source": "photo",
+      "toVerify": "Lu près des burgers gourmets, à confirmer"
+    }
+  },
+
+  "categories": [
+    { "id": "sandwichs", "label": "Sandwichs", "picto": "sandwich", "support": "pain-sandwich", "optionGroups": ["gratine", "sauces", "crudites", "supplements"], "formula": "frites-boisson", "source": "brief+photo" },
+    { "id": "tacos", "label": "Tacos", "picto": "tacos", "support": "galette-tacos", "optionGroups": ["viandes-tacos", "gratine", "sauces", "supplements"], "formula": null, "source": "brief+photo", "toVerify": "Formule frites + boisson pour les tacos ? [À COMPLÉTER]" },
+    { "id": "classics-burgers", "label": "Classics Burgers", "picto": "burger", "support": "bun", "optionGroups": [], "formula": "frites-boisson", "source": "brief+photo", "toVerify": "Lu « servi avec salade, tomate, oignons, cornichons » : pour tous les classics ?" },
+    { "id": "burgers-gourmets", "label": "Burgers Gourmets", "picto": "burger", "support": "bun", "optionGroups": [], "formula": "frites-paysannes-boisson", "source": "brief+photo" },
+    { "id": "smash-burgers", "label": "Smash Burgers", "picto": "burger", "support": "bun", "optionGroups": ["doubler-viande"], "formula": "frites-boisson", "source": "brief+photo" },
+    { "id": "hot-dogs", "label": "Hot-dogs", "picto": "hotdog", "support": "pain-hot-dog", "optionGroups": ["sauces"], "formula": null, "source": "brief+photo", "toVerify": "Formule frites + boisson ? Options ? [À COMPLÉTER]" },
+    { "id": "frites-garnies", "label": "Frites garnies", "picto": "fries", "support": "barquette", "optionGroups": [], "formula": null, "source": "brief" }
+  ],
+
+  "products": [
+    { "id": "sandwich-tenders", "category": "sandwichs", "name": "Tenders", "description": "[À COMPLÉTER]", "defaults": ["tenders"], "badges": [], "source": "brief", "toVerify": "Absent de l'affiche : produit à part ou Crousty aux tenders ? Garniture complète [À COMPLÉTER]" },
+    { "id": "sandwich-crousty", "category": "sandwichs", "name": "Crousty", "description": "[À COMPLÉTER]", "defaults": ["cheddar"], "optionGroups": ["viandes", "gratine", "sauces", "crudites", "supplements"], "badges": [], "source": "brief+photo" },
+    { "id": "sandwich-pastrami", "category": "sandwichs", "name": "Pastrami", "description": "[À COMPLÉTER]", "defaults": ["steak-hache", "escalope", "pastrami", "sauce-emmental", { "id": "cheddar", "qty": 2 }], "badges": [], "source": "brief+photo", "toVerify": "Texte partiellement lisible : « Steak, escalope, pastrami de …, sauce emmental, double cheddar »" },
+    { "id": "sandwich-soho", "category": "sandwichs", "name": "Soho", "description": "[À COMPLÉTER]", "defaults": ["jambon", "creme-fraiche", "mozzarella", "emmental"], "optionGroups": ["viande-soho", "gratine", "sauces", "crudites", "supplements"], "badges": [], "source": "brief+photo", "toVerify": "Un ingrédient illisible après « jambon » [À COMPLÉTER]" },
+    { "id": "sandwich-mix-de-luxe", "category": "sandwichs", "name": "Mix de Luxe", "description": "[À COMPLÉTER]", "defaults": ["steak-hache", "escalope", "bacon-dinde", { "id": "cheddar", "qty": 2 }], "badges": [], "source": "brief+photo" },
+    { "id": "sandwich-chicanos", "category": "sandwichs", "name": "Chicanos", "description": "[À COMPLÉTER]", "defaults": ["emince-poulet", "poivrons", "boursin", { "id": "cheddar", "qty": 2 }], "badges": [], "source": "brief+photo" },
+    { "id": "sandwich-special-steak", "category": "sandwichs", "name": "Spécial Steak", "description": "[À COMPLÉTER]", "defaults": [{ "id": "steak-hache", "qty": 3 }, "poulet-fume", "oeuf", "boursin", { "id": "cheddar", "qty": 2 }], "badges": [], "source": "brief+photo" },
+    { "id": "sandwich-special-escalope", "category": "sandwichs", "name": "Spécial Escalope", "description": "[À COMPLÉTER]", "defaults": [{ "id": "escalope", "qty": 2 }, "poulet-fume", "boursin", { "id": "cheddar", "qty": 2 }], "optionGroups": ["champignons-ou-olives", "gratine", "sauces", "crudites", "supplements"], "badges": [], "source": "brief+photo" },
+
+    { "id": "tacos", "category": "tacos", "name": "Tacos", "description": "[À COMPLÉTER]", "defaults": ["sauce-emmental", "frites"], "badges": [], "source": "brief+photo", "toVerify": "Affiche : « Viande au choix, sauce emmental, jambon de dinde (?), frites ». Tailles ? [À COMPLÉTER]" },
+
+    { "id": "burger-whoop", "category": "classics-burgers", "name": "Whoop", "description": "[À COMPLÉTER]", "defaults": ["steak-hache", "salade", "tomate", "oignons", "cornichons", "mayonnaise", "ketchup"], "optionGroups": ["taille-classic"], "badges": [], "source": "brief+photo" },
+    { "id": "burger-cheese", "category": "classics-burgers", "name": "Cheese", "description": "[À COMPLÉTER]", "defaults": ["steak-hache", "cheddar", "salade", "tomate", "oignons", "cornichons", "mayonnaise", "moutarde"], "optionGroups": ["taille-classic"], "badges": [], "source": "brief+photo" },
+    { "id": "burger-180g", "category": "classics-burgers", "name": "180G", "description": "[À COMPLÉTER]", "defaults": ["steak-hache", "salade", "tomate", "oignons", "cornichons", "biggy", "algerienne"], "badges": [], "source": "brief+photo", "toVerify": "Fromage ? 180G / 360G / 540G : trois burgers ou trois tailles du même ?" },
+    { "id": "burger-360g", "category": "classics-burgers", "name": "360G", "description": "[À COMPLÉTER]", "defaults": [{ "id": "steak-hache", "qty": 2 }, "salade", "tomate", "oignons", "cornichons", "biggy", "algerienne"], "badges": [], "source": "brief+photo", "toVerify": "2 steaks de 180 g ? (déduit du nom)" },
+    { "id": "burger-540g", "category": "classics-burgers", "name": "540G", "description": "[À COMPLÉTER]", "defaults": [{ "id": "steak-hache", "qty": 3 }, "salade", "tomate", "oignons", "cornichons", "biggy", "algerienne"], "badges": [], "source": "photo", "toVerify": "Sur l'affiche mais absent du brief. 3 steaks de 180 g ? (déduit du nom)" },
+    { "id": "burger-big-bacon", "category": "classics-burgers", "name": "Big Bacon", "description": "[À COMPLÉTER]", "defaults": ["steak-hache", "bacon", "salade", "tomate", "oignons", "cornichons", "barbecue", "sauce-poivre"], "badges": [], "source": "brief+photo" },
+    { "id": "burger-country", "category": "classics-burgers", "name": "Country", "description": "[À COMPLÉTER]", "defaults": ["salade", "tomate", "oignons", "cornichons", "barbecue"], "optionGroups": ["viande-country"], "badges": [], "source": "brief+photo", "toVerify": "Texte à peine lisible : « Steak ou Poulet, pomme de terre (?), sauce … & BBQ » [À COMPLÉTER]" },
+    { "id": "burger-so-giant", "category": "classics-burgers", "name": "So Giant", "description": "[À COMPLÉTER]", "defaults": ["steak-hache", "salade", "tomate", "oignons", "cornichons", "sauce-giant"], "badges": [], "source": "brief+photo", "toVerify": "Composition complète ? [À COMPLÉTER]" },
+    { "id": "burger-chicken", "category": "classics-burgers", "name": "Chicken Burger", "description": "[À COMPLÉTER]", "defaults": ["poulet", "salade", "tomate", "oignons", "cornichons", "mayonnaise", "sauce-blanche"], "badges": [], "source": "brief+photo" },
+
+    { "id": "gourmet-new-yorkais", "category": "burgers-gourmets", "name": "New-Yorkais", "description": "[À COMPLÉTER]", "defaults": ["steak-150g", "red-cheddar", "chorizo", "salade", "oignons-frits", "barbecue"], "badges": [], "source": "brief+photo" },
+    { "id": "gourmet-raclette", "category": "burgers-gourmets", "name": "Raclette", "description": "[À COMPLÉTER]", "defaults": ["steak-150g", "raclette", "bacon-boeuf", "salade", "oignons-frits", "sauce-poivre"], "badges": [], "source": "brief+photo" },
+    { "id": "gourmet-chevre-miel", "category": "burgers-gourmets", "name": "Chèvre-Miel", "description": "[À COMPLÉTER]", "defaults": ["steak-150g", "chevre", "miel", "croustillant-miel-sesame", "salade"], "badges": [], "source": "brief+photo", "toVerify": "Lu « chèvre, miel croustillant (?), miel-sésame, salade »" },
+    { "id": "gourmet-braise", "category": "burgers-gourmets", "name": "Braisé", "description": "[À COMPLÉTER]", "defaults": ["supreme-poulet", "bacon", "red-cheddar", "salade", "oignons-rouges", "sauce-poivre"], "badges": [], "source": "brief+photo", "toVerify": "Sauce lue « poivre » ou « poivron » ?" },
+    { "id": "gourmet-so-blue", "category": "burgers-gourmets", "name": "So Blue", "description": "[À COMPLÉTER]", "defaults": ["steak-150g", "bleu-auvergne", "confiture-figue", "salade", "fromage-frais", "tomates-sechees"], "badges": [], "source": "brief+photo" },
+    { "id": "gourmet-wood", "category": "burgers-gourmets", "name": "Wood", "description": "[À COMPLÉTER]", "defaults": ["steak-150g", "comte", "saucisson-sec-boeuf", "champignons", "salade", "oignons-rouges", "sauce-andalouse"], "badges": [], "source": "brief+photo" },
+    { "id": "gourmet-manhattan", "category": "burgers-gourmets", "name": "Manhattan", "description": "[À COMPLÉTER]", "defaults": ["supreme-poulet", "pastrami", "comte", "salade", "tomate", "oignons-rouges", "sauce-fumee"], "badges": [], "source": "brief+photo" },
+    { "id": "gourmet-louisiane", "category": "burgers-gourmets", "name": "Louisiane", "description": "[À COMPLÉTER]", "defaults": ["steak-150g", "bacon", "salade", "tomate", "oignons-rouges", "cornichons", "sauce-cajun"], "badges": [], "source": "brief+photo" },
+    { "id": "gourmet-spicy-avocado", "category": "burgers-gourmets", "name": "Spicy Avocado", "description": "[À COMPLÉTER]", "defaults": ["poulet-braise", "avocat", "jalapenos", "salade", "tomate", "oignons-rouges", "sauce-zinger"], "badges": [], "source": "brief+photo" },
+
+    { "id": "smash-original", "category": "smash-burgers", "name": "Original", "description": "[À COMPLÉTER]", "defaults": ["smash-steak", "cheddar", "salade", "tomate", "oignons", "cornichons", "ketchup", "mayonnaise"], "badges": [], "source": "brief+photo" },
+    { "id": "smash-curry-mango", "category": "smash-burgers", "name": "Curry Mango", "description": "[À COMPLÉTER]", "defaults": ["smash-steak", "cheddar", "salade", "tomate", "oignons", "cornichons", "sauce-curry-mango"], "badges": [], "source": "brief+photo" },
+    { "id": "smash-bacon", "category": "smash-burgers", "name": "Bacon", "description": "[À COMPLÉTER]", "defaults": ["smash-steak", "bacon", "cheddar", "salade", "tomate", "oignons", "cornichons", "sauce-smokey"], "badges": [], "source": "brief+photo" },
+    { "id": "smash-louisiane", "category": "smash-burgers", "name": "Louisiane", "description": "[À COMPLÉTER]", "defaults": ["smash-steak", "cheddar", "salade", "tomate", "oignons", "cornichons", "sauce-cajun"], "badges": [], "source": "brief+photo" },
+    { "id": "smash-mexican", "category": "smash-burgers", "name": "Mexican", "description": "[À COMPLÉTER]", "defaults": ["tenders", "cheddar", "salade", "tomate", "oignons", "cornichons", "jalapenos", "sauce-piquante"], "badges": [], "source": "brief+photo" },
+
+    { "id": "hotdog-classic", "category": "hot-dogs", "name": "Classic", "description": "[À COMPLÉTER]", "defaults": ["saucisse"], "badges": [], "source": "brief+photo", "toVerify": "Composition [À COMPLÉTER]" },
+    { "id": "hotdog-merguez", "category": "hot-dogs", "name": "Merguez", "description": "[À COMPLÉTER]", "defaults": ["merguez"], "badges": [], "source": "brief+photo", "toVerify": "Composition [À COMPLÉTER]" },
+    { "id": "hotdog-bolognaise", "category": "hot-dogs", "name": "Bolognaise", "description": "[À COMPLÉTER]", "defaults": ["bolognaise"], "badges": [], "source": "brief+photo", "toVerify": "Composition [À COMPLÉTER]" },
+    { "id": "hotdog-viande-hachee", "category": "hot-dogs", "name": "Viande hachée", "description": "[À COMPLÉTER]", "defaults": ["viande-hachee"], "badges": [], "source": "photo", "toVerify": "« VIANDE H… » tronqué sur la photo, absent du brief : existe-t-il ?" },
+
+    { "id": "frites-cheddar-bacon", "category": "frites-garnies", "name": "Cheddar bacon", "description": "[À COMPLÉTER]", "defaults": ["frites", "nappage-cheddar", "bacon-miettes"], "badges": [], "source": "brief" },
+    { "id": "frites-cheddar-tandoori", "category": "frites-garnies", "name": "Cheddar tandoori", "description": "[À COMPLÉTER]", "defaults": ["frites", "nappage-cheddar", "tandoori"], "badges": [], "source": "brief" },
+    { "id": "frites-cheddar-viande-hachee", "category": "frites-garnies", "name": "Cheddar viande hachée", "description": "[À COMPLÉTER]", "defaults": ["frites", "nappage-cheddar", "viande-hachee"], "badges": [], "source": "brief" }
+  ]
+}
