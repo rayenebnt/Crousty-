@@ -1,0 +1,12 @@
+{
+  "pxPerCm": 30,
+  "files": {
+    "gratin-fromage__apres": {
+      "w": 810,
+      "h": 342,
+      "wCm": 27,
+      "hCm": 11.41,
+      "demo": true
+    }
+  }
+}

@@ -1,9 +1,9 @@
 # Le Crousty — site du restaurant
 
 Fast-food à Bonneuil-sur-Marne (94) : sandwichs et tacos gratinés, burgers, hot-dogs, croques, brasserie, frites garnies.
-Site vitrine (sans prix ni commande) avec un configurateur de menu en 3D.
+Site vitrine (sans prix ni commande) avec un configurateur de menu qui assemble **de vraies photos** des plats.
 
-Stack : React + TypeScript (Vite), React Three Fiber + drei, Tailwind CSS, Zustand, zod, Vitest.
+Stack : React + TypeScript (Vite), React Three Fiber (affichage des photos), Tailwind CSS, Zustand, zod, Vitest.
 
 ## Lancer
 
@@ -13,6 +13,11 @@ npm run dev            # http://localhost:5173
 npm test               # tests de la carte et du configurateur
 npm run build          # tests + typage + build de production
 npm run menu:report    # tout ce qui reste à compléter / vérifier dans la carte
+npm run photos:liste   # liste des photos à prendre (docs/photos/liste-des-photos.md)
+
+# Traiter les photos déposées dans photos/brutes (détourage, échelle, WebP)
+cd tools/photos && npm install && cd ../..
+node tools/photos/preparer.mjs
 ```
 
 ## Avancement
@@ -20,7 +25,7 @@ npm run menu:report    # tout ce qui reste à compléter / vérifier dans la car
 | Étape | Contenu | Statut |
 |---|---|---|
 | 1 | Arborescence, modèle `menu.json`, composants 3D, animations, questions | Validée → [`docs/etape-1-proposition.md`](docs/etape-1-proposition.md) |
-| 2 | Configurateur sur un produit complet (Crousty + gratiné + frites + boisson) | **À valider** → [`docs/etape-2-configurateur.md`](docs/etape-2-configurateur.md) |
+| 2 | Configurateur sur un produit complet (Crousty + gratiné + frites + boisson), en photos réelles | **En attente des photos** → [`docs/etape-2-configurateur.md`](docs/etape-2-configurateur.md), [`docs/photos/protocole.md`](docs/photos/protocole.md) |
 | 3 | Généralisation à toute la carte | À venir |
 | 4 | Autres pages (accueil, carte, formules, galerie, infos) | À venir |
 | 5 | Performance, mobile, accessibilité, finitions | À venir |
@@ -32,6 +37,10 @@ npm run menu:report    # tout ce qui reste à compléter / vérifier dans la car
 | `src/data/menu.json` | **Source unique** de la carte. Ajouter un produit = modifier ce fichier |
 | `src/data/menu.types.ts` | Contrat du fichier (types commentés) |
 | `src/domain/` | Logique pure et testée : sélections, `resolveBuild`, récap, validation |
-| `src/three/` | Scène 3D : supports, formes procédurales, fromage qui fond, animations |
+| `src/photo/` | Rendu photo : liste des prises de vue, calques, fondus (gratiné, nappage), relief |
+| `src/scene/` | Outils communs : animations, vapeur, papier journal de secours |
+| `tools/photos/` | Outil hors site : prépare les photos brutes (détourage, échelle, WebP) |
+| `photos/brutes/` | Photos déposées par le restaurant |
+| `public/photos/` | Photos prêtes pour le site (générées) |
 | `src/ui/` | Interface : options accessibles, récap |
 | `tests/` | Chaque produit × chaque option se construit ; règles du configurateur |

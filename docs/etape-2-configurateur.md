@@ -1,81 +1,60 @@
-# Le Crousty — Étape 2 : le configurateur sur un produit complet
+# Le Crousty — Étape 2 : le configurateur en photos réelles
 
-> **Statut : à valider.** Produit de référence : le **Crousty** (viande au choix → tenders), avec pain ou tortilla, gratiné emmental, sauces, crudités, suppléments, frites maison ou paysannes, et boisson.
+> **Statut : en attente des photos.**
+>
+> - La première version en 3D dessinée par le code faisait « jeu vidéo ». Elle est remplacée par un rendu qui assemble **de vraies photos** de vos plats (option A).
+> - Le moteur est prêt. Il ne manque que les photos : voir le [protocole](photos/protocole.md) et la [liste des photos](photos/liste-des-photos.md).
 
-## Captures (téléphone, 390 × 844)
+## Ce que vous verrez
 
-| Crousty gratiné, frites, Coca | Le gratiné en train de fondre | Tortilla (gratiné indisponible) | Frites cheddar tandoori | Récap |
-|---|---|---|---|---|
-| ![](captures/1-crousty-gratine.jpg) | ![](captures/2-gratine-qui-fond.jpg) | ![](captures/3-tortilla-sans-gratine.jpg) | ![](captures/4-frites-cheddar-tandoori.jpg) | ![](captures/5-recap.jpg) |
+| Crousty gratiné (vraie photo, provisoire) | Le fromage qui fond | Photos pas encore prises |
+|---|---|---|
+| ![](captures/1-crousty-photo-reelle.jpg) | ![](captures/2-gratine-qui-fond.jpg) | ![](captures/3-photos-a-venir.jpg) |
 
-Ces captures viennent d'un Chromium sans carte graphique (rendu logiciel). Sur un vrai téléphone, l'image est plus nette et les animations plus fluides.
+Le gratiné de ces captures vient d'une de vos photos, détourée automatiquement. C'est une démonstration **provisoire**, à remplacer par vos propres photos.
 
-## Voir l'aperçu
+Tant qu'une photo manque, une étiquette « photo à venir » prend sa place, et un compteur en bas à droite indique où en est la séance (`Photos réelles : 0 / 59`).
 
-Aperçu en ligne (privé, à ouvrir sur ton téléphone) : https://claude.ai/artifact/5ksqNdfKfwPSTTJxTDWDhv
+## Comment ça marche
+
+1. Chaque ingrédient est **photographié seul, vu de dessus**, toujours au même endroit et à la même hauteur ([protocole](photos/protocole.md)).
+2. Vous déposez les photos dans `photos/brutes/`, nommées comme dans la [liste](photos/liste-des-photos.md).
+3. `node tools/photos/preparer.mjs` fait le reste :
+   - détourage automatique (le fond disparaît) ;
+   - recadrage et mise à la même échelle ;
+   - export en WebP léger dans `public/photos/`, avec le manifeste `src/data/photos.json`.
+4. Le configurateur assemble les photos en direct :
+
+| Action | Ce qui se passe à l'écran |
+|---|---|
+| Choisir une viande, un supplément, une crudité | La photo de l'ingrédient tombe dans le pain ouvert, avec un rebond et une ombre qui se resserre |
+| Changer de viande | L'ancienne se soulève et disparaît, la nouvelle tombe |
+| Gratiné | La photo « fromage râpé, avant le four » apparaît. Elle se change en « sorti du four » par un fondu irrégulier, avec une lueur chaude et de la vapeur |
+| Tortilla | La garniture tombe sur la tortilla à plat, qui se change en tortilla roulée au repos. Le gratiné reste indisponible |
+| Sauces (2 max) | La photo du filet de sauce se pose sur la garniture |
+| Frites garnies | Le cheddar s'étale depuis le centre en coulures sur la photo des frites, puis le poulet ou le bacon tombe dessus |
+| Boisson | La canette arrive en glissant |
+| Menu | Tout est posé sur la photo de votre plateau papier journal |
+| Relief | La vue s'incline légèrement sous le doigt (et doucement au repos) : les couches du dessus bougent plus que le plateau |
+
+Rien n'a changé dans la carte (`menu.json`), la logique des options, le formulaire accessible et le récap. Seul l'affichage a été remplacé.
 
 ## Lancer le site
 
 ```bash
 npm install
-npm run dev            # http://localhost:5173
-npm run dev -- --host  # pour l'ouvrir depuis un téléphone sur le même Wi-Fi
+npm run dev                 # http://localhost:5173
+npm test                    # 126 tests (carte, options, liste des photos)
+npm run photos:liste        # régénère la liste des photos (et coche celles reçues)
+cd tools/photos && npm install && cd ../..
+node tools/photos/preparer.mjs   # traite les photos de photos/brutes
 ```
 
-Autres commandes : `npm test` (68 tests), `npm run build` (tests + typage + build), `npm run menu:report` (liste des manques de la carte).
+## Limites connues
 
-## Ce qu'il faut regarder
-
-Chaque option a un effet visible qui démarre en moins de 150 ms :
-
-| Action | Ce qui se passe en 3D |
+| Sujet | Quand |
 |---|---|
-| Choisir une viande | Le pain s'ouvre, la viande tombe avec un petit rebond, le pain se referme. Changer de viande : l'ancienne s'envole, la nouvelle arrive |
-| Gratiné | Le fromage apparaît, fond, coule sur les bords, puis dore (zones grillées, cloques) avec de la vapeur. Décocher : il s'efface |
-| Pain → Tortilla | Le pain part, la tortilla arrive à plat, la garniture tombe dessus, la galette s'enroule. Le gratiné se retire tout seul et devient indisponible (« Pas avec : Tortilla ») |
-| Sauces (2 max) | Un filet se dessine en zigzag, une goutte au bout. La 3ᵉ sauce est grisée |
-| Crudités | La salade virevolte en tombant, les tomates tombent, les oignons pleuvent |
-| Suppléments | Chaque ingrédient se pose à sa place dans l'empilement (œuf, cheddar, bacon, boursin…) |
-| Frites paysannes | Les frites maison repartent, les paysannes (potatoes) tombent dans la barquette |
-| Boisson | La canette arrive en glissant et oscille ; changer de boisson l'échange |
-| Formule | Le tout est posé sur le plateau papier journal (clin d'œil à la photo du plat) |
-| Repos | Après 3 s sans toucher, la scène tourne lentement. Rotation au doigt, zoom limité |
-
-Autres produits déjà ouverts dans le sélecteur, **sans une ligne de code en plus** (tout vient de `menu.json`) :
-- les 7 sandwichs ;
-- le Gratiné ;
-- les 3 frites garnies (le cheddar coule sur les frites).
-
-## Ce qui est en place
-
-- **Données** : `menu.json` complet (12 catégories, 55 produits), validé par des tests à chaque build.
-- **Domaine** (`src/domain`) : `resolveBuild`, règles de sélection, récap. Tout est testé, sans React ni Three.js.
-- **Scène 3D** (`src/three`) :
-  - supports : pain qui s'ouvre, tortilla qui s'enroule, barquette, boisson ;
-  - 14 formes d'ingrédients procédurales ;
-  - shader du fromage (fonte, coulures, dorure), nappage cheddar, filets de sauce, vapeur ;
-  - canettes génériques (nom en clair, sans logo), plateau papier journal ;
-  - lumière chaude, ombres de contact.
-- **Interface** (`src/ui`) :
-  - de vrais boutons radio et cases à cocher, utilisables au clavier et au lecteur d'écran ;
-  - annonces des changements (« Gratiné à l'emmental ajouté ») ;
-  - description de la scène pour les lecteurs d'écran ;
-  - « réduire les animations » respecté (pas de rotation auto, pas de vapeur, entrées courtes).
-- **Vitrine** : aucun prix, aucune commande. Le récap « Ta compo » résume la composition.
-
-## Limites connues (prévues aux étapes suivantes)
-
-| Sujet | Étape |
-|---|---|
-| Burgers, hot-dogs, tacos, croques, brasserie, salade, starters : les données sont prêtes, il manque leurs supports 3D (bun, pain hot-dog, tacos plié, pain de mie, assiette, bol, pot) et quelques formes (brochettes, wings, onion rings, mac & cheese) | 3 |
-| Chargement des modèles `.glb` d'un designer (le champ existe dans `menu.json`) | 3 |
-| Pages accueil (sandwich qui se sépare au scroll), carte, formules, galerie, infos, pied de page, routes et référencement | 4 |
-| Version 2D animée si la 3D n'est pas possible (pour l'instant : message + formulaire complet) | 5 |
-| Performance : l'interface se charge d'abord (~90 Ko compressés), puis la 3D (~270 Ko compressés, objectif ~200). Vapeur et ombres à alléger sur les petits téléphones. Mesures sur de vrais appareils | 5 |
-
-## Questions pour valider l'étape 2
-
-1. Le rendu te donne-t-il faim ? Qu'est-ce qui fait « faux » en premier (pain, fromage, frites, tenders…) ?
-2. La mise en page mobile (3D en haut, options dessous, récap en bas) te convient-elle ?
-3. Le vrai pain ressemble-t-il à celui de la photo du plat (long, doré) ? Une photo du pain seul m'aiderait.
-4. Je passe à l'étape 3 (toute la carte) ?
+| Les emplacements des ingrédients dans le pain seront réglés sur les vraies photos (aujourd'hui : valeurs de départ) | Dès réception du premier lot |
+| Burgers, hot-dogs, tacos, croques, brasserie, salade, starters : la liste des photos est prête (lot 2) ; leur angle de prise de vue (de profil pour les burgers ?) est à valider | Étape 3 |
+| Poids : le moteur d'affichage (three.js) pèse ~240 Ko compressés ; un moteur 2D plus léger est possible pour ce rendu photo | Étape 5 |
+| Pages accueil, carte, galerie, infos | Étape 4 |

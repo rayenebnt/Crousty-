@@ -1,0 +1,13 @@
+{
+  "name": "crousty-photos",
+  "private": true,
+  "type": "module",
+  "description": "Outil hors site : détoure, recadre et met à l'échelle les photos brutes (photos/brutes → public/photos).",
+  "scripts": {
+    "preparer": "node preparer.mjs"
+  },
+  "dependencies": {
+    "@imgly/background-removal-node": "1.4.5",
+    "sharp": "^0.34.0"
+  }
+}

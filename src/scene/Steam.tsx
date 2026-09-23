@@ -2,8 +2,8 @@
 import { useFrame } from "@react-three/fiber";
 import { useMemo, useRef } from "react";
 import * as THREE from "three";
-import { softDisc } from "../lib/textures.ts";
-import { hash01 } from "../anim/easing.ts";
+import { softDisc } from "./textures.ts";
+import { hash01 } from "./easing.ts";
 
 interface Props {
   /** Intensité cible (0 = éteinte, 1 = sortie du four). */

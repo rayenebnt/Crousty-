@@ -10,10 +10,11 @@ import { describe } from "../domain/summary.ts";
 import { useConfigurator } from "../store/configurator.ts";
 import { useReducedMotion, useWebGL } from "./hooks.ts";
 import { OptionGroup } from "./OptionGroup.tsx";
+import { PhotoProgress } from "./PhotoProgress.tsx";
 import { Summary } from "./Summary.tsx";
 
-// La 3D (three.js) est chargée à part : l'interface s'affiche tout de suite.
-const Stage = lazy(() => import("../three/Stage.tsx").then((m) => ({ default: m.Stage })));
+// Le rendu (three.js) est chargé à part : l'interface s'affiche tout de suite.
+const PhotoStage = lazy(() => import("../photo/PhotoStage.tsx").then((m) => ({ default: m.PhotoStage })));
 
 /** Catégories ouvertes à l'étape 2 (les autres arrivent à l'étape 3). */
 const STEP2_CATEGORIES = ["sandwichs", "gratines", "frites-garnies"];
@@ -54,7 +55,7 @@ function ProductPicker() {
 }
 
 export function Configurator() {
-  const { productId, selections, activity, announcement, toggle, reset } = useConfigurator();
+  const { productId, selections, announcement, toggle, reset } = useConfigurator();
   const reduced = useReducedMotion();
   const webgl = useWebGL();
   const ctx = useMemo(() => productContext(menu, productId), [productId]);
@@ -71,14 +72,14 @@ export function Configurator() {
       </header>
 
       <main className="flex min-h-0 flex-1 flex-col md:flex-row">
-        <section aria-label="Aperçu 3D" className="stage-bg relative h-[46dvh] shrink-0 md:h-auto md:flex-[3]">
+        <section aria-label="Aperçu" className="stage-bg relative h-[46dvh] shrink-0 md:h-auto md:flex-[3]">
           {webgl ? (
             <Suspense fallback={<p className="grid h-full place-items-center text-white/60">Préchauffage du four…</p>}>
-              <Stage menu={menu} build={build} reduced={reduced} activity={activity} label={summary.sentence} />
+              <PhotoStage menu={menu} build={build} reduced={reduced} label={summary.sentence} />
             </Suspense>
           ) : (
             <p className="grid h-full place-items-center px-8 text-center text-white/70">
-              La 3D n'est pas disponible sur cet appareil. Ta composition reste détaillée ci-dessous.
+              L'aperçu n'est pas disponible sur cet appareil. Ta composition reste détaillée ci-dessous.
             </p>
           )}
           <div className="pointer-events-none absolute inset-x-0 top-0 p-4">
@@ -86,7 +87,7 @@ export function Configurator() {
             <h1 className="font-display text-4xl leading-none uppercase drop-shadow-[0_2px_10px_rgb(0_0_0/0.6)] md:text-6xl">{ctx.product.name}</h1>
             {ctx.formula && <p className="mt-1.5 inline-block rounded-full bg-rouge px-3 py-1 text-xs font-semibold">{ctx.formula.label}</p>}
           </div>
-          {webgl && <p className="pointer-events-none absolute right-3 bottom-2 text-[11px] text-white/45">Fais tourner au doigt</p>}
+          <PhotoProgress />
         </section>
 
         <section aria-label="Options" className="picto-bg min-h-0 flex-1 overflow-y-auto md:flex-[2] md:border-l md:border-white/10">

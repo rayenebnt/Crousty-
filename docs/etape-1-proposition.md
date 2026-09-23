@@ -1,6 +1,8 @@
 # Le Crousty — Étape 1 : proposition d'architecture
 
 > **Statut : validée avec corrections.** Tes réponses sont consignées en section 10. La suite est dans [`etape-2-configurateur.md`](etape-2-configurateur.md).
+>
+> **Mise à jour :** le rendu 3D dessiné par le code (sections 5 et 6) a été abandonné à ta demande au profit de **vraies photos assemblées** (option A). Le principe « une donnée, plusieurs rendus » reste le même ; voir [`photos/protocole.md`](photos/protocole.md).
 
 Fichiers de données :
 
@@ -188,7 +190,7 @@ Le produit apparaît automatiquement dans la carte, le configurateur, la vue 2D,
 
 ---
 
-## 5. Composants 3D
+## 5. Composants 3D (abandonné : remplacé par le rendu photo)
 
 | Composant | Rôle | Notes performance |
 |---|---|---|
@@ -217,7 +219,7 @@ Le même matériau, en variante « nappage », sert au cheddar qui coule sur les
 
 ---
 
-## 6. Animations
+## 6. Animations (principe conservé, réalisé avec des photos)
 
 Règle : **tout effet démarre en moins de 150 ms** après le clic. La suite peut durer, mais le client voit immédiatement que ça réagit.
 
