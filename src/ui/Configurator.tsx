@@ -62,7 +62,7 @@ export function Configurator() {
   const summary = useMemo(() => describe(menu, productId, selections), [productId, selections]);
 
   return (
-    <div className="flex h-dvh flex-col overflow-hidden">
+    <div className="flex h-full flex-col overflow-hidden">
       <header className="z-10 flex h-14 shrink-0 items-center justify-between border-b border-white/10 px-4">
         <p className="font-display text-2xl tracking-wide">
           LE <span className="text-flamme">CROUSTY</span>

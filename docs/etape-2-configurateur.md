@@ -10,6 +10,10 @@
 
 Ces captures viennent d'un Chromium sans carte graphique (rendu logiciel). Sur un vrai téléphone, l'image est plus nette et les animations plus fluides.
 
+## Voir l'aperçu
+
+Aperçu en ligne (privé, à ouvrir sur ton téléphone) : https://claude.ai/artifact/5ksqNdfKfwPSTTJxTDWDhv
+
 ## Lancer le site
 
 ```bash
@@ -67,7 +71,7 @@ Autres produits déjà ouverts dans le sélecteur, **sans une ligne de code en p
 | Chargement des modèles `.glb` d'un designer (le champ existe dans `menu.json`) | 3 |
 | Pages accueil (sandwich qui se sépare au scroll), carte, formules, galerie, infos, pied de page, routes et référencement | 4 |
 | Version 2D animée si la 3D n'est pas possible (pour l'instant : message + formulaire complet) | 5 |
-| Performance : le paquet 3D pèse ~270 Ko compressés (objectif ~200). Vapeur et ombres à alléger sur les petits téléphones. Mesures sur de vrais appareils | 5 |
+| Performance : l'interface se charge d'abord (~90 Ko compressés), puis la 3D (~270 Ko compressés, objectif ~200). Vapeur et ombres à alléger sur les petits téléphones. Mesures sur de vrais appareils | 5 |
 
 ## Questions pour valider l'étape 2
 

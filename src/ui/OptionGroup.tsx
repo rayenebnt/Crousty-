@@ -52,6 +52,7 @@ export function OptionGroup({ menu, ctx, group: g, selections, onToggle }: Props
               ].join(" ")}
             >
               <input
+                id={`opt-${g.id}-${c.id}`}
                 type={radio ? "radio" : "checkbox"}
                 name={g.id}
                 value={c.id}

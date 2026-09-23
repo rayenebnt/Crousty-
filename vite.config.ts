@@ -8,7 +8,9 @@ export default defineConfig({
     target: "es2022",
     rollupOptions: {
       output: {
+        // React à part : sinon il part dans le paquet 3D et tout se charge d'un coup.
         manualChunks(id) {
+          if (/node_modules\/(react|react-dom|scheduler|zustand|use-sync-external-store)\//.test(id)) return "react";
           if (/node_modules\/(three|@react-three|three-stdlib|troika|meshline|maath|camera-controls)/.test(id)) return "three";
         },
       },
