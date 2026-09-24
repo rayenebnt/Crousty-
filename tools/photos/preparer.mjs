@@ -13,6 +13,7 @@
  *   node tools/photos/preparer.mjs            # toutes les photos brutes
  *   node tools/photos/preparer.mjs --demo     # marque les résultats comme provisoires
  *   node tools/photos/preparer.mjs --brutes=chemin/vers/dossier
+ *   node tools/photos/preparer.mjs --retouche  # un peu plus lumineux et saturé
  *
  * Outil hors site : @imgly/background-removal-node est sous licence AGPL-3.0,
  * il ne fait pas partie du site publié.
@@ -35,6 +36,8 @@ const MANIFEST = join(ROOT, "src/data/photos.json");
 /** Résolution des fichiers publiés : 30 px par cm (un sandwich de 27 cm ≈ 810 px). */
 const OUT_PX_PER_CM = 30;
 const DEMO = process.argv.includes("--demo");
+/** Retouche légère (photos prises sous une lumière terne) : un peu plus lumineux et appétissant. */
+const RETOUCHE = process.argv.includes("--retouche");
 /** Longueur d'une canette 33 cl couchée : sert d'étalon si elle est dans les photos. */
 const CAN_LENGTH_CM = 11.5;
 
@@ -69,6 +72,18 @@ async function alphaBox(png) {
   return { x0, y0, x1, y1, w: info.width, h: info.height };
 }
 
+/**
+ * Le détourage laisse souvent l'intérieur de l'aliment à moitié transparent (frites, sauces) :
+ * le décor se verrait au travers. On rend opaque tout ce qui est franchement dans l'aliment
+ * et on garde un bord doux.
+ */
+const ALPHA_BAS = 40, ALPHA_HAUT = 150;
+async function durcirAlpha(png) {
+  const { data, info } = await sharp(png).ensureAlpha().raw().toBuffer({ resolveWithObject: true });
+  for (let i = 3; i < data.length; i += 4) data[i] = Math.round(255 * Math.min(1, Math.max(0, (data[i] - ALPHA_BAS) / (ALPHA_HAUT - ALPHA_BAS))));
+  return sharp(data, { raw: info }).png().toBuffer();
+}
+
 // 1. Détourage de chaque photo reconnue.
 const cut = new Map();
 for (const f of raws) {
@@ -82,7 +97,7 @@ for (const f of raws) {
   await sharp(join(RAW, f)).rotate().resize({ width: 2400, height: 2400, fit: "inside", withoutEnlargement: true }).png().toFile(normalized);
   const t = Date.now();
   const blob = await removeBackground(pathToFileURL(normalized).href, { publicPath: MODEL_PATH, model: "medium", output: { format: "image/png" } });
-  const png = Buffer.from(await blob.arrayBuffer());
+  const png = await durcirAlpha(Buffer.from(await blob.arrayBuffer()));
   cut.set(name, { shot, png, box: await alphaBox(png) });
   console.log(`✂ ${name} (${Date.now() - t} ms)`);
 }
@@ -122,6 +137,7 @@ for (const [name, c] of cut) {
   // Tout à l'horizontale (le plus grand côté en largeur), sauf les décors ; les paires tournent ensemble.
   const turn = c.shot.kind !== "decor" && height > width;
   let img = sharp(c.png).extract({ left, top, width, height }).resize(outW, outH);
+  if (RETOUCHE) img = img.modulate({ brightness: 1.07, saturation: 1.2 }).linear(1.06, -6);
   if (turn) img = sharp(await img.png().toBuffer()).rotate(90);
   await img.webp({ quality: 84, alphaQuality: 90, effort: 5 }).toFile(join(OUT, `${name}.webp`));
   const [fw, fh, fwCm, fhCm] = turn ? [outH, outW, hCm, wCm] : [outW, outH, wCm, hCm];

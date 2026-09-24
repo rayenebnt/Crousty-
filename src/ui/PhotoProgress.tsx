@@ -1,7 +1,7 @@
 /** Petit compteur « photos reçues » tant que la séance photo n'est pas terminée. */
 import { useMemo } from "react";
 import { menu } from "../data/menu.ts";
-import { manifest } from "../photo/photos.ts";
+import { manifest } from "../photo/manifest.ts";
 import { shotList } from "../photo/shots.ts";
 
 export function PhotoProgress() {

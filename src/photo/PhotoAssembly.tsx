@@ -9,7 +9,7 @@ import type { AssemblySpec, BuildItem } from "../domain/resolveBuild.ts";
 import { Steam } from "../scene/Steam.tsx";
 import { usePresence, type Present } from "../scene/usePresence.ts";
 import { PhotoLayer } from "./PhotoLayer.tsx";
-import { photoInfo } from "./photos.ts";
+import { photoInfo } from "./manifest.ts";
 import { ingredientShot, supportShot } from "./shots.ts";
 
 /** Décalage de chaque couche dans le pain (cm) : chaque ingrédient ajouté reste visible. */
@@ -64,11 +64,22 @@ export function PhotoAssembly({ menu, spec, reduced, baseOrder }: Props) {
     return () => clearTimeout(id);
   }, [spec.items]);
 
+  const isGratin = (p: Present<BuildItem>) => {
+    const v = menu.ingredients[p.item.ingredient].visual;
+    return v.archetype === "melt" && v.variant !== "pour";
+  };
+  // Sous le gratiné, la garniture ne se voit pas : pas d'étiquette, et le gratinage se rejoue à chaque changement.
+  const gratin = items.find((p) => isGratin(p) && p.phase === "enter");
+  const hidden = (p: Present<BuildItem>) => !!gratin && p !== gratin && !onTop.has(p.item.layer);
+  const underSig = items
+    .filter((p) => p.phase === "enter" && !isGratin(p))
+    .map((p) => p.key)
+    .join("|");
+
   // Photos manquantes : de petites étiquettes lisibles, en colonne, plutôt qu'une pile de cadres.
   const missing = items.filter((p) => {
-    const ing = menu.ingredients[p.item.ingredient];
     const shot = ingredientShot(menu, p.item.ingredient, spec.support)[0];
-    return shot && !(ing.visual.archetype === "melt" && ing.visual.variant !== "pour") && !photoInfo(shot.file);
+    return shot && !isGratin(p) && !hidden(p) && !photoInfo(shot.file);
   });
   const chip = (p: Present<BuildItem>) => {
     const k = missing.indexOf(p);
@@ -86,7 +97,7 @@ export function PhotoAssembly({ menu, spec, reduced, baseOrder }: Props) {
       const [avant, apres] = shots;
       const hasAvant = !!photoInfo(avant.file), hasApres = !!photoInfo(apres.file);
       return (
-        <group key={p.key}>
+        <group key={`${p.key}:${underSig}`}>
           {(hasAvant || !hasApres) && <PhotoLayer {...common} file={avant.file} fallbackCm={avant.sizeCm} x={0} z={0} y={3} order={baseOrder + 40} enter="fade" />}
           {hasApres && <PhotoLayer {...common} file={apres.file} fallbackCm={apres.sizeCm} x={0} z={0} y={3.2} order={baseOrder + 41} mode="dissolve" duration={1.3} delay={hasAvant ? 0.5 : 0.1} glow />}
           {!reduced && p.phase === "enter" && <OvenSteam />}
@@ -99,6 +110,7 @@ export function PhotoAssembly({ menu, spec, reduced, baseOrder }: Props) {
       return <PhotoLayer key={p.key} {...common} file={shot.file} fallbackCm={shot.sizeCm} x={0} z={0} y={1 + i * 0.3} order={baseOrder + 5 + i} mode="reveal" duration={0.9} showPlaceholder />;
     }
     if (!photoInfo(shot.file)) {
+      if (hidden(p)) return null;
       const c = chip(p);
       return <PhotoLayer key={p.key} {...common} file={shot.file} fallbackCm={c.size} x={c.x} z={c.z} y={4 + i * 0.1} order={baseOrder + 60 + i} enter="drop" />;
     }
@@ -124,7 +136,7 @@ export function PhotoAssembly({ menu, spec, reduced, baseOrder }: Props) {
 
   return (
     <group>
-      {flat && <PhotoLayer file={flat.file} label={support.label} color={support.visual.color ?? "#D9A05B"} fallbackCm={flat.sizeCm} x={0} z={0} y={0.2} order={baseOrder + 1} phase="enter" reduced={reduced} enter="fade" />}
+      {flat && (photoInfo(flat.file) || !gratin) && <PhotoLayer file={flat.file} label={support.label} color={support.visual.color ?? "#D9A05B"} fallbackCm={flat.sizeCm} x={0} z={0} y={0.2} order={baseOrder + 1} phase="enter" reduced={reduced} enter="fade" />}
       {items.map(layer)}
       {rolled && (
         <PhotoLayer

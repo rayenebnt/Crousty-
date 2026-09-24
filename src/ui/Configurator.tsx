@@ -5,6 +5,7 @@
 import { lazy, Suspense, useMemo } from "react";
 import { menu } from "../data/menu.ts";
 import { productContext, productsOf } from "../domain/catalog.ts";
+import { productReady } from "../photo/presentable.ts";
 import { resolveBuild } from "../domain/resolveBuild.ts";
 import { describe } from "../domain/summary.ts";
 import { useConfigurator } from "../store/configurator.ts";
@@ -17,7 +18,9 @@ import { Summary } from "./Summary.tsx";
 const PhotoStage = lazy(() => import("../photo/PhotoStage.tsx").then((m) => ({ default: m.PhotoStage })));
 
 /** Catégories ouvertes à l'étape 2 (les autres arrivent à l'étape 3). */
-const STEP2_CATEGORIES = ["sandwichs", "gratines", "frites-garnies"];
+const STEP2_CATEGORIES = ["gratines", "sandwichs", "frites-garnies"];
+/** Démo : seuls les produits dont les photos sont prêtes sont proposés. */
+const READY = new Set(menu.products.filter((p) => productReady(menu, p.id)).map((p) => p.id));
 
 function ProductPicker() {
   const productId = useConfigurator((s) => s.productId);
@@ -28,11 +31,13 @@ function ProductPicker() {
       <ul className="flex items-center gap-2 overflow-x-auto px-4 pb-1 [scrollbar-width:none]">
         {STEP2_CATEGORIES.flatMap((cid) => {
           const cat = menu.categories.find((c) => c.id === cid)!;
+          const products = productsOf(menu, cid).filter((p) => READY.has(p.id));
+          if (!products.length) return [];
           return [
             <li key={cid} aria-hidden className="shrink-0 pl-1 text-[11px] leading-tight font-semibold tracking-[0.12em] text-white/50 uppercase first:pl-0">
               {cat.label}
             </li>,
-            ...productsOf(menu, cid).map((p) => (
+            ...products.map((p) => (
               <li key={p.id} className="shrink-0">
                 <button
                   type="button"
@@ -104,7 +109,7 @@ export function Configurator() {
               <OptionGroup key={`${productId}:${g.id}`} menu={menu} ctx={ctx} group={g} selections={selections} onToggle={toggle} />
             ))}
           </form>
-          <p className="px-4 pt-2 pb-6 text-xs text-white/40">Aperçu étape 2 : sandwichs, gratinés et frites garnies. Le reste de la carte arrive à l'étape 3.</p>
+          <p className="px-4 pt-2 pb-6 text-xs text-white/40">Démonstration : seuls les produits déjà photographiés sont proposés. Le reste de la carte arrivera avec la séance photo.</p>
         </section>
       </main>
 

@@ -6,7 +6,7 @@
 | Lot | Contenu | Photos | Reçues |
 |---|---|---|---|
 | **1a** | Le Crousty et son menu : de quoi valider le rendu | 39 | 0 |
-| **1b** | Les autres sandwichs, le gratiné, les frites garnies | 20 | 0 |
+| **1b** | Les autres sandwichs, le gratiné, les frites garnies | 23 | 0 |
 | **2** | Le reste de la carte (étape 3) | 75 | 0 |
 
 ## Lot 1a — à faire en premier (Crousty)
@@ -58,6 +58,9 @@
 | ✓ | Fichier | Photo | Consigne |
 |---|---|---|---|
 | ⬜ | `journal.jpg` | Feuille de papier journal seule | Une feuille de papier journal posée à plat, en entier. |
+| ⬜ | `produit__frites-cheddar-bacon.jpg` | Frites garnies Cheddar bacon (produit fini) | Le produit fini, tel qu'il est servi, en entier. |
+| ⬜ | `produit__frites-cheddar-tandoori.jpg` | Frites garnies Cheddar tandoori (produit fini) | Le produit fini, tel qu'il est servi, en entier. |
+| ⬜ | `produit__frites-cheddar-viande-hachee.jpg` | Frites garnies Cheddar viande hachée (produit fini) | Le produit fini, tel qu'il est servi, en entier. |
 | ⬜ | `emince-poulet.jpg` | Émincé de poulet mariné tex-mex | La portion d'un sandwich, posée en long comme dans le pain (≈ 20 cm × 6 cm), sans le pain. |
 | ⬜ | `kebab.jpg` | Kebab | La portion d'un sandwich, posée en long comme dans le pain (≈ 20 cm × 6 cm), sans le pain. |
 | ⬜ | `poulet.jpg` | Poulet | La portion d'un sandwich, posée en long comme dans le pain (≈ 20 cm × 6 cm), sans le pain. |

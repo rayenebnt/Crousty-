@@ -5,6 +5,18 @@
 > - La première version en 3D dessinée par le code faisait « jeu vidéo ». Elle est remplacée par un rendu qui assemble **de vraies photos** de vos plats (option A).
 > - Le moteur est prêt. Il ne manque que les photos : voir le [protocole](photos/protocole.md) et la [liste des photos](photos/liste-des-photos.md).
 
+## Démo client (provisoire)
+
+Pour montrer le rendu au client avant la séance photo, le configurateur tourne avec les photos que vous m'avez envoyées, détourées automatiquement :
+
+| Gratiné (steak) : le fromage fond à l'arrivée | Frites garnies : cheddar tandoori et cheddar viande hachée |
+|---|---|
+| ![](captures/4-demo-gratine.jpg) | ![](captures/5-demo-frites-garnies.jpg) |
+
+- Seuls les produits dont on a les photos sont proposés (le Gratiné et les deux frites garnies). Le reste de la carte réapparaît automatiquement dès que ses photos arrivent.
+- Ces photos sont marquées « démo » dans `src/data/photos.json` et ne comptent pas dans le compteur de la séance.
+- La photo « avant le four » du gratiné a été reconstituée à partir de la photo « sorti du four ». Les vraies photos, prises selon le [protocole](photos/protocole.md), donneront un rendu plus net : même cadrage, même lumière et un détourage propre.
+
 ## Ce que vous verrez
 
 | Crousty gratiné (vraie photo, provisoire) | Le fromage qui fond | Photos pas encore prises |
@@ -13,7 +25,7 @@
 
 Le gratiné de ces captures vient d'une de vos photos, détourée automatiquement. C'est une démonstration **provisoire**, à remplacer par vos propres photos.
 
-Tant qu'une photo manque, une étiquette « photo à venir » prend sa place, et un compteur en bas à droite indique où en est la séance (`Photos réelles : 0 / 59`).
+Tant qu'une photo manque, une étiquette « photo à venir » prend sa place, et un compteur en bas à droite indique où en est la séance (`Photos réelles : 0 / 62`).
 
 ## Comment ça marche
 

@@ -1,11 +1,39 @@
 {
   "pxPerCm": 30,
   "files": {
+    "frites": {
+      "w": 510,
+      "h": 272,
+      "wCm": 17,
+      "hCm": 9.08,
+      "demo": true
+    },
     "gratin-fromage__apres": {
       "w": 810,
-      "h": 342,
+      "h": 362,
       "wCm": 27,
-      "hCm": 11.41,
+      "hCm": 12.06,
+      "demo": true
+    },
+    "gratin-fromage__avant": {
+      "w": 810,
+      "h": 362,
+      "wCm": 27,
+      "hCm": 12.06,
+      "demo": true
+    },
+    "produit__frites-cheddar-tandoori": {
+      "w": 540,
+      "h": 485,
+      "wCm": 18,
+      "hCm": 16.16,
+      "demo": true
+    },
+    "produit__frites-cheddar-viande-hachee": {
+      "w": 540,
+      "h": 366,
+      "wCm": 18,
+      "hCm": 12.2,
       "demo": true
     }
   }

@@ -9,7 +9,7 @@
 import type { Id, Ingredient, IngredientArchetype, Menu, Support } from "../data/menu.types.ts";
 import { productContext } from "../domain/catalog.ts";
 
-export type ShotKind = "decor" | "support" | "ingredient";
+export type ShotKind = "decor" | "support" | "ingredient" | "produit";
 
 export interface Shot {
   /** Nom du fichier attendu (sans extension). */
@@ -34,6 +34,10 @@ export interface Shot {
 export const LOT1_CATEGORIES = ["sandwichs", "gratines", "frites-garnies"];
 
 export const shotName = (id: Id, state?: string) => (state ? `${id}__${state}` : id);
+
+/** Catégories dont le produit fini peut être photographié d'un bloc (pas d'options). */
+export const PRODUCT_PHOTO_CATEGORIES = ["frites-garnies"];
+export const productShotName = (productId: Id) => `produit__${productId}`;
 
 /** Décors : le plateau papier journal (formule) et la feuille seule (produit seul). */
 export const DECOR = {
@@ -126,7 +130,7 @@ function ingredientShots(ing: Ingredient, id: Id, ctx: Context): Omit<Shot, "lot
       state,
       title: state ? `${ing.label} (en tas)` : ing.label,
       how: howTo(ing, ctx),
-      sizeCm: ctx === "tas" ? [11, 9] : (SIZE_LONG[a] ?? [20, 6]),
+      sizeCm: ctx === "tas" && a !== "fries" ? [11, 9] : (SIZE_LONG[a] ?? [20, 6]),
     },
   ];
 }
@@ -165,6 +169,9 @@ export function shotList(menu: Menu): Shot[] {
       for (const g of ctx.groups) if (g.target === "main") for (const c of g.choices) if (c.support) mainSupports.add(c.support);
       if (ctx.formula) add({ file: DECOR.tray.file, kind: "decor", id: DECOR.tray.file, title: "Plateau et papier journal, vide", how: "Le plateau noir avec sa feuille de papier journal, vide, photographié en entier.", sizeCm: DECOR.tray.sizeCm }, lot, name);
       else add({ file: DECOR.sheet.file, kind: "decor", id: DECOR.sheet.file, title: "Feuille de papier journal seule", how: "Une feuille de papier journal posée à plat, en entier.", sizeCm: DECOR.sheet.sizeCm }, lot, name);
+      // Produit vendu tel quel (frites garnies) : une photo du produit fini suffit.
+      if (PRODUCT_PHOTO_CATEGORIES.includes(p.category))
+        add({ file: productShotName(p.id), kind: "produit", id: p.id, title: `${name} (produit fini)`, how: "Le produit fini, tel qu'il est servi, en entier.", sizeCm: [18, 15] }, lot, name);
 
       const place = (supportId: Id, ingredientIds: Id[]) => {
         const support = menu.supports[supportId];
@@ -189,7 +196,7 @@ export function shotList(menu: Menu): Shot[] {
       }
     }
   }
-  const kindOrder: Record<ShotKind, number> = { decor: 0, support: 1, ingredient: 2 };
+  const kindOrder: Record<ShotKind, number> = { decor: 0, produit: 1, support: 2, ingredient: 3 };
   const layerOrder = ["fries", "meat", "extra", "cheese", "sauce-base", "veg", "veg-top", "sauce", "coating", "gratin", "drink"];
   const added = [...out.keys()];
   return [...out.values()].sort(

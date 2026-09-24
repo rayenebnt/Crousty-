@@ -9,8 +9,8 @@
 
   "showcase": {
     "hero": {
-      "product": "sandwich-crousty",
-      "selections": { "pain": ["pain"], "viandes": ["tenders"], "gratine": ["gratine"], "sauces": ["algerienne"], "crudites": ["salade", "tomate", "oignons"], "boisson-option": ["coca-cola"] }
+      "product": "gratine-viande",
+      "selections": { "viandes-gratine": ["steak"] }
     }
   },
 

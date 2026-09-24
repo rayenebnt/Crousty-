@@ -7,7 +7,8 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import * as THREE from "three";
 import { NOISE_GLSL } from "../scene/glsl.ts";
 import { bounceOut, clamp01, damp, easeInOutCubic, easeOutBack, easeOutCubic } from "../scene/easing.ts";
-import { loadPhoto, photoInfo, placeholder, type LoadedPhoto } from "./photos.ts";
+import { photoInfo } from "./manifest.ts";
+import { loadPhoto, placeholder, type LoadedPhoto } from "./photos.ts";
 
 export type Enter = "drop" | "fade" | "slide" | "none";
 export type Mode = "normal" | "dissolve" | "reveal";

@@ -85,6 +85,6 @@ describe("autres règles", () => {
   it("la vitrine d'accueil se construit", () => {
     const { product, selections } = menu.showcase.hero;
     const b = resolveBuild(menu, product, initialSelections(menu, product, selections));
-    expect(ids(b.main.items)).toEqual(expect.arrayContaining(["tenders", "gratin-fromage"]));
+    expect(ids(b.main.items)).toEqual(expect.arrayContaining(["steak-hache", "gratin-fromage"]));
   });
 });

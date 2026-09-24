@@ -3,7 +3,7 @@
  * le produit, les frites et la boisson à leur place. Unités : centimètres.
  */
 import { useFrame } from "@react-three/fiber";
-import { useMemo, useRef, type ReactNode } from "react";
+import { useEffect, useMemo, useRef, type ReactNode } from "react";
 import * as THREE from "three";
 import type { Menu, PlaceId } from "../data/menu.types.ts";
 import type { AssemblySpec, BuildSpec } from "../domain/resolveBuild.ts";
@@ -12,8 +12,8 @@ import { newspaperTexture } from "../scene/textures.ts";
 import { usePresence } from "../scene/usePresence.ts";
 import { PhotoAssembly } from "./PhotoAssembly.tsx";
 import { PhotoLayer } from "./PhotoLayer.tsx";
-import { photoInfo } from "./photos.ts";
-import { DECOR } from "./shots.ts";
+import { photoInfo } from "./manifest.ts";
+import { DECOR, productShotName } from "./shots.ts";
 
 type Spot = { x: number; z: number; rot: number };
 /** Places sur le plateau (cm, x vers la droite, z vers le bas de l'écran). */
@@ -50,33 +50,40 @@ function Pop({ phase, spot, reduced, children }: { phase: "enter" | "exit"; spot
   return <group ref={ref}>{children}</group>;
 }
 
-/** Plateau ou feuille : la vraie photo si elle existe, sinon le papier journal dessiné. */
-function Decor({ tray, phase, reduced }: { tray: boolean; phase: "enter" | "exit"; reduced: boolean }) {
+/** Plateau ou feuille : la vraie photo si elle existe, sinon le papier journal dessiné.
+ * Les deux décors restent montés et passent de l'un à l'autre en fondu. */
+function Decor({ tray, visible, reduced }: { tray: boolean; visible: boolean; reduced: boolean }) {
   const d = tray ? DECOR.tray : DECOR.sheet;
   const hasPhoto = !!photoInfo(d.file);
   const group = useRef<THREE.Group>(null);
   const mats = useMemo(
     () => ({
-      paper: new THREE.MeshBasicMaterial({ map: newspaperTexture(), transparent: true, toneMapped: false, depthTest: false, depthWrite: false }),
-      tray: new THREE.MeshBasicMaterial({ color: "#141519", transparent: true, toneMapped: false, depthTest: false, depthWrite: false }),
+      paper: new THREE.MeshBasicMaterial({ map: newspaperTexture(), transparent: true, opacity: 0, toneMapped: false, depthTest: false, depthWrite: false }),
+      tray: new THREE.MeshBasicMaterial({ color: "#141519", transparent: true, opacity: 0, toneMapped: false, depthTest: false, depthWrite: false }),
     }),
     [],
   );
-  const t = useRef({ start: -1, exit: -1 });
-  useFrame(({ clock }) => {
-    const s = t.current, now = clock.elapsedTime;
-    if (s.start < 0) s.start = now;
-    if (phase === "exit" && s.exit < 0) s.exit = now;
-    const k = reduced ? 1 : easeOutCubic(clamp01((now - s.start) / 0.4));
-    const o = k * (s.exit >= 0 ? 1 - clamp01((now - s.exit) / 0.3) : 1);
+  useEffect(() => () => {
+    mats.paper.dispose();
+    mats.tray.dispose();
+  }, [mats]);
+  const t = useRef({ o: 0 });
+  useFrame((_, dt) => {
+    const s = t.current;
+    s.o = damp(s.o, visible ? 1 : 0, reduced ? 40 : 7, dt);
+    const o = s.o < 0.002 ? 0 : s.o;
     mats.paper.opacity = o;
     mats.tray.opacity = o;
-    if (group.current) group.current.scale.setScalar(0.96 + 0.04 * k);
+    if (group.current) {
+      group.current.visible = o > 0;
+      group.current.scale.setScalar(0.96 + 0.04 * easeOutCubic(o));
+    }
   });
-  if (hasPhoto) return <PhotoLayer file={d.file} label="" color="#000000" fallbackCm={d.sizeCm} x={0} z={0} y={0} order={1} phase={phase} reduced={reduced} enter="fade" />;
+  if (hasPhoto)
+    return <PhotoLayer file={d.file} label="" color="#000000" fallbackCm={d.sizeCm} x={0} z={0} y={0} order={tray ? 1 : 2} phase="enter" reduced={reduced} enter="fade" visible={visible} showPlaceholder={false} />;
   const [w, h] = d.sizeCm;
   return (
-    <group ref={group}>
+    <group ref={group} visible={false}>
       {tray && (
         <mesh rotation-x={-Math.PI / 2} material={mats.tray} renderOrder={1}>
           <planeGeometry args={[w, h]} />
@@ -89,13 +96,18 @@ function Decor({ tray, phase, reduced }: { tray: boolean; phase: "enter" | "exit
   );
 }
 
-function Place({ menu, spec, spot, reduced, id, baseOrder }: { menu: Menu; spec?: AssemblySpec; spot: Spot; reduced: boolean; id: string; baseOrder: number }) {
+function Place({ menu, spec, spot, reduced, id, baseOrder, productPhoto }: { menu: Menu; spec?: AssemblySpec; spot: Spot; reduced: boolean; id: string; baseOrder: number; productPhoto?: string }) {
   const list = usePresence(spec ? [spec] : [], (s) => `${id}:${s.support}`, 380);
   return (
     <>
       {list.map((p) => (
         <Pop key={p.key} phase={p.phase} spot={spot} reduced={reduced}>
-          <PhotoAssembly menu={menu} spec={p.item} reduced={reduced} baseOrder={baseOrder} />
+          {productPhoto ? (
+            // Produit fini photographié d'un bloc : il s'étale comme un nappage.
+            <PhotoLayer file={productPhoto} label="" color="#000000" fallbackCm={[18, 15]} x={0} z={0} y={0.5} order={baseOrder + 5} phase="enter" reduced={reduced} mode="reveal" duration={1.1} />
+          ) : (
+            <PhotoAssembly menu={menu} spec={p.item} reduced={reduced} baseOrder={baseOrder} />
+          )}
         </Pop>
       ))}
     </>
@@ -103,14 +115,20 @@ function Place({ menu, spec, spot, reduced, id, baseOrder }: { menu: Menu; spec?
 }
 
 export function PhotoScene({ menu, build, reduced }: { menu: Menu; build: BuildSpec; reduced: boolean }) {
-  const decor = usePresence([build.tray], (t) => (t ? "tray" : "sheet"), 350);
   const spots = build.tray ? ON_TRAY : { ...ON_TRAY, main: SOLO };
   return (
     <group>
-      {decor.map((p) => (
-        <Decor key={p.key} tray={p.item} phase={p.phase} reduced={reduced} />
-      ))}
-      <Place menu={menu} id={build.productId} spec={build.main} spot={spots.main} reduced={reduced} baseOrder={200} />
+      <Decor tray visible={build.tray} reduced={reduced} />
+      <Decor tray={false} visible={!build.tray} reduced={reduced} />
+      <Place
+        menu={menu}
+        id={build.productId}
+        spec={build.main}
+        spot={spots.main}
+        reduced={reduced}
+        baseOrder={200}
+        productPhoto={photoInfo(productShotName(build.productId)) ? productShotName(build.productId) : undefined}
+      />
       {(["side", "side2", "drink"] as const).map((pid, i) => (
         <Place key={pid} menu={menu} id={pid} spec={build.places[pid]} spot={spots[pid]} reduced={reduced} baseOrder={50 + i * 50} />
       ))}
