@@ -19,7 +19,11 @@ import { Summary } from "./Summary.tsx";
 const PhotoStage = lazy(() => import("../photo/PhotoStage.tsx").then((m) => ({ default: m.PhotoStage })));
 
 /** Catégories ouvertes à l'étape 2 (les autres arrivent à l'étape 3). */
-const STEP2_CATEGORIES = ["gratines", "sandwichs", "frites-garnies"];
+const STEP2_CATEGORIES = ["gratines", "sandwichs"];
+/** Le client sait à quoi ressemblent sauces, crudités et boissons : le configurateur montre l'essentiel. */
+const HIDDEN_GROUPS = new Set(["sauces", "crudites", "boisson", "boisson-option"]);
+/** Ordre d'affichage : le produit d'abord, puis les frites (le choix des frites avant les frites cheddar). */
+const TARGET_ORDER: Record<string, number> = { main: 0, side: 1, side2: 2, drink: 3 };
 
 function ProductPicker() {
   const productId = useConfigurator((s) => s.productId);
@@ -63,6 +67,14 @@ export function Configurator() {
   const reduced = useReducedMotion();
   const webgl = useWebGL();
   const ctx = useMemo(() => productContext(menu, productId), [productId]);
+  const groups = useMemo(() => {
+    const formula = new Set(ctx.formula?.optionGroups ?? []);
+    return ctx.groups
+      .filter((g) => !HIDDEN_GROUPS.has(g.id))
+      .map((g, i) => ({ g, k: TARGET_ORDER[g.target] * 1000 + (formula.has(g.id) ? 0 : 500) + i }))
+      .sort((a, b) => a.k - b.k)
+      .map((x) => x.g);
+  }, [ctx]);
   const build = useMemo(() => resolveBuild(menu, productId, selections), [productId, selections]);
   const summary = useMemo(() => describe(menu, productId, selections), [productId, selections]);
   // Le rendu (three.js, photos) ne se charge qu'à l'approche de la section, une fois la police prête.
@@ -99,14 +111,14 @@ export function Configurator() {
         <div role="region" aria-label="Options" className="picto-bg min-h-0 flex-1 overflow-y-auto md:flex-[2] md:border-l md:border-white/10">
           <ProductPicker />
           <nav aria-label="Étapes" className="sticky top-0 z-10 flex gap-1.5 overflow-x-auto border-y border-white/10 bg-nuit/95 px-4 py-2 backdrop-blur [scrollbar-width:none]">
-            {ctx.groups.map((g) => (
+            {groups.map((g) => (
               <a key={g.id} href={`#grp-${g.id}`} className="shrink-0 rounded-full px-3 py-1.5 text-sm text-white/75 hover:bg-white/10 hover:text-white focus-visible:outline-2 focus-visible:outline-cheddar">
                 {g.group.label}
               </a>
             ))}
           </nav>
           <form onSubmit={(e) => e.preventDefault()} aria-label={`Options du ${ctx.product.name}`}>
-            {ctx.groups.map((g) => (
+            {groups.map((g) => (
               <OptionGroup key={`${productId}:${g.id}`} menu={menu} ctx={ctx} group={g} selections={selections} onToggle={toggle} />
             ))}
           </form>

@@ -53,6 +53,12 @@ export function isGroupFull(g: ResolvedGroup, sel: Selections): boolean {
   return g.group.kind === "multi" && (sel[g.id]?.length ?? 0) >= g.max;
 }
 
+/** Le choix requis (ex. frites paysannes pour les frites cheddar) est-il coché ? */
+function requirementMet(g: ResolvedGroup, choiceId: Id, sel: Selections): boolean {
+  const req = g.choices.find((c) => c.id === choiceId)?.requires;
+  return !req || (sel[req.group] ?? []).includes(req.choice);
+}
+
 /** Retire ce qui n'est plus possible et complète les groupes obligatoires. */
 export function sanitize(menu: Menu, ctx: ProductContext, input: Selections): Selections {
   const sel: Selections = {};
@@ -65,7 +71,7 @@ export function sanitize(menu: Menu, ctx: ProductContext, input: Selections): Se
   // Deux passes : un changement de support (pain → tortilla) peut rendre d'autres choix impossibles.
   for (let pass = 0; pass < 2; pass++) {
     for (const g of ctx.groups) {
-      sel[g.id] = sel[g.id].filter((id) => choiceAvailability(menu, ctx, sel, g.id, id).available);
+      sel[g.id] = sel[g.id].filter((id) => choiceAvailability(menu, ctx, sel, g.id, id).available && requirementMet(g, id, sel));
       if (sel[g.id].length < g.min) {
         const fill = g.choices.find((c) => !sel[g.id].includes(c.id) && choiceAvailability(menu, ctx, sel, g.id, c.id).available);
         if (fill) sel[g.id] = [...sel[g.id], fill.id];
@@ -100,7 +106,14 @@ export function toggleChoice(menu: Menu, productId: Id, sel: Selections, groupId
   else return sel;
 
   if (next === cur) return sel;
-  return sanitize(menu, ctx, { ...sel, [groupId]: next });
+  const merged: Selections = { ...sel, [groupId]: next };
+  // Choisir une option qui en exige une autre coche aussi celle-ci (frites cheddar → frites paysannes).
+  const req = !selected ? g.choices.find((c) => c.id === choiceId)?.requires : undefined;
+  if (req) {
+    const rg = ctx.groups.find((x) => x.id === req.group);
+    if (rg) merged[req.group] = rg.group.kind === "multi" ? [...new Set([...(merged[req.group] ?? []), req.choice])] : [req.choice];
+  }
+  return sanitize(menu, ctx, merged);
 }
 
 /** Retire une occurrence d'un choix répétable (ex. une des 3 viandes du tacos). */

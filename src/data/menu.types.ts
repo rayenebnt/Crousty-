@@ -212,6 +212,9 @@ export interface Choice {
   support?: Id;
   /** Duplique les ingrédients d'une couche (double, triple, « doublez votre viande »). */
   duplicate?: { layer: LayerId; times: number };
+  /** N'est possible qu'avec ce choix d'un autre groupe (ex. frites cheddar → frites paysannes).
+   *  Le choisir coche le choix requis ; retirer le choix requis le retire. */
+  requires?: { group: Id; choice: Id };
   /** Choix coché à l'ouverture. */
   default?: boolean;
   toVerify?: string;

@@ -45,6 +45,7 @@ const choice = z.object({
   removes: z.array(id).optional(),
   support: id.optional(),
   duplicate: z.object({ layer, times: z.number().int().min(1).max(3) }).optional(),
+  requires: z.object({ group: id, choice: id }).optional(),
   default: z.boolean().optional(),
   toVerify: z.string().optional(),
 });
@@ -162,7 +163,11 @@ export function crossCheck(menu: Menu): string[] {
   for (const [gid, g] of Object.entries(menu.optionGroups)) {
     if (g.choicesFrom && !menu.optionGroups[g.choicesFrom]) errors.push(`groupe ${gid} : choicesFrom inconnu`);
     if (!choicesOf(gid).length) errors.push(`groupe ${gid} : aucun choix`);
-    for (const c of choicesOf(gid)) if (c.support && !menu.supports[c.support]) errors.push(`groupe ${gid}/${c.id} : support inconnu`);
+    for (const c of choicesOf(gid)) {
+      if (c.support && !menu.supports[c.support]) errors.push(`groupe ${gid}/${c.id} : support inconnu`);
+      if (c.requires && !choicesOf(c.requires.group).some((x) => x.id === c.requires!.choice))
+        errors.push(`groupe ${gid}/${c.id} : choix requis inconnu « ${c.requires.group}/${c.requires.choice} »`);
+    }
   }
 
   for (const [fid, f] of Object.entries(menu.formulas)) {
@@ -202,14 +207,21 @@ export function crossCheck(menu: Menu): string[] {
         errors.push(`${p.id} : groupe inconnu « ${gid} »`);
         continue;
       }
-      if ((g.target ?? "main") !== "main") errors.push(`${p.id} : le groupe ${gid} vise « ${g.target} », réservé aux formules`);
+      // Une option de la catégorie peut viser un emplacement de la formule (ex. frites cheddar → frites).
+      const tgt = g.target ?? "main";
+      const place = tgt === "main" ? null : formula ? menu.formulas[formula]?.places[tgt] : undefined;
+      if (tgt !== "main" && !place) {
+        errors.push(`${p.id} : le groupe ${gid} vise « ${tgt} », absent de sa formule`);
+        continue;
+      }
+      const targetSupports = place ? [place.support] : [...supports];
       // Une option peut être indisponible sur un des supports (ex. gratiné sur tortilla),
       // mais doit être possible sur au moins un.
       for (const c of choicesOf(gid)) {
         for (const r of c.adds ?? []) {
           const ing = menu.ingredients[refId(r)];
           if (!ing) errors.push(`${p.id}/${gid}/${c.id} : ingrédient inconnu « ${refId(r)} »`);
-          else if (![...supports].some((s) => accepts(s, ing.layer)))
+          else if (!targetSupports.some((s) => accepts(s, ing.layer)))
             errors.push(`${p.id}/${gid}/${c.id} : « ${refId(r)} » ne va sur aucun support du produit`);
         }
       }

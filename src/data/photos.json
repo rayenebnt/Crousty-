@@ -17,6 +17,14 @@
       "demo": true,
       "synthese": true
     },
+    "bacon-miettes__tas": {
+      "w": 257,
+      "h": 163,
+      "wCm": 8.57,
+      "hCm": 5.43,
+      "demo": true,
+      "synthese": true
+    },
     "barbecue": {
       "w": 573,
       "h": 158,
@@ -66,10 +74,17 @@
       "synthese": true
     },
     "frites": {
-      "w": 510,
-      "h": 272,
-      "wCm": 17,
-      "hCm": 9.08,
+      "w": 512,
+      "h": 301,
+      "wCm": 17.07,
+      "hCm": 10.03,
+      "demo": true
+    },
+    "frites-paysannes": {
+      "w": 540,
+      "h": 266,
+      "wCm": 18.0,
+      "hCm": 8.87,
       "demo": true
     },
     "gratin-fromage__apres": {
@@ -135,6 +150,14 @@
       "demo": true,
       "synthese": true
     },
+    "nappage-cheddar__sur-frites": {
+      "w": 540,
+      "h": 266,
+      "wCm": 18.0,
+      "hCm": 8.87,
+      "demo": true,
+      "synthese": true
+    },
     "oeuf": {
       "w": 332,
       "h": 257,
@@ -183,20 +206,6 @@
       "demo": true,
       "synthese": true
     },
-    "produit__frites-cheddar-tandoori": {
-      "w": 540,
-      "h": 485,
-      "wCm": 18,
-      "hCm": 16.16,
-      "demo": true
-    },
-    "produit__frites-cheddar-viande-hachee": {
-      "w": 540,
-      "h": 366,
-      "wCm": 18,
-      "hCm": 12.2,
-      "demo": true
-    },
     "salade": {
       "w": 537,
       "h": 226,
@@ -237,6 +246,13 @@
       "demo": true,
       "synthese": true
     },
+    "tandoori__tas": {
+      "w": 289,
+      "h": 214,
+      "wCm": 9.63,
+      "hCm": 7.13,
+      "demo": true
+    },
     "tenders": {
       "w": 525,
       "h": 173,
@@ -252,6 +268,13 @@
       "hCm": 6.2,
       "demo": true,
       "synthese": true
+    },
+    "viande-hachee__tas": {
+      "w": 287,
+      "h": 220,
+      "wCm": 9.57,
+      "hCm": 7.33,
+      "demo": true
     }
   }
 }

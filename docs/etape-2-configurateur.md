@@ -13,6 +13,20 @@ Pour montrer le rendu au client avant la séance photo, le configurateur tourne 
 |---|---|
 | ![](captures/4-demo-gratine.jpg) | ![](captures/5-demo-frites-garnies.jpg) |
 
+### Mise à jour : l'essentiel seulement, et les frites cheddar dans le menu gratiné
+
+- **Moins d'options :** le configurateur n'affiche plus les sauces, les crudités ni les boissons, que le client connaît déjà. Restent la viande, les suppléments, les frites et les frites cheddar. La carte, elle, les liste toujours.
+- **Gratiné plus rapide :** l'emmental pleut et l'on arrive sur la vraie photo en environ 1,7 s, au lieu de 3,5 s.
+- **Frites cheddar :** elles n'ont plus de catégorie à elles. Ce sont une **option en plus du menu gratiné** (cheddar viande hachée, cheddar tandoori, cheddar bacon), et elles ne se font **qu'avec les frites paysannes** :
+  - choisir une frites cheddar passe automatiquement aux paysannes ;
+  - revenir aux frites maison retire la frites cheddar.
+- **Animation des frites :** les frites paysannes arrivent, le cheddar fondu coule depuis le centre, puis la viande tombe dessus. Changer d'option fait recouler le cheddar.
+
+  ![Frites cheddar : paysannes, cheddar qui coule, viande qui tombe](captures/10-frites-cheddar.jpg)
+- **Images :**
+  - les frites maison, les paysannes, la viande (utilisée pour « viande hachée ») et le tandoori viennent de vos nouvelles photos, détourées de leur plateau (`tools/photos/demo/frites.py`) ;
+  - le cheddar fondu et le bacon en miettes sont dessinés.
+
 ![Séquence du gratiné : garniture, pluie de fromage, sortie du four](captures/6-sequence-gratine.jpg)
 
 - **Gratiné : la séquence complète.** Le pain ouvert apparaît, la viande tombe dedans, puis les suppléments, les crudités et les sauces (le filet de sauce se dessine de gauche à droite). Ensuite l'emmental râpé pleut sur le sandwich, et le four le transforme en votre photo du gratiné, avec une lueur chaude et de la vapeur. À chaque changement (viande, sauce, crudité…), le fromage fond à l'envers, la garniture change et la séquence se rejoue.

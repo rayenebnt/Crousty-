@@ -88,3 +88,33 @@ describe("autres règles", () => {
     expect(ids(b.main.items)).toEqual(expect.arrayContaining(["steak-hache", "gratin-fromage"]));
   });
 });
+
+describe("Gratiné : frites cheddar (option en plus, frites paysannes obligatoires)", () => {
+  const G = "gratine-viande";
+  const t = (sel: Selections, g: string, c: string) => toggleChoice(menu, G, sel, g, c);
+  const start = initialSelections(menu, G, { "viandes-gratine": ["steak"] });
+
+  it("sans option : frites maison seules", () => {
+    expect(start["frites-cheddar"]).toEqual([]);
+    expect(ids(resolveBuild(menu, G, start).places.side!.items)).toEqual(["frites"]);
+  });
+
+  it("cheddar tandoori : passe aux frites paysannes, nappage puis viande", () => {
+    const s = t(start, "frites-cheddar", "tandoori");
+    expect(s["frites-formule"]).toEqual(["paysannes"]);
+    expect(ids(resolveBuild(menu, G, s).places.side!.items)).toEqual(["frites-paysannes", "nappage-cheddar", "tandoori"]);
+  });
+
+  it("une seule frites cheddar à la fois : en choisir une autre la remplace", () => {
+    const s = t(t(start, "frites-cheddar", "tandoori"), "frites-cheddar", "viande-hachee");
+    expect(s["frites-cheddar"]).toEqual(["viande-hachee"]);
+    // et on peut la retirer
+    expect(t(s, "frites-cheddar", "viande-hachee")["frites-cheddar"]).toEqual([]);
+  });
+
+  it("revenir aux frites maison retire les frites cheddar", () => {
+    const s = t(t(start, "frites-cheddar", "tandoori"), "frites-formule", "maison");
+    expect(s["frites-cheddar"]).toEqual([]);
+    expect(ids(resolveBuild(menu, G, s).places.side!.items)).toEqual(["frites"]);
+  });
+});

@@ -19,7 +19,7 @@ type Spot = { x: number; z: number; rot: number };
 /** Places sur le plateau (cm, x vers la droite, z vers le bas de l'écran). */
 const ON_TRAY: Record<"main" | PlaceId, Spot> = {
   main: { x: 1.5, z: 5, rot: -0.06 },
-  side: { x: -11.5, z: -7, rot: 0.15 },
+  side: { x: -4.5, z: -7.2, rot: 0.06 },
   side2: { x: 0, z: -9, rot: 0 },
   drink: { x: 13, z: -8.5, rot: 0.45 },
 };

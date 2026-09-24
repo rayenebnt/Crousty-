@@ -31,12 +31,12 @@ export interface Shot {
 }
 
 /** Catégories couvertes par le lot 1 (configurateur de l'étape 2). */
-export const LOT1_CATEGORIES = ["sandwichs", "gratines", "frites-garnies"];
+export const LOT1_CATEGORIES = ["sandwichs", "gratines"];
 
 export const shotName = (id: Id, state?: string) => (state ? `${id}__${state}` : id);
 
-/** Catégories dont le produit fini peut être photographié d'un bloc (pas d'options). */
-export const PRODUCT_PHOTO_CATEGORIES = ["frites-garnies"];
+/** Catégories dont le produit fini peut être photographié d'un bloc (pas d'options). Aucune pour l'instant. */
+export const PRODUCT_PHOTO_CATEGORIES: string[] = [];
 export const productShotName = (productId: Id) => `produit__${productId}`;
 
 /** Décors : le plateau papier journal (formule) et la feuille seule (produit seul). */

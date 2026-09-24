@@ -327,6 +327,7 @@
       "label": "Doublez votre viande", "kind": "toggle", "source": "photo",
       "choices": [ { "id": "double", "label": "Viande doublée", "note": "Supplément", "duplicate": { "layer": "meat", "times": 1 } } ]
     },
+    "frites-cheddar": {"label": "Frites cheddar", "kind": "single", "min": 0, "max": 1, "target": "side", "source": "restaurant", "toVerify": "Frites cheddar du menu gratiné (anciennes « frites garnies ») : liste exacte ? Toujours avec les frites paysannes ?", "choices": [{"id": "viande-hachee", "label": "Cheddar viande hachée", "note": "En plus", "adds": ["nappage-cheddar", "viande-hachee"], "requires": {"group": "frites-formule", "choice": "paysannes"}}, {"id": "tandoori", "label": "Cheddar tandoori", "note": "En plus", "adds": ["nappage-cheddar", "tandoori"], "requires": {"group": "frites-formule", "choice": "paysannes"}}, {"id": "bacon", "label": "Cheddar bacon", "note": "En plus", "adds": ["nappage-cheddar", "bacon-miettes"], "requires": {"group": "frites-formule", "choice": "paysannes"}}]},
     "frites-formule": {
       "label": "Tes frites", "kind": "single", "min": 1, "max": 1, "target": "side", "source": "restaurant",
       "choices": [
@@ -414,7 +415,7 @@
 
   "categories": [
     { "id": "sandwichs", "label": "Sandwichs", "picto": "sandwich", "support": "pain-sandwich", "optionGroups": ["pain", "gratine", "sauces", "crudites", "supplements"], "formula": "frites-maison", "source": "restaurant" },
-    { "id": "gratines", "label": "Gratinés", "picto": "sandwich", "support": "pain-sandwich", "optionGroups": ["viandes-gratine", "sauces", "crudites", "supplements"], "formula": "frites-maison", "source": "photo", "toVerify": "Sauces, crudités et suppléments possibles sur les gratinés ?" },
+    { "id": "gratines", "label": "Gratinés", "picto": "sandwich", "support": "pain-sandwich", "optionGroups": ["viandes-gratine", "sauces", "crudites", "supplements", "frites-cheddar"], "formula": "frites-maison", "source": "photo", "toVerify": "Sauces, crudités et suppléments possibles sur les gratinés ?" },
     { "id": "tacos", "label": "Tacos", "picto": "tacos", "support": "galette-tacos", "optionGroups": ["viandes-tacos", "gratine", "sauces", "supplements"], "formula": null, "source": "photo", "toVerify": "Formule frites + boisson ? Tailles ?" },
     { "id": "classics-burgers", "label": "Classics Burgers", "picto": "burger", "support": "bun", "optionGroups": [], "formula": "frites-boisson", "source": "photo", "toVerify": "Lu « servi avec salade, tomate, oignons, cornichons » : pour tous les classics ?" },
     { "id": "burgers-gourmets", "label": "Burgers Gourmets", "picto": "burger", "support": "bun", "optionGroups": [], "formula": "frites-maison", "source": "photo" },
@@ -423,8 +424,7 @@
     { "id": "croques", "label": "Croques", "picto": "sandwich", "support": "pain-de-mie", "optionGroups": [], "formula": null, "source": "photo", "toVerify": "Composition des croques ? Servis avec des frites ?" },
     { "id": "brasserie", "label": "Brasserie", "picto": "plate", "support": "assiette", "optionGroups": [], "formula": "brasserie", "source": "photo" },
     { "id": "salades", "label": "Salade signature", "picto": "salad", "support": "bol-salade", "optionGroups": ["base-salade", "avocat-option"], "formula": null, "source": "photo" },
-    { "id": "starters", "label": "Starters", "picto": "fries", "support": "barquette", "optionGroups": [], "formula": null, "source": "photo" },
-    { "id": "frites-garnies", "label": "Frites garnies", "picto": "fries", "support": "barquette", "optionGroups": [], "formula": null, "source": "brief" }
+    { "id": "starters", "label": "Starters", "picto": "fries", "support": "barquette", "optionGroups": [], "formula": null, "source": "photo" }
   ],
 
   "products": [
@@ -489,10 +489,6 @@
     { "id": "starter-tenders", "category": "starters", "name": "4 Tenders", "description": "[À COMPLÉTER]", "defaults": [{ "id": "tenders", "qty": 2 }], "badges": [], "source": "photo" },
     { "id": "starter-nuggets", "category": "starters", "name": "6 Nuggets", "description": "[À COMPLÉTER]", "defaults": ["nuggets"], "badges": [], "source": "photo" },
     { "id": "starter-onion-rings", "category": "starters", "name": "Onion rings", "description": "[À COMPLÉTER]", "defaults": ["onion-rings"], "badges": [], "source": "photo", "toVerify": "Quantité illisible sur l'affiche" },
-    { "id": "starter-brochettes-boeuf-fromage", "category": "starters", "name": "Brochettes bœuf-fromage", "description": "[À COMPLÉTER]", "defaults": [{ "id": "brochettes-boeuf-fromage", "qty": 3 }], "badges": [], "source": "photo", "toVerify": "Quantité illisible sur l'affiche" },
-
-    { "id": "frites-cheddar-bacon", "category": "frites-garnies", "name": "Cheddar bacon", "description": "[À COMPLÉTER]", "defaults": ["frites", "nappage-cheddar", "bacon-miettes"], "badges": [], "source": "brief" },
-    { "id": "frites-cheddar-tandoori", "category": "frites-garnies", "name": "Cheddar tandoori", "description": "[À COMPLÉTER]", "defaults": ["frites", "nappage-cheddar", "tandoori"], "badges": [], "source": "brief" },
-    { "id": "frites-cheddar-viande-hachee", "category": "frites-garnies", "name": "Cheddar viande hachée", "description": "[À COMPLÉTER]", "defaults": ["frites", "nappage-cheddar", "viande-hachee"], "badges": [], "source": "brief" }
+    { "id": "starter-brochettes-boeuf-fromage", "category": "starters", "name": "Brochettes bœuf-fromage", "description": "[À COMPLÉTER]", "defaults": [{ "id": "brochettes-boeuf-fromage", "qty": 3 }], "badges": [], "source": "photo", "toVerify": "Quantité illisible sur l'affiche" }
   ]
 }
