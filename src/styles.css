@@ -22,7 +22,7 @@
 html,
 body,
 #root {
-  height: 100%;
+  min-height: 100%;
 }
 
 body {
@@ -50,5 +50,80 @@ body {
     animation-duration: 0.01ms !important;
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
+  }
+}
+
+/* ---------- Accueil : l'entrée au restaurant ---------- */
+html {
+  scroll-behavior: smooth;
+}
+
+.hero-vignette {
+  background:
+    radial-gradient(ellipse 90% 70% at 50% 45%, transparent 55%, rgb(0 0 0 / 0.55)),
+    linear-gradient(to top, rgb(6 7 11 / 0.85), transparent 38%),
+    linear-gradient(to bottom, rgb(6 7 11 / 0.6), transparent 16%);
+}
+
+/* Le nom, en lettres 3D posées dans la salle (coordonnées de l'image de la vidéo). */
+.hero-stage {
+  --glow: 0;
+}
+.crousty-sign {
+  position: absolute;
+  left: 15%;
+  top: 32.5%;
+  width: 70%;
+  display: flex;
+  justify-content: space-between;
+  font-family: var(--font-display);
+  font-size: calc(var(--fw) * 0.148);
+  line-height: 1;
+  perspective: calc(var(--fw) * 1.6);
+  transform: rotate(2.2deg) rotateY(-10deg);
+  transform-style: preserve-3d;
+}
+.crousty-letter {
+  display: inline-block;
+  color: #ff8a1c;
+  -webkit-text-stroke: 1px rgb(255 214 140 / 0.55);
+  text-shadow:
+    0 1px 0 #e8690f,
+    0 2px 0 #de600d,
+    0 3px 0 #cf560b,
+    0 4px 0 #bf4b09,
+    0 5px 0 #ad4007,
+    0 6px 0 #993605,
+    0 7px 0 #842c04,
+    0 8px 0 #702403,
+    0 9px 0 #5e1e02,
+    0 12px 12px rgb(0 0 0 / 0.6),
+    0 0 calc(var(--fw) * 0.05) rgb(255 150 50 / calc(var(--glow) * 0.9)),
+    0 0 calc(var(--fw) * 0.12) rgb(255 110 20 / calc(var(--glow) * 0.6));
+  transform-origin: 50% 100%;
+  will-change: transform, opacity;
+}
+.crousty-spill {
+  background: radial-gradient(ellipse 55% 50% at 50% 55%, rgb(255 120 30 / 0.55), transparent 70%);
+  mix-blend-mode: screen;
+  opacity: calc(var(--glow) * 0.75);
+}
+
+.hero-cue {
+  animation: hero-cue 1.6s ease-in-out infinite;
+  transform-origin: top;
+}
+@keyframes hero-cue {
+  0% {
+    transform: scaleY(0);
+    opacity: 1;
+  }
+  60% {
+    transform: scaleY(1);
+    opacity: 1;
+  }
+  100% {
+    transform: scaleY(1);
+    opacity: 0;
   }
 }

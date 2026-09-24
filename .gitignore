@@ -4,3 +4,4 @@ dist
 .DS_Store
 tools/photos/node_modules
 __pycache__/
+tools/hero/fin.png

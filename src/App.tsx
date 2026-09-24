@@ -1,8 +1,27 @@
+import { Carte } from "./site/Carte.tsx";
+import { Footer } from "./site/Footer.tsx";
+import { Header } from "./site/Header.tsx";
+import { Hero } from "./site/Hero.tsx";
+import { Infos } from "./site/Infos.tsx";
+import { Resto } from "./site/Resto.tsx";
 import { Configurator } from "./ui/Configurator.tsx";
-import { useFontsReady } from "./ui/hooks.ts";
 
+/** Le site : une page vitrine, section par section. */
 export function App() {
-  // Les textures 3D écrivent en Anton : on attend la police (2 s au plus).
-  const ready = useFontsReady();
-  return ready ? <Configurator /> : <div className="stage-bg h-full" aria-busy="true" />;
+  return (
+    <>
+      <a href="#compose" className="sr-only z-50 rounded bg-cheddar px-3 py-2 text-noir focus:not-sr-only focus:fixed focus:top-2 focus:left-2">
+        Aller au configurateur
+      </a>
+      <Header />
+      <main>
+        <Hero />
+        <Configurator />
+        <Carte />
+        <Resto />
+        <Infos />
+      </main>
+      <Footer />
+    </>
+  );
 }

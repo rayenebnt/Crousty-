@@ -6,7 +6,10 @@
     "postalCode": "94380",
     "city": "Bonneuil-sur-Marne",
     "country": "FR",
-    "geo": { "lat": "[À COMPLÉTER]", "lng": "[À COMPLÉTER]" }
+    "geo": {
+      "lat": "[À COMPLÉTER]",
+      "lng": "[À COMPLÉTER]"
+    }
   },
   "phone": "[À COMPLÉTER]",
   "openingHours": "[À COMPLÉTER]",
@@ -16,11 +19,21 @@
     "livraison": "[À COMPLÉTER]"
   },
   "deliveryLinks": [],
-  "socialLinks": [],
+  "socialLinks": [
+    {
+      "network": "TikTok",
+      "handle": "@lecrousty",
+      "url": "https://www.tiktok.com/@lecrousty",
+      "source": "Filigrane des vidéos TikTok envoyées"
+    }
+  ],
   "legal": {
     "companyName": "[À COMPLÉTER]",
     "siret": "[À COMPLÉTER]",
     "publicationDirector": "[À COMPLÉTER]",
     "host": "[À COMPLÉTER]"
+  },
+  "toVerify": {
+    "openingHours": "Horaires affichés sur la porte (vidéo TikTok, 1re seconde) mais coupés à l'image : « Lun – Dim …h à 23h30 », « Ven …h à 00h », « Sam … à 00h30 ». À confirmer en entier."
   }
 }

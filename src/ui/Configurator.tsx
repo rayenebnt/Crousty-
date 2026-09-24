@@ -1,17 +1,18 @@
 /**
- * Configurateur : la scène 3D en haut (à gauche sur ordinateur), les options
- * dessous, le récap en bas. Mobile d'abord.
+ * Configurateur (section « Compose ton menu ») : la scène en haut (à gauche sur ordinateur),
+ * les options dessous, le récap en bas. Mobile d'abord.
  */
-import { lazy, Suspense, useMemo } from "react";
+import { lazy, Suspense, useMemo, useRef } from "react";
 import { menu } from "../data/menu.ts";
 import { productContext, productsOf } from "../domain/catalog.ts";
-import { productReady } from "../photo/presentable.ts";
 import { resolveBuild } from "../domain/resolveBuild.ts";
 import { describe } from "../domain/summary.ts";
 import { useConfigurator } from "../store/configurator.ts";
-import { useReducedMotion, useWebGL } from "./hooks.ts";
+import { useNear } from "../site/useNear.ts";
+import { useFontsReady, useReducedMotion, useWebGL } from "./hooks.ts";
 import { OptionGroup } from "./OptionGroup.tsx";
 import { PhotoProgress } from "./PhotoProgress.tsx";
+import { READY } from "./ready.ts";
 import { Summary } from "./Summary.tsx";
 
 // Le rendu (three.js) est chargé à part : l'interface s'affiche tout de suite.
@@ -19,8 +20,6 @@ const PhotoStage = lazy(() => import("../photo/PhotoStage.tsx").then((m) => ({ d
 
 /** Catégories ouvertes à l'étape 2 (les autres arrivent à l'étape 3). */
 const STEP2_CATEGORIES = ["gratines", "sandwichs", "frites-garnies"];
-/** Démo : seuls les produits dont les photos sont prêtes sont proposés. */
-const READY = new Set(menu.products.filter((p) => productReady(menu, p.id)).map((p) => p.id));
 
 function ProductPicker() {
   const productId = useConfigurator((s) => s.productId);
@@ -66,19 +65,19 @@ export function Configurator() {
   const ctx = useMemo(() => productContext(menu, productId), [productId]);
   const build = useMemo(() => resolveBuild(menu, productId, selections), [productId, selections]);
   const summary = useMemo(() => describe(menu, productId, selections), [productId, selections]);
+  // Le rendu (three.js, photos) ne se charge qu'à l'approche de la section, une fois la police prête.
+  const root = useRef<HTMLElement>(null);
+  const near = useNear(root, "150%");
+  const fonts = useFontsReady();
 
   return (
-    <div className="flex h-full flex-col overflow-hidden">
-      <header className="z-10 flex h-14 shrink-0 items-center justify-between border-b border-white/10 px-4">
-        <p className="font-display text-2xl tracking-wide">
-          LE <span className="text-flamme">CROUSTY</span>
-        </p>
-        <p className="text-sm font-medium text-white/70">Compose ton menu</p>
-      </header>
-
-      <main className="flex min-h-0 flex-1 flex-col md:flex-row">
-        <section aria-label="Aperçu" className="stage-bg relative h-[46dvh] shrink-0 md:h-auto md:flex-[3]">
-          {webgl ? (
+    <section ref={root} id="compose" aria-labelledby="compose-titre" className="flex h-[calc(100svh-3.5rem)] scroll-mt-14 flex-col overflow-hidden border-t border-white/10">
+      <h2 id="compose-titre" className="sr-only">
+        Compose ton menu
+      </h2>
+      <div className="flex min-h-0 flex-1 flex-col md:flex-row">
+        <div role="region" aria-label="Aperçu" className="stage-bg relative h-[46dvh] shrink-0 md:h-auto md:flex-[3]">
+          {!near || !fonts ? null : webgl ? (
             <Suspense fallback={<p className="grid h-full place-items-center text-white/60">Préchauffage du four…</p>}>
               <PhotoStage menu={menu} build={build} reduced={reduced} label={summary.sentence} />
             </Suspense>
@@ -88,14 +87,16 @@ export function Configurator() {
             </p>
           )}
           <div className="pointer-events-none absolute inset-x-0 top-0 p-4">
-            <p className="text-xs font-semibold tracking-[0.14em] text-cheddar uppercase">{ctx.category.label}</p>
-            <h1 className="font-display text-4xl leading-none uppercase drop-shadow-[0_2px_10px_rgb(0_0_0/0.6)] md:text-6xl">{ctx.product.name}</h1>
+            <p className="text-xs font-semibold tracking-[0.14em] text-cheddar uppercase">
+              Compose ton menu · {ctx.category.label}
+            </p>
+            <p className="font-display text-4xl leading-none uppercase drop-shadow-[0_2px_10px_rgb(0_0_0/0.6)] md:text-6xl">{ctx.product.name}</p>
             {ctx.formula && <p className="mt-1.5 inline-block rounded-full bg-rouge px-3 py-1 text-xs font-semibold">{ctx.formula.label}</p>}
           </div>
           <PhotoProgress />
-        </section>
+        </div>
 
-        <section aria-label="Options" className="picto-bg min-h-0 flex-1 overflow-y-auto md:flex-[2] md:border-l md:border-white/10">
+        <div role="region" aria-label="Options" className="picto-bg min-h-0 flex-1 overflow-y-auto md:flex-[2] md:border-l md:border-white/10">
           <ProductPicker />
           <nav aria-label="Étapes" className="sticky top-0 z-10 flex gap-1.5 overflow-x-auto border-y border-white/10 bg-nuit/95 px-4 py-2 backdrop-blur [scrollbar-width:none]">
             {ctx.groups.map((g) => (
@@ -110,13 +111,13 @@ export function Configurator() {
             ))}
           </form>
           <p className="px-4 pt-2 pb-6 text-xs text-white/40">Démonstration : seuls les produits déjà photographiés sont proposés. Le reste de la carte arrivera avec la séance photo.</p>
-        </section>
-      </main>
+        </div>
+      </div>
 
       <Summary menu={menu} productId={productId} selections={selections} onReset={reset} />
       <p aria-live="polite" className="sr-only">
         {announcement}
       </p>
-    </div>
+    </section>
   );
 }
