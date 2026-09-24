@@ -6,7 +6,7 @@ import { useMemo } from "react";
 import { menu } from "../data/menu.ts";
 import type { Id } from "../data/menu.types.ts";
 import { productContext, productsOf } from "../domain/catalog.ts";
-import { describe, ingredientList } from "../domain/summary.ts";
+import { describe, productText } from "../domain/summary.ts";
 import { useConfigurator } from "../store/configurator.ts";
 import { OptionGroup } from "../ui/OptionGroup.tsx";
 
@@ -24,7 +24,7 @@ export interface MenuTab {
 }
 
 export const TABS: MenuTab[] = [
-  { id: "gratines", label: "Gratinés", categories: ["gratines"], photo: "gratines", alt: "Le Gratiné, emmental doré au four, et ses frites", line: "Gratiné à l'emmental, au four" },
+  { id: "gratines", label: "Gratinés", categories: ["gratines"], photo: "gratines", alt: "Le sandwich gratiné, mozzarella dorée au four, et ses frites", line: "Gratiné à la mozzarella, au four" },
   { id: "sandwichs", label: "Sandwichs", categories: ["sandwichs"], photo: "sandwichs", alt: "Un sandwich garni de poulet tandoori et de poulet curry, avec des frites", line: "Pain ou tortilla · gratiné en option" },
   {
     id: "burgers",
@@ -60,7 +60,7 @@ export function Menus() {
   const summary = useMemo(() => describe(menu, productId, selections), [productId, selections]);
   const shown = new Set(groups.map((g) => g.id));
   const lines = summary.lines.filter((l) => shown.has(l.groupId));
-  const composition = ingredientList(menu, ctx.product.defaults);
+  const text = productText(menu, productId);
 
   const openTab = (t: MenuTab) => {
     if (t.id === tab.id) return;
@@ -158,7 +158,7 @@ export function Menus() {
                                   ✓
                                 </span>
                               </span>
-                              <span className="line-clamp-2 text-[13px] leading-snug text-white/60">{ingredientList(menu, p.defaults).join(", ") || "Composition à venir"}</span>
+                              <span className="line-clamp-3 text-[13px] leading-snug text-white/60">{productText(menu, p.id) ?? "Composition à venir"}</span>
                             </button>
                           );
                         })}
@@ -193,7 +193,7 @@ export function Menus() {
               <p className="mt-1 font-display text-3xl leading-tight uppercase">
                 {summary.category} · {summary.title}
               </p>
-              {composition.length > 0 && <p className="mt-1 text-sm text-noir/75">{composition.join(", ")}</p>}
+              {text && <p className="mt-1 text-sm text-noir/75">{text}</p>}
               {lines.length > 0 && (
                 <dl className="mt-3 grid grid-cols-[auto_1fr] gap-x-4 gap-y-1 border-t border-noir/15 pt-3 text-sm">
                   {lines.map((l) => (

@@ -11,7 +11,7 @@ export function Footer() {
         <p className="font-display text-4xl tracking-wide">
           LE <span className="text-flamme">CROUSTY</span>
         </p>
-        <p className="mt-2 max-w-md text-white/70">Sandwichs et tacos gratinés, burgers, hot-dogs, frites garnies. Fast-food à Bonneuil-sur-Marne (94).</p>
+        <p className="mt-2 max-w-md text-white/70">Crousty, sandwichs gratinés, tacos, burgers, desserts maison. Fast-food à Bonneuil-sur-Marne (94).</p>
         <nav aria-label="Pied de page" className="mt-6 flex flex-wrap gap-x-5 gap-y-2 text-sm text-white/80">
           <a href="#compose" className="hover:text-white">Composer</a>
           <a href="#carte" className="hover:text-white">La carte</a>

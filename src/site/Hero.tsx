@@ -236,7 +236,7 @@ export function Hero() {
         <div aria-hidden className="hero-vignette pointer-events-none absolute inset-0" />
 
         <h1 id="hero-titre" className="sr-only">
-          Le Crousty, fast-food à Bonneuil-sur-Marne : sandwichs et tacos gratinés, burgers, hot-dogs, frites garnies
+          Le Crousty, fast-food à Bonneuil-sur-Marne : Crousty, sandwichs gratinés, tacos, burgers et desserts maison
         </h1>
 
         <div ref={intro} className="pointer-events-none absolute inset-x-0 bottom-0 px-5 pb-24 md:inset-y-0 md:right-auto md:flex md:w-[42%] md:flex-col md:justify-center md:pb-0 md:pl-12">
@@ -249,13 +249,13 @@ export function Hero() {
         </div>
 
         <p ref={caption} className="pointer-events-none absolute inset-x-0 bottom-24 px-5 font-display text-3xl leading-tight uppercase opacity-0 drop-shadow-[0_2px_14px_rgb(0_0_0/0.8)] md:inset-x-auto md:bottom-auto md:left-12 md:top-1/2 md:w-[36%] md:text-5xl">
-          Sandwichs et tacos <span className="text-cheddar">gratinés</span>, burgers, hot-dogs, frites garnies
+          Crousty, sandwichs <span className="text-cheddar">gratinés</span>, tacos, burgers
         </p>
 
         <div ref={outro} className="absolute inset-x-0 bottom-0 px-5 pb-8 opacity-0 md:inset-y-0 md:right-auto md:flex md:w-[42%] md:flex-col md:justify-center md:pb-0 md:pl-12">
           <p className="text-xs font-semibold tracking-[0.18em] text-cheddar uppercase">Fast-food · Bonneuil-sur-Marne</p>
           <p className="mt-2 max-w-md text-lg leading-snug text-white/90 drop-shadow-[0_2px_10px_rgb(0_0_0/0.8)] md:text-xl">
-            Sandwichs et tacos gratinés à l'emmental, burgers, hot-dogs, frites garnies. Compose ton menu et regarde-le se préparer.
+            Crousty, sandwichs gratinés à la mozzarella, tacos, burgers gourmets et desserts maison. Découvre la carte et compose ton menu.
           </p>
           <div className="mt-5 flex flex-wrap gap-3">
             <a href="#compose" className="rounded-full bg-rouge px-5 py-3 font-display text-lg tracking-wide uppercase shadow-lg shadow-rouge/30 transition hover:bg-flamme focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-cheddar">

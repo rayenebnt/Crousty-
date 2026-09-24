@@ -4,7 +4,7 @@ import { restaurant } from "../data/restaurant.ts";
 const base = import.meta.env.BASE_URL;
 const PHOTOS = [
   { file: "accueil-porte", alt: "Un membre de l'équipe accueille à la porte du Crousty", caption: "L'entrée", span: "row-span-2" },
-  { file: "gratine-steak", alt: "Un gratiné au steak, l'emmental doré au four", caption: "Gratiné", span: "row-span-2" },
+  { file: "gratine-steak", alt: "Un gratiné au steak, le fromage doré au four", caption: "Gratiné", span: "row-span-2" },
   { file: "burger-frites", alt: "Un burger et des frites posés sur le comptoir", caption: "Au comptoir", span: "row-span-2" },
   { file: "frites-cheddar-tandoori", alt: "Frites nappées de cheddar et poulet tandoori", caption: "Frites cheddar tandoori", span: "row-span-2" },
   { file: "comptoir", alt: "La salle : le comptoir en bois, les écrans du menu, les boissons", caption: "La salle", span: "row-span-2" },

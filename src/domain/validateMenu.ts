@@ -15,7 +15,7 @@ import {
 const id = z.string().regex(/^[a-z0-9]+(-[a-z0-9]+)*$/, "identifiant kebab-case attendu");
 const hex = z.string().regex(/^#[0-9A-Fa-f]{6}$/, "couleur hex attendue");
 const layer = z.enum(LAYERS as [string, ...string[]]);
-const source = z.enum(["brief", "photo", "restaurant"]).optional();
+const source = z.enum(["brief", "photo", "restaurant", "document"]).optional();
 const ingredientRef = z.union([id, z.object({ id, qty: z.number().int().min(1).max(5) })]);
 const anim = z
   .object({
@@ -60,6 +60,7 @@ export const menuSchema = z.object({
     city: z.string(),
     validatedByRestaurant: z.boolean(),
     todoMarker: z.literal("[À COMPLÉTER]"),
+    source: z.string().optional(),
   }),
   showcase: z.object({ hero: z.object({ product: id, selections: z.record(id, z.array(id)) }) }),
   supports: z.record(

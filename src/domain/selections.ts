@@ -72,9 +72,11 @@ export function sanitize(menu: Menu, ctx: ProductContext, input: Selections): Se
   for (let pass = 0; pass < 2; pass++) {
     for (const g of ctx.groups) {
       sel[g.id] = sel[g.id].filter((id) => choiceAvailability(menu, ctx, sel, g.id, id).available && requirementMet(g, id, sel));
-      if (sel[g.id].length < g.min) {
-        const fill = g.choices.find((c) => !sel[g.id].includes(c.id) && choiceAvailability(menu, ctx, sel, g.id, c.id).available);
-        if (fill) sel[g.id] = [...sel[g.id], fill.id];
+      // Compléter jusqu'au minimum (tacos L : 3 viandes).
+      while (sel[g.id].length < g.min) {
+        const fill = g.choices.find((c) => !sel[g.id].includes(c.id) && choiceAvailability(menu, ctx, sel, g.id, c.id).available && requirementMet(g, c.id, sel));
+        if (!fill) break;
+        sel[g.id] = [...sel[g.id], fill.id];
       }
     }
   }

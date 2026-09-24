@@ -20,8 +20,8 @@
 export type Id = string;
 export type ToComplete = "[À COMPLÉTER]";
 
-/** D'où vient l'information. `restaurant` = confirmé par le restaurant. */
-export type Source = "brief" | "photo" | "restaurant";
+/** D'où vient l'information. `restaurant` = confirmé par le restaurant ; `document` = carte fournie par le restaurant (docs/Menu_Complet_Crousty_Bonneuil.docx). */
+export type Source = "brief" | "photo" | "restaurant" | "document";
 
 // ---------------------------------------------------------------------------
 // Vocabulaire fixe côté code (ajouter une valeur ici = nouveau code 3D)
@@ -127,6 +127,8 @@ export interface MenuMeta {
   /** Passe à true quand le restaurant a relu toute la carte. */
   validatedByRestaurant: boolean;
   todoMarker: ToComplete;
+  /** D'où vient la carte. */
+  source?: string;
 }
 
 /** Produits mis en scène (accueil, ouverture du configurateur). */

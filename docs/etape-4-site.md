@@ -40,6 +40,29 @@ python3 tools/hero/galerie.py <video.mov>    # public/galerie/*.webp
 - **« Réduire les animations » activé :** l'accueil affiche directement l'image finale, avec le nom et les boutons.
 - **Une meilleure vidéo, un meilleur rendu :** une vidéo filmée exprès, en horizontal, sans personne et en 4K, avec une marche lente et stable de la rue jusqu'au comptoir, donnerait un résultat proche de la vidéo de référence. Pour l'intégrer, il suffit de relancer `images.py` avec cette vidéo.
 
+## La carte d'après votre document
+
+La carte (`src/data/menu.json`) reprend maintenant `docs/Menu_Complet_Crousty_Bonneuil.docx` : 12 catégories et 60 produits, avec les textes de votre document comme descriptions. **Les prix ne sont pas repris** (site vitrine, et le document précise qu'ils varient selon la plateforme).
+
+| Changement | Détail |
+|---|---|
+| Crousty | Ce sont des bols : riz, viande, sauce blanche maison, persil, piquant ou sucré (Tandory, Tenders, Boursin) |
+| Menu gratiné | Gratiné **à la mozzarella**, viande au choix. Les frites cheddar restent en option (avec les paysannes) |
+| Tacos | S, M, L (1, 2 ou 3 viandes) et personnalisé, avec la sauce fromagère maison |
+| Sandwiches | 13 sandwiches (Kebab, Crousty steak, Mix, Chicken red, Chicanos, Soho steak, Roll…). Chicanos et Roll sont en tortilla |
+| Burgers | Smash (3), gourmets maison (8, frites paysannes + boisson), classiques (7) |
+| Nouveau | Petites faims, desserts pâtissiers (donut au choix), 9 tiramisus (2 sur Uber Eats), canettes 33 cl |
+| Retiré | Hot-dogs, croques (sauf le Croq des petites faims), frites garnies, les burgers et plats absents du document |
+
+**À vérifier avec le restaurant :**
+- le gratiné des sandwichs est-il à l'emmental, comme vous me l'aviez dit, ou à la mozzarella, comme le menu gratiné ?
+- frites + boisson : sont-elles incluses pour tous les sandwichs, comme pour le kebab ? pour tous les gourmets, comme pour Old Fashion, Wood et Manhattan ?
+- les compositions du Gourmet Blue Touch et du Croq ;
+- le steak du Classic Cheese ;
+- ce que contient le Tacos personnalisé.
+
+Le détail est dans `npm run menu:report`.
+
 ## Compose ton menu (nouvelle version)
 
 L'assemblage animé des photos est abandonné : il ne faisait pas assez professionnel. La section est maintenant **par catégorie**, sans visualisation :

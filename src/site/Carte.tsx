@@ -3,7 +3,7 @@ import { useId, useState } from "react";
 import { menu } from "../data/menu.ts";
 import type { Category, Product } from "../data/menu.types.ts";
 import { productsOf, resolveGroup } from "../domain/catalog.ts";
-import { ingredientList } from "../domain/summary.ts";
+import { productText } from "../domain/summary.ts";
 import { useConfigurator } from "../store/configurator.ts";
 import { COMPOSABLE } from "./Menus.tsx";
 import { Todo } from "./Todo.tsx";
@@ -28,7 +28,7 @@ function Choices({ category }: { category: Category }) {
 
 function ProductCard({ p }: { p: Product }) {
   const setProduct = useConfigurator((s) => s.setProduct);
-  const composition = ingredientList(menu, p.defaults);
+  const text = productText(menu, p.id);
   const compose = () => {
     setProduct(p.id);
     document.getElementById("compose")?.scrollIntoView({ behavior: "smooth" });
@@ -37,7 +37,7 @@ function ProductCard({ p }: { p: Product }) {
     <li className="flex flex-col overflow-hidden rounded-2xl border border-white/10 bg-white/[0.04]">
       <div className="flex flex-1 flex-col p-4">
         <h4 className="font-display text-2xl leading-tight uppercase">{p.name}</h4>
-        <p className="mt-1 flex-1 text-sm text-white/70">{composition.length ? composition.join(", ") : <Todo what="composition" />}</p>
+        <p className="mt-1 flex-1 text-sm text-white/70">{text ?? (p.defaults.length ? null : <Todo what="composition" />)}</p>
         {COMPOSABLE.has(p.id) && (
           <button type="button" onClick={compose} className="mt-3 self-start rounded-full bg-rouge px-4 py-2 text-sm font-semibold transition hover:bg-flamme focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-cheddar">
             Le composer ›

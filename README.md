@@ -1,6 +1,6 @@
 # Le Crousty — site du restaurant
 
-Fast-food à Bonneuil-sur-Marne (94) : sandwichs et tacos gratinés, burgers, hot-dogs, croques, brasserie, frites garnies.
+Fast-food à Bonneuil-sur-Marne (94) : Crousty (bols de riz), sandwichs gratinés, tacos, burgers, brasserie, desserts.
 Site vitrine d'une page (sans prix ni commande) :
 - un accueil animé au défilement, qui fait entrer le visiteur dans le restaurant (d'après la vidéo TikTok) ;
 - un configurateur de menu qui assemble **de vraies photos** des plats ;

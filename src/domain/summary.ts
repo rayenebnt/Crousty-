@@ -60,3 +60,13 @@ export function describe(menu: Menu, productId: Id, input: Selections): Summary 
     sentence: parts.join(". ") + ".",
   };
 }
+
+/** Ce qu'on affiche sous le nom d'un produit : le texte de la carte, sinon sa composition (null s'il n'y a rien d'utile). */
+export function productText(menu: Menu, productId: Id): string | null {
+  const p = menu.products.find((x) => x.id === productId);
+  if (!p) return null;
+  if (!p.description.includes(menu.meta.todoMarker)) return p.description;
+  const parts = ingredientList(menu, p.defaults);
+  // Un seul ingrédient (« Tiramisu » sous « Caramel Spéculoos ») n'apprend rien.
+  return parts.length > 1 ? parts.join(", ") : null;
+}
