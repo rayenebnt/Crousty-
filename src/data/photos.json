@@ -1,6 +1,70 @@
 {
   "pxPerCm": 30,
   "files": {
+    "algerienne": {
+      "w": 585,
+      "h": 150,
+      "wCm": 19.5,
+      "hCm": 5.0,
+      "demo": true,
+      "synthese": true
+    },
+    "bacon": {
+      "w": 556,
+      "h": 191,
+      "wCm": 18.53,
+      "hCm": 6.37,
+      "demo": true,
+      "synthese": true
+    },
+    "barbecue": {
+      "w": 573,
+      "h": 158,
+      "wCm": 19.1,
+      "hCm": 5.27,
+      "demo": true,
+      "synthese": true
+    },
+    "biggy": {
+      "w": 583,
+      "h": 160,
+      "wCm": 19.43,
+      "hCm": 5.33,
+      "demo": true,
+      "synthese": true
+    },
+    "boursin": {
+      "w": 525,
+      "h": 163,
+      "wCm": 17.5,
+      "hCm": 5.43,
+      "demo": true,
+      "synthese": true
+    },
+    "cheddar": {
+      "w": 523,
+      "h": 200,
+      "wCm": 17.43,
+      "hCm": 6.67,
+      "demo": true,
+      "synthese": true
+    },
+    "curry": {
+      "w": 513,
+      "h": 257,
+      "wCm": 17.1,
+      "hCm": 8.57,
+      "demo": true,
+      "synthese": true
+    },
+    "escalope": {
+      "w": 534,
+      "h": 185,
+      "wCm": 17.8,
+      "hCm": 6.17,
+      "demo": true,
+      "synthese": true
+    },
     "frites": {
       "w": 510,
       "h": 272,
@@ -18,9 +82,106 @@
     "gratin-fromage__avant": {
       "w": 810,
       "h": 362,
-      "wCm": 27,
-      "hCm": 12.06,
-      "demo": true
+      "wCm": 27.0,
+      "hCm": 12.07,
+      "demo": true,
+      "synthese": true
+    },
+    "harissa": {
+      "w": 538,
+      "h": 162,
+      "wCm": 17.93,
+      "hCm": 5.4,
+      "demo": true,
+      "synthese": true
+    },
+    "jambon-dinde": {
+      "w": 448,
+      "h": 228,
+      "wCm": 14.93,
+      "hCm": 7.6,
+      "demo": true,
+      "synthese": true
+    },
+    "kebab": {
+      "w": 514,
+      "h": 265,
+      "wCm": 17.13,
+      "hCm": 8.83,
+      "demo": true,
+      "synthese": true
+    },
+    "ketchup": {
+      "w": 535,
+      "h": 163,
+      "wCm": 17.83,
+      "hCm": 5.43,
+      "demo": true,
+      "synthese": true
+    },
+    "mayonnaise": {
+      "w": 563,
+      "h": 148,
+      "wCm": 18.77,
+      "hCm": 4.93,
+      "demo": true,
+      "synthese": true
+    },
+    "merguez": {
+      "w": 602,
+      "h": 152,
+      "wCm": 20.07,
+      "hCm": 5.07,
+      "demo": true,
+      "synthese": true
+    },
+    "oeuf": {
+      "w": 332,
+      "h": 257,
+      "wCm": 11.07,
+      "hCm": 8.57,
+      "demo": true,
+      "synthese": true
+    },
+    "oignons": {
+      "w": 468,
+      "h": 157,
+      "wCm": 15.6,
+      "hCm": 5.23,
+      "demo": true,
+      "synthese": true
+    },
+    "oignons-caramelises": {
+      "w": 525,
+      "h": 198,
+      "wCm": 17.5,
+      "hCm": 6.6,
+      "demo": true,
+      "synthese": true
+    },
+    "pain-sandwich__ouvert": {
+      "w": 810,
+      "h": 362,
+      "wCm": 27.0,
+      "hCm": 12.07,
+      "demo": true,
+      "synthese": true
+    },
+    "pastrami": {
+      "w": 596,
+      "h": 228,
+      "wCm": 19.87,
+      "hCm": 7.6,
+      "demo": true,
+      "synthese": true
+    },
+    "poulet": {
+      "w": 644,
+      "h": 270,
+      "wCm": 21.47,
+      "hCm": 9.0,
+      "demo": true,
+      "synthese": true
     },
     "produit__frites-cheddar-tandoori": {
       "w": 540,
@@ -35,6 +196,62 @@
       "wCm": 18,
       "hCm": 12.2,
       "demo": true
+    },
+    "salade": {
+      "w": 537,
+      "h": 226,
+      "wCm": 17.9,
+      "hCm": 7.53,
+      "demo": true,
+      "synthese": true
+    },
+    "samourai": {
+      "w": 544,
+      "h": 160,
+      "wCm": 18.13,
+      "hCm": 5.33,
+      "demo": true,
+      "synthese": true
+    },
+    "sauce-blanche": {
+      "w": 550,
+      "h": 156,
+      "wCm": 18.33,
+      "hCm": 5.2,
+      "demo": true,
+      "synthese": true
+    },
+    "steak-hache": {
+      "w": 568,
+      "h": 291,
+      "wCm": 18.93,
+      "hCm": 9.7,
+      "demo": true,
+      "synthese": true
+    },
+    "tandoori": {
+      "w": 496,
+      "h": 300,
+      "wCm": 16.53,
+      "hCm": 10.0,
+      "demo": true,
+      "synthese": true
+    },
+    "tenders": {
+      "w": 525,
+      "h": 173,
+      "wCm": 17.5,
+      "hCm": 5.77,
+      "demo": true,
+      "synthese": true
+    },
+    "tomate": {
+      "w": 506,
+      "h": 186,
+      "wCm": 16.87,
+      "hCm": 6.2,
+      "demo": true,
+      "synthese": true
     }
   }
 }

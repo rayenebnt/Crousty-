@@ -8,6 +8,8 @@ export interface PhotoInfo {
   hCm: number;
   /** Photo provisoire (tirée d'une image de démonstration), à remplacer. */
   demo?: boolean;
+  /** Image fabriquée (dessinée ou recomposée) pour la démo, pas une photo. */
+  synthese?: boolean;
 }
 
 export const manifest = raw as { pxPerCm: number; files: Record<string, PhotoInfo> };

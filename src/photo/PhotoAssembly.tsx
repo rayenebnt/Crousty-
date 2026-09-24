@@ -1,6 +1,8 @@
 /**
  * Un assemblage en photos : le support (pain ouvert, tortilla…) puis chaque ingrédient,
- * dans l'ordre des couches. Gratiné : photo « avant le four » puis fondu vers « après ».
+ * dans l'ordre des couches. Gratiné : la garniture tombe dans le pain, puis le fromage râpé
+ * pleut dessus, puis le four (fondu vers la photo « après », vapeur). Tout changement de
+ * garniture rejoue la séquence.
  * Nappage : la photo des frites nappées s'étale sur les frites. Tortilla : se roule au repos.
  */
 import { useEffect, useMemo, useRef, useState } from "react";
@@ -8,30 +10,70 @@ import type { LayerId, Menu } from "../data/menu.types.ts";
 import type { AssemblySpec, BuildItem } from "../domain/resolveBuild.ts";
 import { Steam } from "../scene/Steam.tsx";
 import { usePresence, type Present } from "../scene/usePresence.ts";
+import { CheeseRain } from "./CheeseRain.tsx";
 import { PhotoLayer } from "./PhotoLayer.tsx";
 import { photoInfo } from "./manifest.ts";
 import { ingredientShot, supportShot } from "./shots.ts";
 
 /** Décalage de chaque couche dans le pain (cm) : chaque ingrédient ajouté reste visible. */
 const OFFSET: Partial<Record<LayerId, [number, number]>> = {
-  cheese: [0.9, -0.8],
-  extra: [-1.3, 0.8],
-  veg: [1.5, 1.2],
-  "veg-top": [-0.7, -1.2],
+  cheese: [0.5, -0.3],
+  extra: [-0.6, 0.3],
+  veg: [0.5, 0.2],
+  "veg-top": [-0.4, -0.3],
 };
 
 const EXIT_MS = 420;
+/** Écart entre deux ingrédients qui tombent ensemble (s). */
+const STAGGER = 0.16;
+/** Durée d'une chute avec rebond (voir PhotoLayer). */
+const DROP = 0.55;
 
 /** Vapeur de sortie du four : forte quelques secondes, puis légère. (La vapeur travaille en unités ×8.) */
-function OvenSteam() {
-  const [level, setLevel] = useState(1);
+function OvenSteam({ delay = 0 }: { delay?: number }) {
+  const [level, setLevel] = useState(0);
   useEffect(() => {
-    const id = setTimeout(() => setLevel(0.35), 3800);
-    return () => clearTimeout(id);
-  }, []);
+    const a = setTimeout(() => setLevel(1), delay * 1000);
+    const b = setTimeout(() => setLevel(0.35), delay * 1000 + 3800);
+    return () => {
+      clearTimeout(a);
+      clearTimeout(b);
+    };
+  }, [delay]);
   return (
     <group position-y={4} scale={8}>
       <Steam intensity={level} hx={1.1} hz={0.35} count={16} />
+    </group>
+  );
+}
+
+interface RunProps {
+  avant: { file: string; sizeCm: [number, number] };
+  apres: { file: string; sizeCm: [number, number] };
+  label: string;
+  color: string;
+  phase: "enter" | "exit";
+  /** Attente avant la pluie de fromage : le temps que la garniture se pose (s). */
+  delay: number;
+  reduced: boolean;
+  order: number;
+}
+
+/** Une séquence de gratinage : pluie d'emmental râpé, puis le four. */
+function GratinRun({ avant, apres, label, color, phase, delay, reduced, order }: RunProps) {
+  const hasAvant = !!photoInfo(avant.file), hasApres = !!photoInfo(apres.file);
+  const common = { label, color, phase, reduced, x: 0, z: 0 };
+  if (reduced || !hasAvant) {
+    return <PhotoLayer {...common} file={hasApres ? apres.file : avant.file} fallbackCm={apres.sizeCm} y={3.2} order={order + 1} enter="fade" delay={reduced ? 0 : delay} />;
+  }
+  const [w, h] = photoInfo(apres.file) ? [photoInfo(apres.file)!.wCm, photoInfo(apres.file)!.hCm] : apres.sizeCm;
+  const oven = delay + 2.1;
+  return (
+    <group>
+      <CheeseRain rx={w * 0.36} rz={h * 0.27} y={3.4} order={(order + 3) * 2} delay={delay} fadeAt={1.9} phase={phase} />
+      <PhotoLayer {...common} file={avant.file} fallbackCm={avant.sizeCm} y={3} order={order} mode="dissolve" duration={1.4} delay={delay + 0.35} />
+      {hasApres && <PhotoLayer {...common} file={apres.file} fallbackCm={apres.sizeCm} y={3.2} order={order + 1} mode="dissolve" duration={1.4} delay={oven} glow />}
+      {phase === "enter" && <OvenSteam delay={oven + 0.2} />}
     </group>
   );
 }
@@ -68,13 +110,28 @@ export function PhotoAssembly({ menu, spec, reduced, baseOrder }: Props) {
     const v = menu.ingredients[p.item.ingredient].visual;
     return v.archetype === "melt" && v.variant !== "pour";
   };
-  // Sous le gratiné, la garniture ne se voit pas : pas d'étiquette, et le gratinage se rejoue à chaque changement.
   const gratin = items.find((p) => isGratin(p) && p.phase === "enter");
+  // Sous le gratiné, un ingrédient sans photo n'a pas d'étiquette : le fromage le recouvre.
   const hidden = (p: Present<BuildItem>) => !!gratin && p !== gratin && !onTop.has(p.item.layer);
-  const underSig = items
-    .filter((p) => p.phase === "enter" && !isGratin(p))
-    .map((p) => p.key)
-    .join("|");
+  const under = items.filter((p) => p.phase === "enter" && !isGratin(p));
+  const underSig = under.map((p) => p.key).join("|");
+
+  // Le gratinage se rejoue à chaque changement de garniture, une fois les nouveaux ingrédients posés.
+  const seen = useRef<Set<string> | null>(null);
+  const runDelay = useMemo(() => {
+    const first = seen.current === null;
+    const fresh = under.filter((p) => first || !seen.current!.has(p.key));
+    if (!fresh.length) return first ? 0.4 : 0.45;
+    const last = Math.max(...fresh.map((p) => p.batchIndex));
+    return (first ? 0.3 : 0.1) + last * STAGGER + DROP + 0.45;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [underSig]);
+  useEffect(() => {
+    seen.current = new Set(underSig.split("|"));
+  }, [underSig]);
+  const gratinItem = gratin?.item;
+  const runInput = useMemo(() => (gratinItem ? [{ sig: underSig, delay: runDelay, item: gratinItem }] : []), [gratinItem, underSig, runDelay]);
+  const runs = usePresence(runInput, (r) => `${r.item.key}:${r.sig}`, 400);
 
   // Photos manquantes : de petites étiquettes lisibles, en colonne, plutôt qu'une pile de cadres.
   const missing = items.filter((p) => {
@@ -91,19 +148,9 @@ export function PhotoAssembly({ menu, spec, reduced, baseOrder }: Props) {
   const layer = (p: Present<BuildItem>, i: number) => {
     const ing = menu.ingredients[p.item.ingredient];
     const shots = ingredientShot(menu, p.item.ingredient, spec.support);
-    const common = { label: ing.label, color: ing.visual.color ?? "#C08040", phase: p.phase, reduced, delay: p.batchIndex * 0.12 };
-    if (ing.visual.archetype === "melt" && ing.visual.variant !== "pour") {
-      // Gratiné : « avant » tombe, puis fondu vers « après ». Sans photo « avant », fondu direct.
-      const [avant, apres] = shots;
-      const hasAvant = !!photoInfo(avant.file), hasApres = !!photoInfo(apres.file);
-      return (
-        <group key={`${p.key}:${underSig}`}>
-          {(hasAvant || !hasApres) && <PhotoLayer {...common} file={avant.file} fallbackCm={avant.sizeCm} x={0} z={0} y={3} order={baseOrder + 40} enter="fade" />}
-          {hasApres && <PhotoLayer {...common} file={apres.file} fallbackCm={apres.sizeCm} x={0} z={0} y={3.2} order={baseOrder + 41} mode="dissolve" duration={1.3} delay={hasAvant ? 0.5 : 0.1} glow />}
-          {!reduced && p.phase === "enter" && <OvenSteam />}
-        </group>
-      );
-    }
+    const first = !mounted.current;
+    const common = { label: ing.label, color: ing.visual.color ?? "#C08040", phase: p.phase, reduced, delay: (first ? 0.3 : 0.1) + p.batchIndex * STAGGER };
+    if (ing.visual.archetype === "melt" && ing.visual.variant !== "pour") return null; // voir GratinRun
     const shot = shots[0];
     if (!shot) return null;
     if (ing.visual.variant === "pour") {
@@ -119,6 +166,7 @@ export function PhotoAssembly({ menu, spec, reduced, baseOrder }: Props) {
     const rx = p.item.rank ? (p.item.rank % 2 ? 1 : -1) * spread * Math.ceil(p.item.rank / 2) : 0;
     const rz = p.item.rank ? (p.item.rank % 2 ? -0.5 : 0.5) : 0;
     const enter = ing.visual.archetype === "can" || ing.visual.archetype === "bottle" ? "slide" : "drop";
+    const drizzle = ing.visual.archetype === "drizzle";
     return (
       <PhotoLayer
         key={p.key}
@@ -130,14 +178,25 @@ export function PhotoAssembly({ menu, spec, reduced, baseOrder }: Props) {
         y={onTop.has(p.item.layer) ? 3 : 0.6 + i * 0.35}
         order={baseOrder + 5 + i}
         enter={enter}
+        {...(drizzle ? { mode: "wipe" as const, duration: 0.75 } : {})}
       />
     );
   };
+
+  const mounted = useRef(false);
+  useEffect(() => {
+    mounted.current = true;
+  }, []);
 
   return (
     <group>
       {flat && (photoInfo(flat.file) || !gratin) && <PhotoLayer file={flat.file} label={support.label} color={support.visual.color ?? "#D9A05B"} fallbackCm={flat.sizeCm} x={0} z={0} y={0.2} order={baseOrder + 1} phase="enter" reduced={reduced} enter="fade" />}
       {items.map(layer)}
+      {runs.map((r) => {
+        const [avant, apres] = ingredientShot(menu, r.item.item.ingredient, spec.support);
+        const ing = menu.ingredients[r.item.item.ingredient];
+        return <GratinRun key={r.key} avant={avant} apres={apres} label={ing.label} color={ing.visual.color ?? "#F5D98A"} phase={r.phase} delay={r.item.delay} reduced={reduced} order={baseOrder + 40} />;
+      })}
       {rolled && (
         <PhotoLayer
           file={rolled.file}

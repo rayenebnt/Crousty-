@@ -11,7 +11,7 @@ import { photoInfo } from "./manifest.ts";
 import { loadPhoto, placeholder, type LoadedPhoto } from "./photos.ts";
 
 export type Enter = "drop" | "fade" | "slide" | "none";
-export type Mode = "normal" | "dissolve" | "reveal";
+export type Mode = "normal" | "dissolve" | "reveal" | "wipe";
 
 export interface LayerProps {
   file: string;
@@ -57,6 +57,10 @@ function photoMaterial() {
         if (uMode < 0.5) {
           // Fondu irrégulier : des plaques apparaissent au hasard, comme le fromage qui fond.
           m = smoothstep(n - 0.06, n + 0.06, uProgress * 1.2 - 0.1);
+        } else if (uMode > 1.5) {
+          // Filet de sauce : tracé de gauche à droite, comme le flacon qu'on presse.
+          float x = vUv.x + (n - 0.5) * 0.06;
+          m = 1.0 - smoothstep(uProgress * 1.1 - 0.05, uProgress * 1.1, x);
         } else {
           // Nappage : part du centre et s'étale en coulures.
           vec2 d = (vUv - 0.5) * 2.0;
@@ -126,7 +130,7 @@ export function PhotoLayer(p: LayerProps) {
   useEffect(() => {
     mat.uniforms.map.value = photo?.map ?? null;
     shadow.uniforms.map.value = photo?.shadow ?? null;
-    mat.uniforms.uMode.value = p.mode === "reveal" ? 1 : 0;
+    mat.uniforms.uMode.value = p.mode === "wipe" ? 2 : p.mode === "reveal" ? 1 : 0;
   }, [photo, mat, shadow, p.mode]);
 
   const group = useRef<THREE.Group>(null);
