@@ -12,6 +12,7 @@ import { Steam } from "../scene/Steam.tsx";
 import { usePresence, type Present } from "../scene/usePresence.ts";
 import { CheeseRain } from "./CheeseRain.tsx";
 import { PhotoLayer } from "./PhotoLayer.tsx";
+import { piecesDuration } from "./PiecesDrop.tsx";
 import { photoInfo } from "./manifest.ts";
 import { ingredientShot, supportShot } from "./shots.ts";
 
@@ -28,6 +29,11 @@ const EXIT_MS = 420;
 const STAGGER = 0.16;
 /** Durée d'une chute avec rebond (voir PhotoLayer). */
 const DROP = 0.55;
+/** Durée d'arrivée d'un ingrédient : chute d'un bloc, ou morceau par morceau. */
+const arrival = (file: string | undefined, reduced: boolean) => {
+  const n = file ? photoInfo(file)?.pieces : undefined;
+  return n && !reduced ? piecesDuration(n) : DROP;
+};
 
 /** Vapeur de sortie du four : forte quelques secondes, puis légère. (La vapeur travaille en unités ×8.) */
 function OvenSteam({ delay = 0 }: { delay?: number }) {
@@ -117,10 +123,12 @@ export function PhotoAssembly({ menu, spec, reduced, baseOrder }: Props) {
     for (const p of fresh) {
       out.set(p.key, t);
       const v = menu.ingredients[p.item.ingredient].visual;
-      t += v.archetype === "fries" ? 0.45 : v.variant === "pour" ? 0.75 : 0.3;
+      const file = ingredientShot(menu, p.item.ingredient, spec.support)[0]?.file;
+      // Le suivant part quand le précédent est presque posé.
+      t += v.variant === "pour" ? 0.75 : arrival(file, reduced) * 0.8;
     }
     return out;
-  }, [items, menu]);
+  }, [items, menu, spec.support, reduced]);
   useEffect(() => {
     seenItems.current = new Set(items.map((p) => p.key));
   }, [items]);
@@ -141,8 +149,8 @@ export function PhotoAssembly({ menu, spec, reduced, baseOrder }: Props) {
     const first = seen.current === null;
     const fresh = under.filter((p) => first || !seen.current!.has(p.key));
     if (!fresh.length) return first ? 0.4 : 0.45;
-    const last = Math.max(...fresh.map((p) => p.batchIndex));
-    return (first ? 0.3 : 0.1) + last * STAGGER + DROP + 0.25;
+    const end = Math.max(...fresh.map((p) => p.batchIndex * STAGGER + arrival(ingredientShot(menu, p.item.ingredient, spec.support)[0]?.file, reduced)));
+    return (first ? 0.3 : 0.1) + end + 0.2;
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [underSig]);
   useEffect(() => {

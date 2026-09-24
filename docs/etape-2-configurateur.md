@@ -13,6 +13,17 @@ Pour montrer le rendu au client avant la séance photo, le configurateur tourne 
 |---|---|
 | ![](captures/4-demo-gratine.jpg) | ![](captures/5-demo-frites-garnies.jpg) |
 
+### Mise à jour : des aliments qui tombent morceau par morceau
+
+Pour éviter l'effet « photo posée d'un bloc », chaque photo d'aliment est **découpée en ses morceaux**, en suivant ses contours : les ombres entre les frites, entre les morceaux de viande.
+
+Chaque morceau tombe ensuite **seul**, avec sa rotation, son petit rebond et son ombre au sol. Les morceaux du bord arrivent d'abord et le haut du tas en dernier : le tas se construit sous les yeux. Une fois tout posé, on retrouve exactement la photo.
+
+- Découpe : `python3 tools/photos/morceaux.py`. Le script écrit `public/photos/<nom>.morceaux.png` et le nombre de morceaux dans le manifeste. Il faut le relancer après chaque nouvelle photo.
+- Frites maison ≈ 37 morceaux, paysannes ≈ 50, tandoori ≈ 47, viandes du sandwich ≈ 40.
+- Tranches de tomate et boursin tombent par élément entier. Les sauces se dessinent, le fromage fond et le pain reste entier.
+- Rendu : un seul appel de dessin par aliment (`src/photo/PiecesDrop.tsx`), donc léger sur mobile. Avec « réduire les animations », la photo apparaît directement.
+
 ### Mise à jour : l'essentiel seulement, et les frites cheddar dans le menu gratiné
 
 - **Moins d'options :** le configurateur n'affiche plus les sauces, les crudités ni les boissons, que le client connaît déjà. Restent la viande, les suppléments, les frites et les frites cheddar. La carte, elle, les liste toujours.

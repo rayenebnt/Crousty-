@@ -8,7 +8,8 @@ import * as THREE from "three";
 import { NOISE_GLSL } from "../scene/glsl.ts";
 import { bounceOut, clamp01, damp, easeInOutCubic, easeOutBack, easeOutCubic } from "../scene/easing.ts";
 import { photoInfo } from "./manifest.ts";
-import { loadPhoto, placeholder, type LoadedPhoto } from "./photos.ts";
+import { loadPhoto, loadPieces, placeholder, type LoadedPhoto, type LoadedPieces } from "./photos.ts";
+import { PiecesDrop, type PiecesClock } from "./PiecesDrop.tsx";
 
 export type Enter = "drop" | "fade" | "slide" | "none";
 export type Mode = "normal" | "dissolve" | "reveal" | "wipe";
@@ -117,10 +118,31 @@ export function usePhoto(file: string, label: string, color: string, fallbackCm:
   return { photo, size, real: !!info };
 }
 
+/** Morceaux de la photo, si elle en a et qu'elle tombe : null tant qu'ils chargent, false s'il n'y en a pas. */
+function usePieces(file: string, wanted: boolean) {
+  const has = wanted && !!photoInfo(file)?.pieces;
+  const [pieces, setPieces] = useState<LoadedPieces | null | false>(has ? null : false);
+  useEffect(() => {
+    if (!has) return setPieces(false);
+    let alive = true;
+    loadPieces(file).then(
+      (p) => alive && setPieces(p),
+      () => alive && setPieces(false),
+    );
+    return () => {
+      alive = false;
+    };
+  }, [file, has]);
+  return pieces;
+}
+
 const SHADOW_OFFSET = { x: 0.5, z: 0.8 };
 
 export function PhotoLayer(p: LayerProps) {
   const { photo, size } = usePhoto(p.file, p.label, p.color, p.fallbackCm, p.showPlaceholder ?? true);
+  // Un aliment qui tombe arrive morceau par morceau (si la photo a été découpée).
+  const pieces = usePieces(p.file, !p.reduced && (p.enter ?? "drop") === "drop" && (!p.mode || p.mode === "normal"));
+  const pclock = useRef<PiecesClock>({ start: -1, opacity: 1, landed: 0, done: false });
   const mat = useMemo(photoMaterial, []);
   const shadow = useMemo(shadowMaterial, []);
   useEffect(() => () => {
@@ -139,7 +161,7 @@ export function PhotoLayer(p: LayerProps) {
 
   useFrame(({ clock }, dt) => {
     const g = group.current;
-    if (!g || !photo) return;
+    if (!g || !photo || pieces === null) return;
     const s = t.current, now = clock.elapsedTime;
     if (s.start < 0) s.start = now + (p.reduced ? 0 : (p.delay ?? 0));
     if (p.phase === "exit" && s.exit < 0) s.exit = now;
@@ -148,7 +170,13 @@ export function PhotoLayer(p: LayerProps) {
     const dur = p.reduced ? 0.15 : enter === "drop" ? 0.55 : enter === "slide" ? 0.6 : 0.35;
     const k = clamp01(e / dur);
     let yOff = 0, xOff = 0, rotOff = 0, opacity = e < 0 ? 0 : 1, shadowK = 1;
-    if (enter === "drop") {
+    const piecewise = !!pieces && !p.reduced;
+    if (piecewise) {
+      // Les morceaux tombent eux-mêmes ; la photo entière n'apparaît qu'une fois tout posé.
+      pclock.current.start = s.start;
+      opacity = pclock.current.done ? 1 : 0;
+      shadowK = pclock.current.landed;
+    } else if (enter === "drop") {
       yOff = (1 - bounceOut(k)) * 26;
       opacity = e < 0 ? 0 : clamp01(k * 5);
       shadowK = k * k;
@@ -180,6 +208,8 @@ export function PhotoLayer(p: LayerProps) {
       }
       shadowK *= 1 - x;
     }
+    // Fondu de sortie (et masquage de la tortilla) : transmis aux morceaux.
+    pclock.current.opacity = s.exit >= 0 ? 1 - clamp01((now - s.exit) / (p.reduced ? 0.12 : 0.3)) : s.vis;
     g.position.set(p.x + xOff, p.y + yOff, p.z);
     g.rotation.y = (p.rot ?? 0) + rotOff;
     mat.uniforms.uOpacity.value = opacity;
@@ -195,7 +225,7 @@ export function PhotoLayer(p: LayerProps) {
     }
   });
 
-  if (!photo) return null;
+  if (!photo || pieces === null) return null;
   return (
     <group ref={group}>
       <mesh ref={shadowMesh} rotation-x={-Math.PI / 2} material={shadow} renderOrder={p.order * 2 - 1} scale={1}>
@@ -204,6 +234,7 @@ export function PhotoLayer(p: LayerProps) {
       <mesh rotation-x={-Math.PI / 2} material={mat} renderOrder={p.order * 2}>
         <planeGeometry args={size} />
       </mesh>
+      {pieces && !p.reduced && <PiecesDrop map={photo.map} data={pieces} size={size} order={p.order} reduced={p.reduced} clock={pclock.current} />}
     </group>
   );
 }

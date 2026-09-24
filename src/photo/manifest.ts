@@ -10,6 +10,8 @@ export interface PhotoInfo {
   demo?: boolean;
   /** Image fabriquée (dessinée ou recomposée) pour la démo, pas une photo. */
   synthese?: boolean;
+  /** Nombre de morceaux (public/photos/<nom>.morceaux.png) : l'aliment tombe morceau par morceau. */
+  pieces?: number;
 }
 
 export const manifest = raw as { pxPerCm: number; files: Record<string, PhotoInfo> };
@@ -17,3 +19,5 @@ export const manifest = raw as { pxPerCm: number; files: Record<string, PhotoInf
 export const photoInfo = (file: string): PhotoInfo | undefined => manifest.files[file];
 
 export const photoUrl = (file: string) => `${import.meta.env.BASE_URL}photos/${file}.webp`;
+
+export const piecesUrl = (file: string) => `${import.meta.env.BASE_URL}photos/${file}.morceaux.png`;

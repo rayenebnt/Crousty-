@@ -23,7 +23,8 @@
       "wCm": 8.57,
       "hCm": 5.43,
       "demo": true,
-      "synthese": true
+      "synthese": true,
+      "pieces": 45
     },
     "barbecue": {
       "w": 573,
@@ -47,7 +48,8 @@
       "wCm": 17.5,
       "hCm": 5.43,
       "demo": true,
-      "synthese": true
+      "synthese": true,
+      "pieces": 7
     },
     "cheddar": {
       "w": 523,
@@ -63,7 +65,8 @@
       "wCm": 17.1,
       "hCm": 8.57,
       "demo": true,
-      "synthese": true
+      "synthese": true,
+      "pieces": 38
     },
     "escalope": {
       "w": 534,
@@ -78,14 +81,16 @@
       "h": 301,
       "wCm": 17.07,
       "hCm": 10.03,
-      "demo": true
+      "demo": true,
+      "pieces": 37
     },
     "frites-paysannes": {
       "w": 540,
       "h": 266,
       "wCm": 18.0,
       "hCm": 8.87,
-      "demo": true
+      "demo": true,
+      "pieces": 50
     },
     "gratin-fromage__apres": {
       "w": 810,
@@ -124,7 +129,8 @@
       "wCm": 17.13,
       "hCm": 8.83,
       "demo": true,
-      "synthese": true
+      "synthese": true,
+      "pieces": 39
     },
     "ketchup": {
       "w": 535,
@@ -172,7 +178,8 @@
       "wCm": 15.6,
       "hCm": 5.23,
       "demo": true,
-      "synthese": true
+      "synthese": true,
+      "pieces": 33
     },
     "oignons-caramelises": {
       "w": 525,
@@ -180,7 +187,8 @@
       "wCm": 17.5,
       "hCm": 6.6,
       "demo": true,
-      "synthese": true
+      "synthese": true,
+      "pieces": 40
     },
     "pain-sandwich__ouvert": {
       "w": 810,
@@ -204,7 +212,8 @@
       "wCm": 21.47,
       "hCm": 9.0,
       "demo": true,
-      "synthese": true
+      "synthese": true,
+      "pieces": 43
     },
     "salade": {
       "w": 537,
@@ -212,7 +221,8 @@
       "wCm": 17.9,
       "hCm": 7.53,
       "demo": true,
-      "synthese": true
+      "synthese": true,
+      "pieces": 63
     },
     "samourai": {
       "w": 544,
@@ -236,7 +246,8 @@
       "wCm": 18.93,
       "hCm": 9.7,
       "demo": true,
-      "synthese": true
+      "synthese": true,
+      "pieces": 44
     },
     "tandoori": {
       "w": 496,
@@ -244,14 +255,16 @@
       "wCm": 16.53,
       "hCm": 10.0,
       "demo": true,
-      "synthese": true
+      "synthese": true,
+      "pieces": 46
     },
     "tandoori__tas": {
       "w": 289,
       "h": 214,
       "wCm": 9.63,
       "hCm": 7.13,
-      "demo": true
+      "demo": true,
+      "pieces": 47
     },
     "tenders": {
       "w": 525,
@@ -267,14 +280,16 @@
       "wCm": 16.87,
       "hCm": 6.2,
       "demo": true,
-      "synthese": true
+      "synthese": true,
+      "pieces": 3
     },
     "viande-hachee__tas": {
       "w": 287,
       "h": 220,
       "wCm": 9.57,
       "hCm": 7.33,
-      "demo": true
+      "demo": true,
+      "pieces": 47
     }
   }
 }
