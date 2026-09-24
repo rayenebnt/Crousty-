@@ -5,7 +5,7 @@ import type { Category, Product } from "../data/menu.types.ts";
 import { productsOf, resolveGroup } from "../domain/catalog.ts";
 import { productText } from "../domain/summary.ts";
 import { useConfigurator } from "../store/configurator.ts";
-import { COMPOSABLE } from "./Menus.tsx";
+import { categoryPhoto, COMPOSABLE } from "./Menus.tsx";
 import { Todo } from "./Todo.tsx";
 
 function Choices({ category }: { category: Category }) {
@@ -55,6 +55,7 @@ export function Carte() {
   const cat = cats.find((c) => c.id === active)!;
   const formula = cat.formula ? menu.formulas[cat.formula] : null;
   const products = productsOf(menu, cat.id);
+  const photo = categoryPhoto(cat.id);
 
   return (
     <section id="carte" aria-labelledby="carte-titre" className="picto-bg scroll-mt-14 border-t border-white/10 py-16">
@@ -84,12 +85,15 @@ export function Carte() {
         </div>
 
         <div role="tabpanel" id={`${uid}-panel`} aria-labelledby={`${uid}-tab-${active}`} className="mt-6">
-          <div className="rounded-2xl border border-white/10 bg-nuit/70 p-5 backdrop-blur">
-            <div className="flex flex-wrap items-baseline gap-x-4 gap-y-2">
-              <h3 className="font-display text-4xl uppercase">{cat.label}</h3>
-              {formula && <p className="rounded-full bg-rouge px-3 py-1 text-xs font-semibold">{formula.label}</p>}
+          <div className={`overflow-hidden rounded-2xl border border-white/10 bg-nuit/70 backdrop-blur ${photo ? "grid md:grid-cols-[1fr_320px]" : ""}`}>
+            <div className="p-5">
+              <div className="flex flex-wrap items-baseline gap-x-4 gap-y-2">
+                <h3 className="font-display text-4xl uppercase">{cat.label}</h3>
+                {formula && <p className="rounded-full bg-rouge px-3 py-1 text-xs font-semibold">{formula.label}</p>}
+              </div>
+              <Choices category={cat} />
             </div>
-            <Choices category={cat} />
+            {photo && <img key={cat.id} src={photo.src} alt={photo.alt} loading="lazy" decoding="async" className="menu-photo -order-1 aspect-[16/9] h-full w-full object-cover md:order-none md:aspect-auto md:min-h-56" />}
           </div>
           <ul className="mt-5 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {products.map((p) => (

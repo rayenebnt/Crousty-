@@ -72,11 +72,15 @@ L'assemblage animé des photos est abandonné : il ne faisait pas assez professi
 | Gratinés | Le gratiné et ses frites | Viande, suppléments, frites, frites cheddar |
 | Sandwichs | Le sandwich tandoori-curry | Le sandwich (7), pain ou tortilla, gratiné, suppléments, frites |
 | Burgers | Le burger et ses frites | La gamme (Classics, Gourmets, Smash), le burger, taille ou viande doublée, frites |
+| Tacos | Le tacos gratiné et ses frites | S, M, L ou personnalisé, les viandes, gratiné, suppléments |
+| Crousty | Le bol Crousty | Tandory, Tenders ou Boursin, piquant ou sucré |
+| Brasserie | L'escalope gratinée et la salade | Le plat, l'accompagnement, la base de la salade |
 
 - La photo change seulement avec l'onglet, et chaque produit affiche sa composition tirée de la carte.
 - Les sauces, crudités et boissons ne sont pas proposées ici : le client les connaît déjà, et la carte les liste.
 - Un récap « Ta compo » jaune résume le choix. Le site reste une vitrine, sans commande ni prix.
-- Les photos sont dans `public/menus/`. Le code de l'ancien rendu photo (`src/photo/`, `src/ui/Configurator.tsx`) n'est plus chargé par le site et peut être supprimé.
+- Les photos sont dans `public/menus/`. Chaque catégorie de « La carte » affiche aussi la sienne.
+- Les photos Tacos, Crousty et Brasserie ont été fournies avec un titre écrit : `tools/menus/nettoyer.py` l'efface et les agrandit. Elles font 260 px à l'origine, donc de meilleures versions (1000 px ou plus, sans texte) seraient plus nettes. Le code de l'ancien rendu photo (`src/photo/`, `src/ui/Configurator.tsx`) n'est plus chargé par le site et peut être supprimé.
 
 ## Les sections
 

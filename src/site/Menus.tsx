@@ -21,20 +21,40 @@ export interface MenuTab {
   alt: string;
   /** Une ligne factuelle, tirée de la carte. */
   line: string;
+  /** Titre du choix du produit quand l'onglet n'a qu'une catégorie. */
+  pick: string;
 }
 
 export const TABS: MenuTab[] = [
-  { id: "gratines", label: "Gratinés", categories: ["gratines"], photo: "gratines", alt: "Le sandwich gratiné, mozzarella dorée au four, et ses frites", line: "Gratiné à la mozzarella, au four" },
-  { id: "sandwichs", label: "Sandwichs", categories: ["sandwichs"], photo: "sandwichs", alt: "Un sandwich garni de poulet tandoori et de poulet curry, avec des frites", line: "Pain ou tortilla · gratiné en option" },
+  { id: "gratines", label: "Gratinés", categories: ["gratines"], photo: "gratines", alt: "Le sandwich gratiné, mozzarella dorée au four, et ses frites", line: "Gratiné à la mozzarella, au four", pick: "Ton gratiné" },
+  { id: "sandwichs", label: "Sandwichs", categories: ["sandwichs"], photo: "sandwichs", alt: "Un sandwich garni de poulet tandoori et de poulet curry, avec des frites", line: "Pain ou tortilla · gratiné en option", pick: "Ton sandwich" },
   {
     id: "burgers",
     label: "Burgers",
     categories: ["classics-burgers", "burgers-gourmets", "smash-burgers"],
     photo: "burgers",
     alt: "Un burger au pain brioché, steak et fromage fondu, avec des frites",
-    line: "Classics · Gourmets · Smash",
+    line: "Classiques · Gourmets · Smash",
+    pick: "Ton burger",
+  },
+  { id: "tacos", label: "Tacos", categories: ["tacos"], photo: "tacos", alt: "Un tacos gratiné nappé de sauce, avec des frites", line: "1, 2 ou 3 viandes · sauce fromagère maison", pick: "Ton tacos" },
+  { id: "crousty", label: "Crousty", categories: ["crousty"], photo: "crousty", alt: "Un bol Crousty : riz, poulet tandoori, oignons frits", line: "Riz, viande, sauce blanche maison", pick: "Ton Crousty" },
+  {
+    id: "brasserie",
+    label: "Brasserie",
+    categories: ["brasserie"],
+    photo: "brasserie",
+    alt: "Une escalope gratinée au jambon, frites et salade signature",
+    line: "Plats et salade signature",
+    pick: "Ton plat",
   },
 ];
+
+/** Photo d'une catégorie de la carte (les burgers partagent la leur). */
+export const categoryPhoto = (categoryId: Id) => {
+  const t = TABS.find((x) => x.categories.includes(categoryId));
+  return t ? { src: `${base}menus/${t.photo}.webp`, alt: t.alt } : null;
+};
 
 /** Produits qu'on peut composer ici (le bouton « Le composer » de la carte y mène). */
 export const COMPOSABLE = new Set(TABS.flatMap((t) => t.categories.flatMap((c) => productsOf(menu, c).map((p) => p.id))));
@@ -65,6 +85,7 @@ export function Menus() {
   const openTab = (t: MenuTab) => {
     if (t.id === tab.id) return;
     setProduct(t.id === "gratines" ? menu.showcase.hero.product : productsOf(menu, t.categories[0])[0].id);
+    document.getElementById(`menu-tab-${t.id}`)?.scrollIntoView({ block: "nearest", inline: "center", behavior: "smooth" });
   };
 
   return (
@@ -77,7 +98,7 @@ export function Menus() {
               Choisis, <span className="text-flamme">on prépare</span>
             </h2>
           </div>
-          <div role="tablist" aria-label="Catégories" className="flex gap-1 rounded-2xl bg-white/6 p-1">
+          <div role="tablist" aria-label="Catégories" className="-mx-4 flex max-w-[calc(100%+2rem)] gap-1 overflow-x-auto px-4 [scrollbar-width:none] sm:mx-0 sm:max-w-full sm:rounded-2xl sm:bg-white/6 sm:p-1">
             {TABS.map((t) => (
               <button
                 key={t.id}
@@ -86,7 +107,7 @@ export function Menus() {
                 aria-selected={t.id === tab.id}
                 aria-controls="menu-panel"
                 onClick={() => openTab(t)}
-                className={`min-h-11 rounded-xl px-4 py-2 font-display text-lg tracking-wide uppercase transition focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-cheddar sm:px-6 ${
+                className={`min-h-11 shrink-0 rounded-xl px-4 py-2 font-display text-lg tracking-wide uppercase transition focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-cheddar sm:px-6 ${
                   t.id === tab.id ? "bg-rouge text-white shadow-lg shadow-rouge/25" : "text-white/75 hover:text-white"
                 }`}
               >
@@ -136,7 +157,7 @@ export function Menus() {
                   return (
                     <fieldset key={cid} className="grid gap-2.5">
                       <legend className="mb-2.5 flex w-full flex-wrap items-baseline gap-x-3 gap-y-1">
-                        <span className="font-display text-2xl tracking-wide uppercase">{tab.categories.length > 1 ? cat.label : "Ton sandwich"}</span>
+                        <span className="font-display text-2xl tracking-wide uppercase">{tab.categories.length > 1 ? cat.label : tab.pick}</span>
                         {formula && <span className="text-xs font-medium text-white/55">{formula.label}</span>}
                       </legend>
                       <div className="grid gap-2 sm:grid-cols-2">
