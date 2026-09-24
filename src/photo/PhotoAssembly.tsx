@@ -203,6 +203,7 @@ export function PhotoAssembly({ menu, spec, reduced, baseOrder }: Props) {
         y={onTop.has(p.item.layer) ? 3 : 0.6 + i * 0.35}
         order={baseOrder + 5 + i}
         enter={enter}
+        shadow={tas && i > 0 ? 0.3 : 1}
         {...(drizzle ? { mode: "wipe" as const, duration: 0.75 } : {})}
       />
     );

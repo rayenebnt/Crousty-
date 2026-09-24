@@ -24,7 +24,7 @@
       "hCm": 5.43,
       "demo": true,
       "synthese": true,
-      "pieces": 45
+      "pieces": 64
     },
     "barbecue": {
       "w": 573,
@@ -94,18 +94,18 @@
     },
     "gratin-fromage__apres": {
       "w": 810,
-      "h": 362,
-      "wCm": 27,
-      "hCm": 12.06,
+      "h": 310,
+      "wCm": 27.0,
+      "hCm": 10.33,
       "demo": true
     },
     "gratin-fromage__avant": {
       "w": 810,
-      "h": 362,
+      "h": 310,
       "wCm": 27.0,
-      "hCm": 12.07,
+      "hCm": 10.33,
       "demo": true,
-      "pieces": 71
+      "pieces": 67
     },
     "harissa": {
       "w": 538,
@@ -177,7 +177,7 @@
       "hCm": 5.23,
       "demo": true,
       "synthese": true,
-      "pieces": 33
+      "pieces": 72
     },
     "oignons-caramelises": {
       "w": 525,
@@ -190,11 +190,10 @@
     },
     "pain-sandwich__ouvert": {
       "w": 810,
-      "h": 362,
+      "h": 310,
       "wCm": 27.0,
-      "hCm": 12.07,
-      "demo": true,
-      "synthese": true
+      "hCm": 10.33,
+      "demo": true
     },
     "pastrami": {
       "w": 596,
@@ -256,12 +255,12 @@
       "pieces": 49
     },
     "tandoori__tas": {
-      "w": 289,
-      "h": 214,
-      "wCm": 9.63,
-      "hCm": 7.13,
+      "w": 466,
+      "h": 242,
+      "wCm": 15.53,
+      "hCm": 8.07,
       "demo": true,
-      "pieces": 47
+      "pieces": 56
     },
     "tenders": {
       "w": 525,
@@ -281,12 +280,12 @@
       "pieces": 3
     },
     "viande-hachee__tas": {
-      "w": 287,
-      "h": 220,
-      "wCm": 9.57,
-      "hCm": 7.33,
+      "w": 459,
+      "h": 252,
+      "wCm": 15.3,
+      "hCm": 8.4,
       "demo": true,
-      "pieces": 47
+      "pieces": 62
     }
   }
 }

@@ -13,6 +13,11 @@ Pour montrer le rendu au client avant la séance photo, le configurateur tourne 
 |---|---|
 | ![](captures/4-demo-gratine.jpg) | ![](captures/5-demo-frites-garnies.jpg) |
 
+### Mise à jour : nouveau pain, viande éparpillée sur les frites cheddar
+
+- **Pain :** le pain ouvert vient de votre nouvelle photo (détourée, 27 cm). La photo du gratiné « sorti du four » est ajustée à sa forme, pour ne pas dépasser, et l'emmental est posé sur la mie.
+- **Frites cheddar :** la viande n'arrive plus en tas au centre. Elle est **éparpillée sur toute la surface** du cheddar (environ 17 × 9 cm), en une cinquantaine de morceaux qui tombent un par un, avec quelques trous où l'on voit le cheddar. Les ombres sont allégées pour que le cheddar reste orange.
+
 ### Mise à jour : vos photos d'emmental, de cheddar et de viandes
 
 Ces images viennent de vos photos, détourées de leur plateau (`tools/photos/demo/photos_recues.py`) :

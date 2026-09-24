@@ -72,9 +72,10 @@ interface Props {
   order: number;
   reduced: boolean;
   clock: PiecesClock;
+  shadow?: number;
 }
 
-export function PiecesDrop({ map, data, size, order, clock }: Props) {
+export function PiecesDrop({ map, data, size, order, clock, shadow = 1 }: Props) {
   const n = data.pieces.length;
   const geo = useMemo(() => {
     const g = new THREE.PlaneGeometry(1, 1).rotateX(-Math.PI / 2);
@@ -159,7 +160,7 @@ export function PiecesDrop({ map, data, size, order, clock }: Props) {
       o.scale.set(it.sx * (1 + up * 0.3), 1, it.sz * (1 + up * 0.3));
       o.updateMatrix();
       s.setMatrixAt(i, o.matrix);
-      salpha.setX(i, e < it.t0 ? 0 : 0.5 * clamp01(k * 3) * (1 - up * 0.6));
+      salpha.setX(i, e < it.t0 ? 0 : 0.5 * shadow * clamp01(k * 3) * (1 - up * 0.6));
     }
     m.instanceMatrix.needsUpdate = s.instanceMatrix.needsUpdate = true;
     alpha.needsUpdate = salpha.needsUpdate = true;

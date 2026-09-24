@@ -36,6 +36,8 @@ export interface LayerProps {
   visible?: boolean;
   /** Lueur chaude pendant le fondu (sortie du four). */
   glow?: boolean;
+  /** Force de l'ombre portée (défaut 1). Plus faible sur les frites : l'ombre salirait le cheddar. */
+  shadow?: number;
   /** Afficher un cadre « photo à venir » si la photo manque (sinon rien). */
   showPlaceholder?: boolean;
 }
@@ -215,7 +217,7 @@ export function PhotoLayer(p: LayerProps) {
     mat.uniforms.uOpacity.value = opacity;
     mat.uniforms.uProgress.value = progress;
     mat.uniforms.uGlow.value = p.glow ? Math.sin(Math.PI * progress) * 0.18 : 0;
-    shadow.uniforms.uOpacity.value = 0.55 * shadowK;
+    shadow.uniforms.uOpacity.value = 0.55 * shadowK * (p.shadow ?? 1);
     const sm = shadowMesh.current;
     if (sm) {
       // L'ombre reste au sol pendant la chute : plus grande et plus douce quand l'aliment est haut.
@@ -234,7 +236,7 @@ export function PhotoLayer(p: LayerProps) {
       <mesh rotation-x={-Math.PI / 2} material={mat} renderOrder={p.order * 2}>
         <planeGeometry args={size} />
       </mesh>
-      {pieces && !p.reduced && <PiecesDrop map={photo.map} data={pieces} size={size} order={p.order} reduced={p.reduced} clock={pclock.current} />}
+      {pieces && !p.reduced && <PiecesDrop map={photo.map} data={pieces} size={size} order={p.order} reduced={p.reduced} clock={pclock.current} shadow={p.shadow ?? 1} />}
     </group>
   );
 }
