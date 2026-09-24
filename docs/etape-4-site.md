@@ -40,11 +40,26 @@ python3 tools/hero/galerie.py <video.mov>    # public/galerie/*.webp
 - **« Réduire les animations » activé :** l'accueil affiche directement l'image finale, avec le nom et les boutons.
 - **Une meilleure vidéo, un meilleur rendu :** une vidéo filmée exprès, en horizontal, sans personne et en 4K, avec une marche lente et stable de la rue jusqu'au comptoir, donnerait un résultat proche de la vidéo de référence. Pour l'intégrer, il suffit de relancer `images.py` avec cette vidéo.
 
+## Compose ton menu (nouvelle version)
+
+L'assemblage animé des photos est abandonné : il ne faisait pas assez professionnel. La section est maintenant **par catégorie**, sans visualisation :
+
+| Onglet | Photo | Ce qu'on choisit |
+|---|---|---|
+| Gratinés | Le gratiné et ses frites | Viande, suppléments, frites, frites cheddar |
+| Sandwichs | Le sandwich tandoori-curry | Le sandwich (7), pain ou tortilla, gratiné, suppléments, frites |
+| Burgers | Le burger et ses frites | La gamme (Classics, Gourmets, Smash), le burger, taille ou viande doublée, frites |
+
+- La photo change seulement avec l'onglet, et chaque produit affiche sa composition tirée de la carte.
+- Les sauces, crudités et boissons ne sont pas proposées ici : le client les connaît déjà, et la carte les liste.
+- Un récap « Ta compo » jaune résume le choix. Le site reste une vitrine, sans commande ni prix.
+- Les photos sont dans `public/menus/`. Le code de l'ancien rendu photo (`src/photo/`, `src/ui/Configurator.tsx`) n'est plus chargé par le site et peut être supprimé.
+
 ## Les sections
 
 | Section | Contenu | Source |
 |---|---|---|
-| Compose ton menu | Le configurateur de l'étape 2 (gratiné animé, frites garnies…). Il est placé juste sous l'accueil, et la scène ne se charge qu'à l'approche | `menu.json`, `public/photos` |
+| Compose ton menu | Par catégorie (Gratinés, Sandwichs, Burgers) : une photo, les produits, les options, le récap | `menu.json`, `public/menus` |
 | La carte | Onglets par catégorie. Pour chaque catégorie : sa formule et ses options au choix (pain, sauces, crudités, suppléments…) ; pour chaque produit : sa composition. Le bouton « Le composer » ouvre le produit dans le configurateur | `menu.json` |
 | Le resto | Galerie de vraies images, tirées de la vidéo et de vos photos, et lien TikTok | `public/galerie`, `restaurant.json` |
 | Nous trouver | Adresse, horaires, téléphone, services, bouton « Itinéraire » (une recherche Google Maps, en attendant l'adresse exacte) | `restaurant.json` |

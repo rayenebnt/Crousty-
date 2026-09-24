@@ -4,18 +4,9 @@ import { menu } from "../data/menu.ts";
 import type { Category, Product } from "../data/menu.types.ts";
 import { productsOf, resolveGroup } from "../domain/catalog.ts";
 import { ingredientList } from "../domain/summary.ts";
-import { photoInfo, photoUrl } from "../photo/manifest.ts";
-import { productShotName } from "../photo/shots.ts";
 import { useConfigurator } from "../store/configurator.ts";
-import { READY } from "../ui/ready.ts";
+import { COMPOSABLE } from "./Menus.tsx";
 import { Todo } from "./Todo.tsx";
-
-/** Photo d'un produit fini, si on l'a (frites garnies, gratiné). */
-function productPhoto(p: Product): string | null {
-  if (photoInfo(productShotName(p.id))) return photoUrl(productShotName(p.id));
-  if (p.defaults.some((d) => (typeof d === "string" ? d : d.id) === "gratin-fromage") && photoInfo("gratin-fromage__apres")) return photoUrl("gratin-fromage__apres");
-  return null;
-}
 
 function Choices({ category }: { category: Category }) {
   const groups = category.optionGroups.map((g) => resolveGroup(menu, g)).filter((g) => g.choices.length);
@@ -38,22 +29,16 @@ function Choices({ category }: { category: Category }) {
 function ProductCard({ p }: { p: Product }) {
   const setProduct = useConfigurator((s) => s.setProduct);
   const composition = ingredientList(menu, p.defaults);
-  const img = productPhoto(p);
   const compose = () => {
     setProduct(p.id);
     document.getElementById("compose")?.scrollIntoView({ behavior: "smooth" });
   };
   return (
     <li className="flex flex-col overflow-hidden rounded-2xl border border-white/10 bg-white/[0.04]">
-      {img && (
-        <div className="stage-bg grid h-36 place-items-center">
-          <img src={img} alt="" className="max-h-32 max-w-[85%] object-contain drop-shadow-[0_10px_18px_rgb(0_0_0/0.5)]" loading="lazy" decoding="async" />
-        </div>
-      )}
       <div className="flex flex-1 flex-col p-4">
         <h4 className="font-display text-2xl leading-tight uppercase">{p.name}</h4>
         <p className="mt-1 flex-1 text-sm text-white/70">{composition.length ? composition.join(", ") : <Todo what="composition" />}</p>
-        {READY.has(p.id) && (
+        {COMPOSABLE.has(p.id) && (
           <button type="button" onClick={compose} className="mt-3 self-start rounded-full bg-rouge px-4 py-2 text-sm font-semibold transition hover:bg-flamme focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-cheddar">
             Le composer ›
           </button>
