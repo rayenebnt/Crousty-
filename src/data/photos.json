@@ -60,13 +60,13 @@
       "synthese": true
     },
     "curry": {
-      "w": 513,
-      "h": 257,
-      "wCm": 17.1,
-      "hCm": 8.57,
+      "w": 655,
+      "h": 245,
+      "wCm": 21.83,
+      "hCm": 8.17,
       "demo": true,
       "synthese": true,
-      "pieces": 38
+      "pieces": 52
     },
     "escalope": {
       "w": 534,
@@ -105,7 +105,7 @@
       "wCm": 27.0,
       "hCm": 12.07,
       "demo": true,
-      "synthese": true
+      "pieces": 71
     },
     "harissa": {
       "w": 538,
@@ -124,13 +124,12 @@
       "synthese": true
     },
     "kebab": {
-      "w": 514,
-      "h": 265,
-      "wCm": 17.13,
-      "hCm": 8.83,
+      "w": 681,
+      "h": 245,
+      "wCm": 22.7,
+      "hCm": 8.17,
       "demo": true,
-      "synthese": true,
-      "pieces": 39
+      "pieces": 57
     },
     "ketchup": {
       "w": 535,
@@ -161,8 +160,7 @@
       "h": 266,
       "wCm": 18.0,
       "hCm": 8.87,
-      "demo": true,
-      "synthese": true
+      "demo": true
     },
     "oeuf": {
       "w": 332,
@@ -207,13 +205,13 @@
       "synthese": true
     },
     "poulet": {
-      "w": 644,
-      "h": 270,
-      "wCm": 21.47,
-      "hCm": 9.0,
+      "w": 689,
+      "h": 245,
+      "wCm": 22.97,
+      "hCm": 8.17,
       "demo": true,
       "synthese": true,
-      "pieces": 43
+      "pieces": 48
     },
     "salade": {
       "w": 537,
@@ -250,13 +248,12 @@
       "pieces": 44
     },
     "tandoori": {
-      "w": 496,
-      "h": 300,
-      "wCm": 16.53,
-      "hCm": 10.0,
+      "w": 685,
+      "h": 245,
+      "wCm": 22.83,
+      "hCm": 8.17,
       "demo": true,
-      "synthese": true,
-      "pieces": 46
+      "pieces": 49
     },
     "tandoori__tas": {
       "w": 289,

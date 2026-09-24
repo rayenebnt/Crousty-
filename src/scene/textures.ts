@@ -201,22 +201,3 @@ export const newspaperTexture = () =>
       ctx.fillRect(x - s, y - s, s * 2, s * 2);
     }
   });
-
-/** Brin d'emmental râpé (pluie de fromage) : blanc, teinté par instance. */
-export const cheeseShred = () =>
-  make("cheese-shred", 128, 32, (ctx, w, h) => {
-    ctx.lineCap = "round";
-    ctx.lineWidth = h * 0.42;
-    ctx.strokeStyle = "#FFFFFF";
-    ctx.beginPath();
-    ctx.moveTo(h * 0.3, h * 0.55);
-    ctx.quadraticCurveTo(w / 2, h * 0.25, w - h * 0.3, h * 0.5);
-    ctx.stroke();
-    // léger modelé : bord inférieur plus sombre
-    ctx.globalCompositeOperation = "source-atop";
-    const g = ctx.createLinearGradient(0, 0, 0, h);
-    g.addColorStop(0, "rgba(255,255,255,0)");
-    g.addColorStop(1, "rgba(150,120,60,0.45)");
-    ctx.fillStyle = g;
-    ctx.fillRect(0, 0, w, h);
-  });

@@ -22,12 +22,14 @@ ROOT = Path(__file__).resolve().parents[2]
 PHOTOS = ROOT / "public/photos"
 MANIFEST = ROOT / "src/data/photos.json"
 
-# Ce qui tombe en morceaux (les sauces se dessinent, le fromage fond, le pain et les tranches restent entiers).
-EXCLUDE_PREFIX = ("gratin-fromage", "nappage-", "pain-", "tortilla")
+# Ce qui tombe en morceaux (les sauces se dessinent, le fromage râpé tombe puis fond, le pain reste entier).
+EXCLUDE_PREFIX = ("gratin-fromage__apres", "nappage-", "pain-", "tortilla")
 EXCLUDE = {"ketchup", "mayonnaise", "sauce-blanche", "barbecue", "biggy", "algerienne", "harissa", "samourai", "oeuf", "cheddar", "escalope"}
 
 
 # Aliments faits d'éléments entiers (tranches, lanières, saucisses) : un morceau = un élément.
+# Découpe plus fine (fromage râpé : de petites poignées de brins).
+FINE = {"gratin-fromage__avant": (60, 260)}
 WHOLE = {"tomate", "bacon", "merguez", "jambon-dinde", "pastrami", "tenders", "boursin"}
 
 
@@ -46,7 +48,8 @@ def cut(name, info):
         labels, _ = ndi.label(img[..., 3] > 0.92)  # sans les ombres, qui relient les éléments
     else:
         # Segmentation par graphe : les frontières passent par les ombres entre les morceaux.
-        labels = felzenszwalb(rgb, scale=160, sigma=0.7, min_size=max(100, int(mask.sum() / 160))) + 1
+        scale, div = FINE.get(name, (160, 160))
+        labels = felzenszwalb(rgb, scale=scale, sigma=0.7, min_size=max(60, int(mask.sum() / div))) + 1
         labels[~mask] = 0
     # Les pixels semi-transparents du bord rejoignent le morceau voisin (pas de liseré oublié).
     edge = (img[..., 3] > 0.02) & (labels == 0)

@@ -44,12 +44,40 @@ def handful(img, w_cm, h_cm, px_per_cm, seed):
     yy, xx = np.mgrid[0:hh, 0:ww].astype(np.float32)
     ang = np.arctan2(yy - hh / 2, xx - ww / 2)
     r = np.hypot((xx - ww / 2) / (ww / 2), (yy - hh / 2) / (hh / 2))
-    wob = 0.85 + 0.1 * np.sin(ang * 3 + seed) + 0.06 * np.sin(ang * 7 + seed * 2) + (noise(hh, ww, 25, 2, seed=seed) - 0.5) * 0.18
+    wob = 0.93 + 0.06 * np.sin(ang * 3 + seed) + 0.06 * np.sin(ang * 7 + seed * 2) + (noise(hh, ww, 25, 2, seed=seed) - 0.5) * 0.18
     blob = np.clip((wob - r) / 0.06, 0, 1)
     sub[..., 3] *= blob
     edge = np.clip(1 - (wob - r) / 0.25, 0, 1) * blob
     sub[..., :3] *= (1 - 0.25 * edge)[..., None]
     return sub
+
+
+def cheddar_mask(fries):
+    """Forme du nappage : une large nappe et des coulures arrondies, seulement sur les frites."""
+    h, w = fries.shape[:2]
+    S = 2
+    H, W = h * S, w * S
+    yy, xx = np.mgrid[0:H, 0:W].astype(np.float32)
+    cy = H * 0.5
+    nx, ny = (xx - W / 2) / (W / 2), (yy - cy) / (H / 2)
+    ang = np.arctan2(ny, nx)
+    r = np.hypot(nx, ny)
+    wob = 0.6 + 0.07 * np.sin(ang * 4 + 1) + 0.05 * np.sin(ang * 7 + 2) + (noise(H, W, 50, 3, seed=31) - 0.5) * 0.2
+    m = np.clip((wob - r) / 0.025, 0, 1)
+    # coulures : langues arrondies qui descendent entre les frites
+    for k in range(8):
+        a = rng.uniform(0, 2 * np.pi)
+        L = rng.uniform(0.12, 0.28)
+        wd = rng.uniform(0.06, 0.1)
+        for t in np.linspace(0.5, 0.55 + L, 40):
+            px = W / 2 + np.cos(a) * t * W / 2
+            py = cy + np.sin(a) * t * H / 2
+            rr = wd * W / 2 * (0.75 + 0.25 * np.cos((t - 0.5) / (L + 0.05) * np.pi / 2))
+            m = np.maximum(m, np.clip((rr - np.hypot(xx - px, yy - py)) / 3, 0, 1))
+    fa = cv2.resize(fries[..., 3], (W, H))
+    m *= np.clip(fa * 1.5, 0, 1)
+    m = blur(m, 1.5)
+    return cv2.resize(m, (w, h), interpolation=cv2.INTER_AREA)
 
 
 def cheddar_over(fries):

@@ -13,6 +13,13 @@ Pour montrer le rendu au client avant la séance photo, le configurateur tourne 
 |---|---|
 | ![](captures/4-demo-gratine.jpg) | ![](captures/5-demo-frites-garnies.jpg) |
 
+### Mise à jour : vos photos d'emmental, de cheddar et de viandes
+
+Ces images viennent de vos photos, détourées de leur plateau (`tools/photos/demo/photos_recues.py`) :
+- **Gratiné :** la viande tombe dans le pain, puis **l'emmental râpé de votre photo** tombe par petites poignées (71 morceaux) ; le four le transforme ensuite en votre photo du gratiné. Il remplace les brins dessinés.
+- **Frites cheddar :** le nappage est **le cheddar gratiné de votre photo**, découpé en nappe et en coulures sur les paysannes.
+- **Viandes du sandwich :** le kebab et le tandoori sont pris dans vos photos, en portion allongée qui remplit le pain. Le poulet et le curry sont la même photo de tandoori, avec la teinte décalée. Ce sont des approximations, à remplacer par de vraies photos.
+
 ### Mise à jour : des aliments qui tombent morceau par morceau
 
 Pour éviter l'effet « photo posée d'un bloc », chaque photo d'aliment est **découpée en ses morceaux**, en suivant ses contours : les ombres entre les frites, entre les morceaux de viande.

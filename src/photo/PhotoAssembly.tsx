@@ -10,7 +10,6 @@ import type { LayerId, Menu } from "../data/menu.types.ts";
 import type { AssemblySpec, BuildItem } from "../domain/resolveBuild.ts";
 import { Steam } from "../scene/Steam.tsx";
 import { usePresence, type Present } from "../scene/usePresence.ts";
-import { CheeseRain } from "./CheeseRain.tsx";
 import { PhotoLayer } from "./PhotoLayer.tsx";
 import { piecesDuration } from "./PiecesDrop.tsx";
 import { photoInfo } from "./manifest.ts";
@@ -72,13 +71,12 @@ function GratinRun({ avant, apres, label, color, phase, delay, reduced, order }:
   if (reduced || !hasAvant) {
     return <PhotoLayer {...common} file={hasApres ? apres.file : avant.file} fallbackCm={apres.sizeCm} y={3.2} order={order + 1} enter="fade" delay={reduced ? 0 : delay} />;
   }
-  const [w, h] = photoInfo(apres.file) ? [photoInfo(apres.file)!.wCm, photoInfo(apres.file)!.hCm] : apres.sizeCm;
-  // Rapide : la pluie d'emmental, puis on arrive vite sur la vraie photo du gratiné.
-  const oven = delay + 0.85;
+  // L'emmental râpé (vraie photo) tombe morceau par morceau, puis le four : fondu vers la photo « après ».
+  const fall = arrival(avant.file, reduced);
+  const oven = delay + fall + 0.1;
   return (
     <group>
-      <CheeseRain rx={w * 0.36} rz={h * 0.27} y={3.4} order={(order + 3) * 2} delay={delay} spread={0.6} fadeAt={0.95} phase={phase} />
-      <PhotoLayer {...common} file={avant.file} fallbackCm={avant.sizeCm} y={3} order={order} mode="dissolve" duration={0.7} delay={delay + 0.15} />
+      <PhotoLayer {...common} file={avant.file} fallbackCm={avant.sizeCm} y={3} order={order} enter="drop" delay={delay} />
       {hasApres && <PhotoLayer {...common} file={apres.file} fallbackCm={apres.sizeCm} y={3.2} order={order + 1} mode="dissolve" duration={0.8} delay={oven} glow />}
       {phase === "enter" && <OvenSteam delay={oven + 0.2} />}
     </group>
